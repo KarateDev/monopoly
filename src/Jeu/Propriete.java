@@ -3,6 +3,11 @@ package Jeu;
 public abstract class Propriete extends Carreau {
 
 	Joueur proprietaire;
+        
+        public Propriete(int numcase,String nomcarreau){
+            super(numcase,nomcarreau);
+            setProprietaire(null);
+        }
 
 	/**
 	 * 
