@@ -1,6 +1,10 @@
 package Jeu;
 
-public class ServicePublic extends Compagnie {
+<<<<<<< Updated upstream:src/Jeu/ServicePublique.java
+public class ServicePublique extends Compagnie {
+=======
+public class ServicePublic extends Propriete {
+>>>>>>> Stashed changes:src/Jeu/ServicePublic.java
 
     public ServicePublic(int numcase, String nomcarreau) {
         super(numcase, nomcarreau);

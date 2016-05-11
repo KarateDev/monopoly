@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Controleur {
 
 
-	IHM ihm;
+	IHM ihm = new IHM(this);
 	Monopoly monopoly = new Monopoly();
 
 	public void creerPlateau(String dataFilename){
@@ -117,18 +117,14 @@ public class Controleur {
 	    //intialisation du plateau de jeu
 	    int nbJoueurs = 0;
 	    boolean fin = false;
-	    while( nbJoueurs < 6 && !fin){
-		String nom = ihm.saisirNom();
-		Joueur j = new Joueur(nom);
-		monopoly.addJoueur(j);
+		for (int i = 0; i != 6; ++i) {
+			String nom = ihm.saisirNom();
+			if (i >= 2 && nom.equals("fin")) break;
+			Joueur j = new Joueur(nom);
+			monopoly.addJoueur(j);
 		
-		
-		if(nbJoueurs >=2){
-		    //demander si il a terminé
+			
 		}
-	    
-	    
-	    }
             
         }
 }

@@ -5,6 +5,9 @@ import java.util.Scanner;
 public class IHM {
 
 	Controleur controleur;
+	IHM (Controleur controleur) {
+		this.controleur = controleur;
+	}
 
     public Controleur getControleur() {
 	return controleur;
@@ -14,7 +17,7 @@ public class IHM {
 	this.controleur = controleur;
     }
 
-	public String saisirNom(){
+	public String saisirNom(){ 
 	    System.out.println("Entrez le nom du joueur :");
 	    Scanner sc = new Scanner(System.in);
 	    String nom = sc.nextLine();

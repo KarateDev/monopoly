@@ -1,6 +1,12 @@
 package Jeu;
 
+<<<<<<< Updated upstream
+import java.util.HashSet;
+
 public class Gare extends Compagnie {
+=======
+public class Gare extends Propriete {
+>>>>>>> Stashed changes
 
     public Gare(int numcase, String nomcarreau) {
         super(numcase, nomcarreau);

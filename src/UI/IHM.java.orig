@@ -1,0 +1,50 @@
+package UI;
+
+<<<<<<< Updated upstream
+=======
+import Jeu.Joueur;
+import java.util.ArrayList;
+>>>>>>> Stashed changes
+import java.util.Scanner;
+
+public class IHM {
+
+	Controleur controleur;
+	IHM(Controleur controleur) {
+		this.controleur = controleur;
+	}
+	
+	ArrayList<Joueur> initJoueurs() {
+		System.out.print("Combien de joueurs: ");
+		Scanner scanner = new Scanner(System.in);
+		int nbJoueurs = scanner.nextInt();
+
+<<<<<<< Updated upstream
+    public Controleur getControleur() {
+	return controleur;
+    }
+
+    public void setControleur(Controleur controleur) {
+	this.controleur = controleur;
+    }
+
+	public String saisirNom(){
+	    System.out.println("Entrez le nom du joueur :");
+	    Scanner sc = new Scanner(System.in);
+	    String nom = sc.nextLine();
+	    return nom;
+=======
+		ArrayList<Joueur> lstJoueurs = new ArrayList();
+		for (int i = 0; i != nbJoueurs; ++i) {
+			lstJoueurs.add(demanderCreationJoueur());
+		}
+		
+		return lstJoueurs;
+	}
+	Joueur demanderCreationJoueur() {
+		System.out.print("Nom: ");
+		Scanner scanner = new Scanner(System.in);
+		return new Joueur(scanner.nextLine());
+>>>>>>> Stashed changes
+	}
+}

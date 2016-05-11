@@ -12,6 +12,7 @@ public class Main {
 		// TODO code application logic here
 		Controleur controleur = new Controleur();
 		controleur.creerPlateau("./data.txt");
+		controleur.initialiserUnePartie();
 	}
 	
 }

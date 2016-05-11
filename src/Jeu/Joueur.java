@@ -9,10 +9,10 @@ public class Joueur {
 	private String nomJoueur;
 	private int cash = 1500;
         
-        public Joueur(String nomjoueur){
-            proprietes = new HashSet<>();
-            this.nomJoueur = nomjoueur;
-        }
+    public Joueur(String nomjoueur){
+        proprietes = new HashSet<>();
+        this.nomJoueur = nomjoueur;
+    }
 
 	/**
 	 * @param l
@@ -44,14 +44,14 @@ public class Joueur {
 	}
         
         public int getnbServicePublique() {
-		HashSet proprietes = getProprietes();
-                int nbservicepublique = 0;
-                for(Propriete p : this.proprietes){
-                    if(p.getClass()== ServicePublique.class){
-                        nbservicepublique += 1;
-                    }
+			HashSet proprietes = getProprietes();
+            int nbservicepublique = 0;
+			for(Propriete p : this.proprietes){
+				if(p.getClass()== ServicePublic.class) {
+					nbservicepublique += 1;
                 }
-                return nbservicepublique;
+            }
+            return nbservicepublique;
 	}
 
 	public HashSet<Propriete> getProprietes() {
@@ -106,5 +106,4 @@ public class Joueur {
         public void setCash(int cash) {
             this.cash = cash;
         }
-
 }

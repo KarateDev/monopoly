@@ -4,13 +4,19 @@ import java.util.*;
 
 public class Monopoly {
 
+<<<<<<< Updated upstream
+	private HashMap<Integer,Carreau> carreaux;
+	private ArrayList<Joueur> joueurs;
+        private HashSet<Integer> des;
+=======
 	private ArrayList carreaux;
 	private HashMap<String,Joueur> joueurs;
     private HashSet<Integer> des;
+>>>>>>> Stashed changes
         
     public Monopoly(){
-        carreaux = new ArrayList();
-        joueurs = new HashMap<>();
+        carreaux = new HashMap<>();
+        joueurs = new ArrayList<>();
 		des = new HashSet<>();
     }
 
@@ -41,7 +47,7 @@ public class Monopoly {
     }
         
         public void addJoueur(Joueur j){
-            this.joueurs.put(j.getNomJoueur(),j);
+            this.joueurs.add(j);
         }
         
         public HashSet<Integer> getDes() {
@@ -54,6 +60,11 @@ public class Monopoly {
 
 
 	public void addCarreau(Carreau c) {
-		carreaux.add(c);
+		carreaux.put(carreaux.size()+1,c);
 	}
+<<<<<<< Updated upstream
+
+
+=======
+>>>>>>> Stashed changes
 }
