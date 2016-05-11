@@ -8,17 +8,13 @@ public abstract class Propriete extends Carreau {
 	 * 
 	 * @param j
 	 */
-	private void acheterPropriete(Joueur j) {
-		// TODO - implement Propriete.acheterPropriete
-		throw new UnsupportedOperationException();
+	public void setProprietaire(Joueur j) {
+		this.proprietaire = j;
 	}
 
-	private int calculLoyer() {
-		// TODO - implement Propriete.calculLoyer
-		throw new UnsupportedOperationException();
-	}
+	public abstract int calculLoyer();
 
-	private Joueur getProprietaire() {
+	public Joueur getProprietaire() {
 		return this.proprietaire;
 	}
 

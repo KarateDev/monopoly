@@ -15,12 +15,10 @@ public class Joueur {
         }
 
 	/**
-	 * test git
 	 * @param l
 	 */
 	public void payerLoyer(int l) {
-		// TODO - implement Joueur.payerLoyer
-		throw new UnsupportedOperationException();
+            setCash(getCash()-l);
 	}
 
 	/**
@@ -28,44 +26,45 @@ public class Joueur {
 	 * @param l
 	 */
 	public void recevoirLoyer(int l) {
-		// TODO - implement Joueur.recevoirLoyer
-		throw new UnsupportedOperationException();
+            setCash(getCash()+l);
 	}
 
 	public int getnbgare() {
-		// TODO - implement Joueur.getnbgare
-		throw new UnsupportedOperationException();
+		HashSet proprietes = getProprietes();
+                int nbgare = 0;
+                for(Propriete p : this.proprietes){
+                    if(p.getClass()== Gare.class){
+                        nbgare += 1;
+                    }
+                }
+                return nbgare;
 	}
 
-	public HashSet<Propriete> getproprietes() {
-		return this.getProprietes();
+	public HashSet<Propriete> getProprietes() {
+		return this.proprietes;
 	}
 
 	/**
 	 * 
 	 * @param propriété
 	 */
-	public boolean achatPropriété(ProprieteAConstruire propriété) {
-		// TODO - implement Joueur.achatPropriété
-		throw new UnsupportedOperationException();
+	public boolean achatPropriété(Propriete propriete) {
+		if(getCash() >= propriete.getPrix()){
+                    propriete.setProprietaire(this);
+                    addPropriete(propriete);
+                    setCash(getCash()-propriete.getPrix());
+                    return true;
+                }else{
+                    return false;
+                }
 	}
 
 	public int getCash() {
 		return this.cash;
 	}
 
-	public void addPropriete() {
-		// TODO - implement Joueur.addPropriete
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param prop
-	 */
-	public void payePropriete(Propriete prop) {
-		// TODO - implement Joueur.payePropriete
-		throw new UnsupportedOperationException();
+	public void addPropriete(Propriete propriete) {
+		proprietes.add(propriete);
 	}
 
 	public Carreau getPositionCourante() {
@@ -80,25 +79,18 @@ public class Joueur {
 		this.positionCourante = pos;
 	}
 
-    /**
-     * @return the proprietes
-     */
-    public HashSet<Propriete> getProprietes() {
-        return proprietes;
-    }
+        /**
+         * @return the nomJoueur
+         */
+        public String getNomJoueur() {
+            return nomJoueur;
+        }
 
-    /**
-     * @return the nomJoueur
-     */
-    public String getNomJoueur() {
-        return nomJoueur;
-    }
-
-    /**
-     * @param cash the cash to set
-     */
-    public void setCash(int cash) {
-        this.cash = cash;
-    }
+        /**
+         * @param cash the cash to set
+         */
+        public void setCash(int cash) {
+            this.cash = cash;
+        }
 
 }
