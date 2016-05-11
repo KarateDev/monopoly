@@ -10,7 +10,7 @@ public class Joueur {
 	private int cash = 1500;
 
 	/**
-	 * 
+	 * test git
 	 * @param l
 	 */
 	public void payerLoyer(int l) {
