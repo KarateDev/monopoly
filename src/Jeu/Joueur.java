@@ -5,9 +5,14 @@ import java.util.*;
 public class Joueur {
 
 	private Carreau positionCourante;
-	HashSet<Propriete> proprietes;
+	private HashSet<Propriete> proprietes;
 	private String nomJoueur;
 	private int cash = 1500;
+        
+        public Joueur(String nomjoueur){
+            proprietes = new HashSet<>();
+            this.nomJoueur = nomjoueur;
+        }
 
 	/**
 	 * test git
@@ -33,7 +38,7 @@ public class Joueur {
 	}
 
 	public HashSet<Propriete> getproprietes() {
-		return this.proprietes;
+		return this.getProprietes();
 	}
 
 	/**
@@ -74,5 +79,26 @@ public class Joueur {
 	public void setPositionCourante(Carreau pos) {
 		this.positionCourante = pos;
 	}
+
+    /**
+     * @return the proprietes
+     */
+    public HashSet<Propriete> getProprietes() {
+        return proprietes;
+    }
+
+    /**
+     * @return the nomJoueur
+     */
+    public String getNomJoueur() {
+        return nomJoueur;
+    }
+
+    /**
+     * @param cash the cash to set
+     */
+    public void setCash(int cash) {
+        this.cash = cash;
+    }
 
 }
