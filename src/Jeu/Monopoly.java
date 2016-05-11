@@ -5,12 +5,12 @@ import java.util.*;
 public class Monopoly {
 
 	private HashMap<Integer,Carreau> carreaux;
-	private HashMap<String,Joueur> joueurs;
+	private ArrayList<Joueur> joueurs;
         private HashSet<Integer> des;
         
     public Monopoly(){
         carreaux = new HashMap<>();
-        joueurs = new HashMap<>();
+        joueurs = new ArrayList<>();
 		des = new HashSet<>();
     }
 
@@ -32,16 +32,16 @@ public class Monopoly {
 	this.carreaux = carreaux;
     }
 
-    public HashMap<String, Joueur> getJoueurs() {
+    public ArrayList<Joueur> getJoueurs() {
 	return joueurs;
     }
 
-    public void setJoueurs(HashMap<String, Joueur> joueurs) {
+    public void setJoueurs(ArrayList<Joueur> joueurs) {
 	this.joueurs = joueurs;
     }
         
         public void addJoueur(Joueur j){
-            this.joueurs.put(j.getNomJoueur(),j);
+            this.joueurs.add(j);
         }
         
         public HashSet<Integer> getDes() {
