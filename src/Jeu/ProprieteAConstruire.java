@@ -7,7 +7,7 @@ public class ProprieteAConstruire extends Propriete {
     }
 
     @Override
-    public int calculLoyer() {
+    public int calculLoyer(int valeurdes) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

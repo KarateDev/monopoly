@@ -17,7 +17,7 @@ public abstract class Propriete extends Carreau {
 		this.proprietaire = j;
 	}
 
-	public abstract int calculLoyer();
+	public abstract int calculLoyer(int valeurdes);
 
 	public Joueur getProprietaire() {
 		return this.proprietaire;

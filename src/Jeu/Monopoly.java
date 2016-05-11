@@ -6,15 +6,21 @@ public class Monopoly {
 
 	private HashMap<Integer,Carreau> Carreaux;
 	private HashMap<String,Joueur> joueurs;
+        private HashSet<Integer> des;
         
         public Monopoly(){
             Carreaux = new HashMap();
             joueurs = new HashMap<>();
+            des = new HashSet<>();
         }
 
-	public int lancerDe() {
-		Random rand = new Random();
-                return rand.nextInt(6)+1;
+	public void lancerDes() {
+            des.clear();
+            Random rand = new Random();
+            int de = rand.nextInt(6)+1;
+            des.add(de);
+            de = rand.nextInt(6)+1;
+            des.add(de);
 	}
         
         public void addJoueur(Joueur j){
@@ -30,6 +36,10 @@ public class Monopoly {
          */
         public HashMap<Integer,Carreau> getCarreaux() {
             return Carreaux;
+        }
+        
+        public HashSet<Integer> getDes() {
+            return des;
         }
 
         /**

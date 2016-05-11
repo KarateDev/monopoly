@@ -13,5 +13,8 @@ public abstract class Carreau {
 	public int getNumero() {
 		return this.numero;
 	}
-
+        
+        public String getNomCarreau(){
+            return this.nomCarreau;
+        }
 }

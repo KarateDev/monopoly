@@ -1,9 +1,17 @@
 package Jeu;
 
-public class Gare extends Compagnie {
+import java.util.HashSet;
+
+public class Gare extends Propriete {
 
     public Gare(int numcase, String nomcarreau) {
         super(numcase, nomcarreau);
+    }
+
+    @Override
+    public int calculLoyer(int valeurdes) {
+        int nbgare = getProprietaire().getnbgare();
+        return 25 * nbgare;
     }
     
 }

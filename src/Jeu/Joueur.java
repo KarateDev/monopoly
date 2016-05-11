@@ -42,6 +42,17 @@ public class Joueur {
                 }
                 return nbgare;
 	}
+        
+        public int getnbServicePublique() {
+		HashSet proprietes = getProprietes();
+                int nbservicepublique = 0;
+                for(Propriete p : this.proprietes){
+                    if(p.getClass()== ServicePublique.class){
+                        nbservicepublique += 1;
+                    }
+                }
+                return nbservicepublique;
+	}
 
 	public HashSet<Propriete> getProprietes() {
 		return this.proprietes;
