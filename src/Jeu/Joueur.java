@@ -19,7 +19,7 @@ public class Joueur {
 	 */
 	public void payerLoyer(int l) {
             if (getCash()-l<0){
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(); // si le joueur ne peut pas payer
             }
             setCash(getCash()-l);
 	}

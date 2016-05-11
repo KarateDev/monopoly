@@ -2,11 +2,17 @@ package Jeu;
 
 public abstract class Propriete extends Carreau {
 
-	Joueur proprietaire;
+	private Joueur proprietaire;
+        private int prixachat;
         
-        public Propriete(int numcase,String nomcarreau){
+        public Propriete(int numcase,String nomcarreau,int prixachat){
             super(numcase,nomcarreau);
             setProprietaire(null);
+            setPrixachat(prixachat);
+        }
+        
+        private void setPrixachat(int prixachat){
+            this.prixachat = prixachat;
         }
 
 	/**
@@ -33,18 +39,8 @@ public abstract class Propriete extends Carreau {
 	}
 
 	public int getPrix() {
-		// TODO - implement Propriete.getPrix
-		throw new UnsupportedOperationException();
+		return this.prixachat;
 	}
 
-	public Propriete getPropriété() {
-		// TODO - implement Propriete.getPropriété
-		throw new UnsupportedOperationException();
-	}
-
-	public void addProprietaire() {
-		// TODO - implement Propriete.addProprietaire
-		throw new UnsupportedOperationException();
-	}
 
 }

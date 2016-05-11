@@ -2,8 +2,8 @@ package Jeu;
 
 public class ServicePublique extends Propriete {
 
-    public ServicePublique(int numcase, String nomcarreau) {
-        super(numcase, nomcarreau);
+    public ServicePublique(int numcase, String nomcarreau,int prixachat) {
+        super(numcase, nomcarreau, prixachat);
     }
 
     @Override
