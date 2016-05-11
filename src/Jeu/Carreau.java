@@ -10,11 +10,16 @@ public abstract class Carreau {
             this.nomCarreau = nomcarreau;
         }
 
+    public String getNomCarreau() {
+	return nomCarreau;
+    }
+
+    public void setNomCarreau(String nomCarreau) {
+	this.nomCarreau = nomCarreau;
+    }
+
 	public int getNumero() {
 		return this.numero;
 	}
         
-        public String getNomCarreau(){
-            return this.nomCarreau;
-        }
 }

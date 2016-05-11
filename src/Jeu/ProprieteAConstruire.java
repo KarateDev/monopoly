@@ -3,30 +3,48 @@ import java.util.HashSet;
 
 public class ProprieteAConstruire extends Propriete {
     
-    private Groupe groupe;
+    private CouleurPropriete couleur;
     private int loyerterrainnu;
+    private int loyer1maison;
+    private int loyer2maison;
+    private int loyer3maison;
+    private int loyer4maison;
+    private int loyer1hotel;
+    private int prixhypoteque;
     private int nbmaison;
 
-    public ProprieteAConstruire(int numcase, String nomcarreau,int prixachat,int loyerterrainnu) {
+    public ProprieteAConstruire(int numcase, String nomcarreau,CouleurPropriete couleur,int prixachat,int loyerterrainnu
+            , int loyer1maison, int loyer2maison, int loyer3maison, int loyer4maison, int loyer1hotel, int prixhypotheque) {
         super(numcase, nomcarreau, prixachat);
-        setloyerterrainnu(loyerterrainnu);
+        this.couleur = couleur;
+        this.loyerterrainnu = loyerterrainnu;
+        this.loyer1maison = loyer1maison;
+        this.loyer2maison = loyer2maison;
+        this.loyer3maison = loyer3maison;
+        this.loyer4maison = loyer4maison;
+        this.loyer1hotel = loyer1hotel; // = 5maison
+        this.prixhypoteque = prixhypotheque;
         this.nbmaison = 0;
     }
 
     @Override
     public int calculLoyer(int valeurdes) { //sans les maisons pour le moment
-        HashSet<ProprieteAConstruire> paconstruires = this.getGroupe().getProprieteAConstruires();
-        Boolean toutmemegroupe = true;
-        for(ProprieteAConstruire p : paconstruires){
-            if (!getProprietaire().getProprietes().contains(p)){
-                toutmemegroupe = false;
+        int nbmaisonmemecouleur = 0;
+        HashSet<Propriete> proprietes = this.getProprietaire().getProprietes();
+        for (Propriete p : proprietes){                     // pour savoir si le joueur possede tout les terrains de meme couleur
+            if (p.getClass() == ProprieteAConstruire.class){
+                if (((ProprieteAConstruire) p).getCouleur() == this.getCouleur()){
+                    nbmaisonmemecouleur +=1;
+                }
             }
         }
-        if (toutmemegroupe){
-            return getoyeloyerterrainnu() * 2;
+        
+        if (nbmaisonmemecouleur == 3 || (this.getCouleur() == CouleurPropriete.bleuFonce && nbmaisonmemecouleur == 2)){
+            return loyerterrainnu *2;
         }else{
-            return getoyeloyerterrainnu();
+            return loyerterrainnu;
         }
+
     }
     
     public void addMaison(){
@@ -36,33 +54,9 @@ public class ProprieteAConstruire extends Propriete {
     public int getNbmaison(){
         return this.nbmaison;
     }
-
-    /**
-     * @return the loyer
-     */
-    public int getoyeloyerterrainnu() {
-        return loyerterrainnu;
-    }
-
-    /**
-     * @param loyer the loyer to set
-     */
-    private void setloyerterrainnu(int loyer) {
-        this.loyerterrainnu = loyer;
-    }
-
-    /**
-     * @return the groupe
-     */
-    public Groupe getGroupe() {
-        return groupe;
-    }
-
-    /**
-     * @param groupe the groupe to set
-     */
-    public void setGroupe(Groupe groupe) {
-        this.groupe = groupe;
-    }
     
+    public CouleurPropriete getCouleur(){
+        return this.couleur;
+    }
+
 }

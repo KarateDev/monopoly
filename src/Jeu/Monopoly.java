@@ -5,12 +5,12 @@ import java.util.*;
 public class Monopoly {
 
 	private HashMap<Integer,Carreau> Carreaux;
-	private HashMap<String,Joueur> joueurs;
+	private HashSet<Joueur> joueurs;
         private HashSet<Integer> des;
         
         public Monopoly(){
             Carreaux = new HashMap();
-            joueurs = new HashMap<>();
+            joueurs = new HashSet<>();
             des = new HashSet<>();
         }
 
@@ -24,7 +24,7 @@ public class Monopoly {
 	}
         
         public void addJoueur(Joueur j){
-            this.joueurs.put(j.getNomJoueur(),j);
+            this.joueurs.add(j);
         }
         
         public void addCarreau(Carreau c){
@@ -45,7 +45,7 @@ public class Monopoly {
         /**
          * @return the joueurs
          */
-        public HashMap<String,Joueur> getJoueurs() {
+        public HashSet<Joueur> getJoueurs() {
             return joueurs;
         }
 

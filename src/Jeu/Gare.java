@@ -1,7 +1,5 @@
 package Jeu;
 
-import java.util.HashSet;
-
 public class Gare extends Propriete {
 
     public Gare(int numcase, String nomcarreau,int prixachat) {

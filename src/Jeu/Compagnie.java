@@ -1,8 +1,8 @@
 package Jeu;
 
-public class ServicePublique extends Propriete {
+public class Compagnie extends Propriete {
 
-    public ServicePublique(int numcase, String nomcarreau,int prixachat) {
+    public Compagnie(int numcase, String nomcarreau,int prixachat) {
         super(numcase, nomcarreau, prixachat);
     }
 
