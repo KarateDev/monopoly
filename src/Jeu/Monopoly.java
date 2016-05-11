@@ -20,5 +20,23 @@ public class Monopoly {
         public void addJoueur(Joueur j){
             this.joueurs.put(j.getNomJoueur(),j);
         }
+        
+        public void addCarreau(Carreau c){
+            this.Carreaux.put(c.getNumero(),c);
+        }
+
+        /**
+         * @return the Carreaux
+         */
+        public HashMap<Integer,Carreau> getCarreaux() {
+            return Carreaux;
+        }
+
+        /**
+         * @return the joueurs
+         */
+        public HashMap<String,Joueur> getJoueurs() {
+            return joueurs;
+        }
 
 }

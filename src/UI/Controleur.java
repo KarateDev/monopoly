@@ -88,8 +88,7 @@ public class Controleur {
 	 * @param indice
 	 */
 	public Carreau getCarreau(int indice) {
-		// TODO - implement Controleur.getCarreau
-		throw new UnsupportedOperationException();
+		return monopoly.getCarreaux().get(indice);
 	}
 
 }
