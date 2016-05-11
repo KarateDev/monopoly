@@ -18,6 +18,9 @@ public class Joueur {
 	 * @param l
 	 */
 	public void payerLoyer(int l) {
+            if (getCash()-l<0){
+                throw new UnsupportedOperationException();
+            }
             setCash(getCash()-l);
 	}
 
