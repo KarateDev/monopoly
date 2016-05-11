@@ -4,12 +4,21 @@ import java.util.*;
 
 public class Monopoly {
 
-	private Carreau carreaux;
-	private Collection<Joueur> joueurs;
+	private HashMap<Integer,Carreau> Carreaux;
+	private HashMap<String,Joueur> joueurs;
+        
+        public Monopoly(){
+            Carreaux = new HashMap();
+            joueurs = new HashMap<>();
+        }
 
 	public int lancerDe() {
-		// TODO - implement Monopoly.lancerDe
-		throw new UnsupportedOperationException();
+		Random rand = new Random();
+                return rand.nextInt(6)+1;
 	}
+        
+        public void addJoueur(Joueur j){
+            this.joueurs.put(j.getNomJoueur(),j);
+        }
 
 }
