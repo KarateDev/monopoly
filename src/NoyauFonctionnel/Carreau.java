@@ -1,3 +1,5 @@
+package NoyauFonctionnel;
+
 public abstract class Carreau {
 
 	private int numero;

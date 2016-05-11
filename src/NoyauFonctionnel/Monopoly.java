@@ -1,3 +1,5 @@
+package NoyauFonctionnel;
+
 import java.util.*;
 
 public class Monopoly {

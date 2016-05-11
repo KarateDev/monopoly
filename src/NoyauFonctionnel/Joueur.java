@@ -1,10 +1,12 @@
+package NoyauFonctionnel;
+
 import java.util.*;
 import NoyauFonctionnel.*;
 
 public class Joueur {
 
 	private Carreau positionCourante;
-	Collection<Propriete> proprietes;
+	HashSet<Propriete> proprietes;
 	private String nomJoueur;
 	private int cash = 1500;
 
@@ -31,7 +33,7 @@ public class Joueur {
 		throw new UnsupportedOperationException();
 	}
 
-	public Propriete getproprietes() {
+	public HashSet<Propriete> getproprietes() {
 		return this.proprietes;
 	}
 

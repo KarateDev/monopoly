@@ -1,5 +1,9 @@
 package Control;
 
+import NoyauFonctionnel.Monopoly;
+import NoyauFonctionnel.Carreau;
+import NoyauFonctionnel.Joueur;
+
 public class Controleur {
 
 	IHM ihm;
