@@ -1,15 +1,25 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Jeu;
 
-public class Compagnie extends Propriete {
+/**
+ *
+ * @author mazzillj
+ */
+public class Compagnie extends Propriete{
 
-    public Compagnie(int numcase, String nomcarreau) {
-        super(numcase, nomcarreau);
+    public Compagnie(int num, String nomcarreau) {
+	super(num, nomcarreau);
     }
 
     @Override
-    public int calculLoyer() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    
+    public int calculLoyer(int valeurdes) {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+ 
     
 }
