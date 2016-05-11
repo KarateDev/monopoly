@@ -92,4 +92,22 @@ public class Controleur {
 		throw new UnsupportedOperationException();
 	}
 
+        public void initialiserUnePartie(){
+	    //intialisation du plateau de jeu
+	    int nbJoueurs = 0;
+	    boolean fin = false;
+	    while( nbJoueurs < 6 && !fin){
+		String nom = ihm.saisirNom();
+		Joueur j = new Joueur(nom);
+		monopoly.addJoueur(j);
+		
+		
+		if(nbJoueurs >=2){
+		    //demander si il a terminé
+		}
+	    
+	    
+	    }
+            
+        }
 }
