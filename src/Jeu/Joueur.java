@@ -1,7 +1,6 @@
-package NoyauFonctionnel;
+package Jeu;
 
 import java.util.*;
-import NoyauFonctionnel.*;
 
 public class Joueur {
 

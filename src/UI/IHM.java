@@ -1,6 +1,4 @@
-package Control;
-
-import Control.*;
+package UI;
 
 public class IHM {
 

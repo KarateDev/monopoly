@@ -1,4 +1,4 @@
-package NoyauFonctionnel;
+package Jeu;
 
 public abstract class Propriete extends Carreau {
 

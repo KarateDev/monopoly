@@ -1,4 +1,4 @@
-package NoyauFonctionnel;
+package Jeu;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package NoyauFonctionnel;
+package Jeu;
 
 public class Groupe {
 

@@ -1,4 +1,4 @@
-package NoyauFonctionnel;
+package Jeu;
 
 public class ProprieteAConstruire extends Propriete {
 }

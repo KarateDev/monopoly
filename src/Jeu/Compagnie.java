@@ -1,4 +1,4 @@
-package NoyauFonctionnel;
+package Jeu;
 
 public class Compagnie extends Propriete {
 }
