@@ -14,12 +14,12 @@ public abstract class Carreau {
 	return nomCarreau;
     }
 
-    public void setNomCarreau(String nomCarreau) {
+    private void setNomCarreau(String nomCarreau) {
 	this.nomCarreau = nomCarreau;
     }
 
-	public int getNumero() {
-		return this.numero;
-	}
+    public int getNumero() {
+        return this.numero;
+    }
         
 }

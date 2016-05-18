@@ -9,18 +9,16 @@ public class Joueur {
 	private String nomJoueur;
 	private int cash = 1500;
         
-    public Joueur(String nomjoueur){ 
+    public Joueur(String nomjoueur,Carreau depart){ 
         proprietes = new HashSet<>();
         this.nomJoueur = nomjoueur;
+        this.positionCourante = depart;
     }
 
 	/**
 	 * @param l
 	 */
-	public void payerLoyer(int l) {
-            if (getCash()-l<0){
-                throw new UnsupportedOperationException(); // si le joueur ne peut pas payer
-            }
+	public void payerCash(int l) {
             setCash(getCash()-l);
 	}
 
@@ -28,7 +26,7 @@ public class Joueur {
 	 * 
 	 * @param l
 	 */
-	public void recevoirLoyer(int l) {
+	public void recevoirCash(int l) {
             setCash(getCash()+l);
 	}
 
@@ -87,7 +85,7 @@ public class Joueur {
 	}
 
 	public void addPropriete(Propriete propriete) {
-		proprietes.add(propriete);
+		this.proprietes.add(propriete);
 	}
 
 	public Carreau getPositionCourante() {
@@ -112,7 +110,7 @@ public class Joueur {
         /**
          * @param cash the cash to set
          */
-        public void setCash(int cash) {
+        private void setCash(int cash) {
             this.cash = cash;
         }
 }

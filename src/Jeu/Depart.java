@@ -2,8 +2,15 @@ package Jeu;
 
 public class Depart extends Carreau {
     
-    public Depart(){
+    private int gainPourPassage;
+    
+    public Depart(int gainpourpassage){
             super(1,"Depart");
+            this.gainPourPassage = gainpourpassage;
         }
+    
+    public int getGainPourPassage(){
+        return this.gainPourPassage;
+    }
     
 }

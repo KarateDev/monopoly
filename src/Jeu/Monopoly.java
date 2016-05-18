@@ -11,11 +11,11 @@ public class Monopoly {
         public Monopoly(){
             Carreaux = new HashMap();
             joueurs = new ArrayList<>();
-            des = new ArrayList<>();
+            des = new ArrayList<>(2);
         }
 
 	public void lancerDes() {
-            des.clear();
+            this.des.clear();
             Random rand = new Random();
             int de = rand.nextInt(6)+1;
             des.add(de);
@@ -47,6 +47,14 @@ public class Monopoly {
          */
         public ArrayList<Joueur> getJoueurs() {
             return joueurs;
+        }
+        
+        public int getSommeDes() {
+            return des.get(0)+des.get(1);
+        }
+        
+        public void eliminerJoueur(Joueur j){
+            joueurs.remove(j);
         }
 
 }
