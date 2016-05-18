@@ -9,7 +9,7 @@ public class Joueur {
 	private String nomJoueur;
 	private int cash = 1500;
         
-    public Joueur(String nomjoueur){
+    public Joueur(String nomjoueur){ 
         proprietes = new HashSet<>();
         this.nomJoueur = nomjoueur;
     }
@@ -72,6 +72,15 @@ public class Joueur {
                     return false;
                 }
 	}
+        
+        public void achatMaisonSurPropriete(ProprieteAConstruire propriete){
+            if(getCash() >= propriete.PRIXMAISON){
+                if (propriete.getNbmaison() < 5){
+                    setCash(getCash() - propriete.PRIXMAISON);
+                    propriete.addMaison();
+                }
+            }
+        }
 
 	public int getCash() {
 		return this.cash;

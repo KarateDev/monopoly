@@ -5,13 +5,13 @@ import java.util.*;
 public class Monopoly {
 
 	private HashMap<Integer,Carreau> Carreaux;
-	private HashSet<Joueur> joueurs;
-        private HashSet<Integer> des;
+	private ArrayList<Joueur> joueurs;
+        private ArrayList<Integer> des;
         
         public Monopoly(){
             Carreaux = new HashMap();
-            joueurs = new HashSet<>();
-            des = new HashSet<>();
+            joueurs = new ArrayList<>();
+            des = new ArrayList<>();
         }
 
 	public void lancerDes() {
@@ -38,14 +38,14 @@ public class Monopoly {
             return Carreaux;
         }
         
-        public HashSet<Integer> getDes() {
+        public ArrayList<Integer> getDes() {
             return des;
         }
 
         /**
          * @return the joueurs
          */
-        public HashSet<Joueur> getJoueurs() {
+        public ArrayList<Joueur> getJoueurs() {
             return joueurs;
         }
 
