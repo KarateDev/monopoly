@@ -21,7 +21,7 @@ public class jeu {
 		controleur.initialiserUnePartie();
                 
                 int numeroJoueur = 0;
-                while (controleur.getMonopoly().getJoueurs().size() > 1){ //boucle du jeu tant qu'il reste plus un joueur
+                while (controleur.getMonopoly().getJoueurs().size() > 1){ //boucle du jeu tant qu'il reste plus qu'un joueur
                     Joueur j = controleur.getMonopoly().getJoueurs().get(numeroJoueur);
                     controleur.jouerUnCoup(j);
                     numeroJoueur += 1;

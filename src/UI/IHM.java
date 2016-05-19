@@ -98,5 +98,23 @@ public class IHM {
     public void afficherFaitUnDouble(){
         System.out.println("Vous avez fait un double ! Vous pouvez donc rejouer !");
     }
+
+    public boolean finSaisie() {
+	boolean fin = false;
+	String rep = "rien";
+	while(!rep.equals("oui") && !rep.equals("non") ){
+	System.out.println("Voulez vous stoper l'ajout de joueurs ? (oui/non) ");
+	Scanner sc = new Scanner(System.in);
+	rep = sc.nextLine();
+	if(rep.equals("oui")){
+	    fin = true;
+	}else{
+	    if(!rep.equals("non")){
+		System.out.println("Vous devez repondre par oui ou non !");
+	    }
+	}
+	}
+	return fin;
+    }
     
 }

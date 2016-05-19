@@ -198,18 +198,17 @@ public class Controleur {
 	    //intialisation du plateau de jeu
 	    int nbJoueurs = 0;
 	    boolean fin = false;
-		for (int i = 1; i <= 6; ++i) {
-			String nom = ihm.saisirNom(i);
-			if (nom.equals("fin")){
-                            if (i > 2){
-                                break;
-                            }else{
-                                i--;
-                            }
-                        }
-			Joueur j = new Joueur(nom,monopoly.getCarreaux().get(1));
-			getMonopoly().addJoueur(j);
+		int nbj = 1;
+		while(!fin ){
+		    String nom = ihm.saisirNom(nbj); 
+		    if(nbj >= 2){
+			fin = ihm.finSaisie();
+		    }
+		    Joueur j = new Joueur(nom,monopoly.getCarreaux().get(1));
+		    getMonopoly().addJoueur(j);
+		    nbj++;
 		}
+		
             }
 
         /**
