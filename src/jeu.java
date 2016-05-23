@@ -20,15 +20,15 @@ public class jeu {
 		controleur.creerPlateau("./data.txt");
 		controleur.initialiserUnePartie();
                 
-                int numeroJoueur = 0;
-                while (controleur.getMonopoly().getJoueurs().size() > 1){ //boucle du jeu tant qu'il reste plus qu'un joueur
-                    Joueur j = controleur.getMonopoly().getJoueurs().get(numeroJoueur);
-                    controleur.jouerUnCoup(j);
-                    numeroJoueur += 1;
-                    if (numeroJoueur > controleur.getMonopoly().getJoueurs().size()-1){
-                        numeroJoueur = 0;
-                    }
+            int numeroJoueur = 0;
+            while (controleur.getMonopoly().getJoueurs().size() > 1){ //boucle du jeu tant qu'il reste plus qu'un joueur
+                Joueur j = controleur.getMonopoly().getJoueurs().get(numeroJoueur);
+                controleur.jouerUnCoup(j);
+                numeroJoueur += 1;
+                if (numeroJoueur > controleur.getMonopoly().getJoueurs().size()-1){
+                    numeroJoueur = 0;
                 }
+            }
 	}
     
 }

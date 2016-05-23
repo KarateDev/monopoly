@@ -166,6 +166,7 @@ public class Controleur {
                 }while (aFaitUnDouble);
                 if (nbDouble == 3){ //on envoie le joueur en prison  a completer
                     ihm.afficherJoueur3double(j);
+		    j.setPositionCourante(getCarreau(11));
                 }
 	}
 

@@ -8,29 +8,33 @@ public class Monopoly {
 	private ArrayList<Joueur> joueurs;
         private ArrayList<Integer> des;
         
-        public Monopoly(){
-            Carreaux = new HashMap();
-            joueurs = new ArrayList<>();
-            des = new ArrayList<>(2);
-        }
+    public Monopoly() {
+        Carreaux = new HashMap();
+        joueurs = new ArrayList<>();
+        des = new ArrayList<>(2);
+    }
 
 	public void lancerDes() {
-            this.des.clear();
-            Random rand = new Random();
-            int de = rand.nextInt(6)+1;
-            des.add(de);
-            de = rand.nextInt(6)+1;
-            des.add(de);
+		this.des.clear();
+		Random rand = new Random();
+		int de = rand.nextInt(6)+1;
+		des.add(de);
+		de = rand.nextInt(6)+1;
+		des.add(de);
 	}
         
-        public void addJoueur(Joueur j){
-            this.joueurs.add(j);
-        }
+    public void addJoueur(Joueur j){
+		this.joueurs.add(j);
+	}
         
-        public void addCarreau(Carreau c){
-            this.Carreaux.put(c.getNumero(),c);
-        }
+    public void addCarreau(Carreau c){
+        this.Carreaux.put(c.getNumero(),c);
+    }
 
+		
+	public void envoyerEnPrison(Joueur j) {
+		j.setPositionCourante(this.getCarreaux().get(11));//la prison se trouve être la case 11
+	}
         /**
          * @return the Carreaux
          */
