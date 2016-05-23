@@ -65,6 +65,11 @@ public class IHM {
          System.out.println("Il vous reste : "+j.getCash()+"€\n");
     }
     
+    public void afficherPayerTaxe(Joueur j , Taxe t){
+	System.out.println(t.getNomCarreau() + " : Vous payez " + t.getPrixTaxe() + " au trésor public ");
+        System.out.println("Il vous reste : "+j.getCash()+"€\n");
+    }
+    
     public boolean afficherDemandeAcheterPropriete(Propriete p){
         Scanner sc = new Scanner(System.in);
         System.out.print("Voulez vous acheter cette propriete ? (oui/non) : ");

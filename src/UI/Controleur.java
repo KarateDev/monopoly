@@ -114,6 +114,8 @@ public class Controleur {
                     if (aFaitUnDouble){
                         nbDouble ++;
                         if (nbDouble == 3){
+			    ihm.afficherJoueur(j);    //affichage des données du joueur
+			    ihm.afficherLancerDesDe(getMonopoly().getDes().get(0), getMonopoly().getDes().get(1)); //affiche les resultats des dés
                             break;
                         }
                     }
@@ -124,6 +126,7 @@ public class Controleur {
                         ihm.affichePassageDepart(((Depart) getCarreau(1)).getGainPourPassage());
                     }
                     ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));  //affiche le carreau su lequel il tombe
+
 
                     if (j.getPositionCourante().getClass() == Gare.class 
                             || j.getPositionCourante().getClass() == ProprieteAConstruire.class 
@@ -153,6 +156,10 @@ public class Controleur {
                     } else if (j.getPositionCourante() instanceof AllerEnPrison) {
 						monopoly.envoyerEnPrison(j);
 					}
+
+		    // gère les intercations du joueur avec le carreau
+		    interactionCarreau(j);
+                    
 
                     if (j.getCash() < 0){ //si le joueur n'a plus d'argent, il est eliminé
                         ihm.afficherJoueurElimine(j);
@@ -217,5 +224,44 @@ public class Controleur {
         public Monopoly getMonopoly() {
             return monopoly;
         }
+	
+	/*
+	Le controlleur vérifie sur quelle case se trouve le joueur et lui propose une interaction adéquate
+	*/
+	public void interactionCarreau(Joueur j){
+	    // verifie la case sur laquelle se trouve le joueur
+                    if (j.getPositionCourante().getClass() == Gare.class 
+                            || j.getPositionCourante().getClass() == ProprieteAConstruire.class 
+                            || j.getPositionCourante().getClass() == Compagnie.class){ //si il tombe sur une case propriete
+                        Propriete p = (Propriete) j.getPositionCourante();
+			// si il n'y a pas de propriétaire, le joueur peut acheter la case
+                        if (p.getProprietaire() == null){
+                            if (j.getCash() >= p.getPrix()){
+                                boolean reponse = ihm.afficherDemandeAcheterPropriete(p); //demande la reponse
+                                if (reponse == true){
+                                    j.achatPropriété(p);
+                                    ihm.afficherAchatPropriete(p);
+                                }
+                            }
+                        }else{
+			    // si le joueur n'est pas le propriétaire , il paye le loyer
+                            if (!j.equals(p.getProprietaire())){ 
+                                j.payerCash(p.calculLoyer(getMonopoly().getSommeDes()));
+                                p.getProprietaire().recevoirCash(p.calculLoyer(getMonopoly().getSommeDes()));
+                                ihm.afficherPayerLoyer(j, p, p.calculLoyer(getMonopoly().getSommeDes())); //affiche que le joueur doit payer un loyer
+                            }
+                        }
+                    }else if (j.getPositionCourante() instanceof Taxe) {
+                        Taxe caseTaxe = (Taxe) j.getPositionCourante();
+			j.payerTaxe(caseTaxe.getPrixTaxe());
+			ihm.afficherPayerTaxe(j, caseTaxe);
+                   } else if (j.getPositionCourante() instanceof CaisseDeCommunaute) {
+                        //a completer (si il tombe sur une case caisse de communaute)
+                    } else if (j.getPositionCourante() instanceof Chance) {
+                        //a completer (si il tombe sur une case chance)
+                    } else if (j.getPositionCourante() instanceof AllerEnPrison) {
+						monopoly.envoyerEnPrison(j);
+		    }
+	}
 
 }

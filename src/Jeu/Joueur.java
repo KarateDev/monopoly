@@ -21,6 +21,10 @@ public class Joueur {
 	public void payerCash(int l) {
             setCash(getCash()-l);
 	}
+	
+	public void payerTaxe(int t) {
+	    setCash(getCash() +t);
+	}
 
 	/**
 	 * 
