@@ -52,10 +52,10 @@ public class Controleur {
 							getMonopoly().addCarreau(new Depart(Integer.valueOf(data.get(i)[3])));
 							break;
 						case "Impôt sur le revenu":
-                                                        getMonopoly().addCarreau(new Taxe(Integer.valueOf(data.get(i)[1]), data.get(i)[2], Integer.valueOf(data.get(i)[3])));
+							getMonopoly().addCarreau(new Taxe(Integer.valueOf(data.get(i)[1]), data.get(i)[2], Integer.valueOf(data.get(i)[3])));
 							break;
-                                                case "Taxe de Luxe":
-                                                        getMonopoly().addCarreau(new Taxe(Integer.valueOf(data.get(i)[1]), data.get(i)[2], Integer.valueOf(data.get(i)[3])));
+						case "Taxe de Luxe":
+							getMonopoly().addCarreau(new Taxe(Integer.valueOf(data.get(i)[1]), data.get(i)[2], Integer.valueOf(data.get(i)[3])));
 							break;
 						case "Caisse de Communauté":
 							getMonopoly().addCarreau(new CaisseDeCommunaute(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
@@ -69,10 +69,9 @@ public class Controleur {
 						case "Parc Gratuit":
 							getMonopoly().addCarreau(new ParcPublic(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
 							break;
-                                                default: //c'est pour la case "aller en prison"
-                                                        getMonopoly().addCarreau(new Prison(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
-							break;
-                                                    
+						case "Allez en prison":
+						case "Simple Visite / En Prison":
+							getMonopoly().addCarreau(new AllerEnPrison(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
 					}
 				}
 				else
@@ -145,16 +144,16 @@ public class Controleur {
                                 ihm.afficherPayerLoyer(j, p, p.calculLoyer(getMonopoly().getSommeDes())); //affiche que le joueur doit payer un loyer
                             }
                         }
-                    }else if(j.getPositionCourante().getClass() == Taxe.class){
+                    } else if (j.getPositionCourante() instanceof Taxe) {
                         //a completer (si il tombe sur une case taxe)
-                    }else if(j.getPositionCourante().getClass() == CaisseDeCommunaute.class){
+                    } else if (j.getPositionCourante() instanceof CaisseDeCommunaute) {
                         //a completer (si il tombe sur une case caisse de communaute)
-                    }else if(j.getPositionCourante().getClass() == Chance.class){
+                    } else if (j.getPositionCourante() instanceof Chance) {
                         //a completer (si il tombe sur une case chance)
-                    }else if(j.getPositionCourante().getNomCarreau().equals("Allez en prison")){
-                        //a completer (si il tombe sur la case aller en prison)
-                    }
-                    
+                    } else if (j.getPositionCourante() instanceof AllerEnPrison) {
+						monopoly.envoyerEnPrison(j);
+					}
+
                     if (j.getCash() < 0){ //si le joueur n'a plus d'argent, il est eliminé
                         ihm.afficherJoueurElimine(j);
                         getMonopoly().eliminerJoueur(j);
