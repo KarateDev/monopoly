@@ -128,34 +128,7 @@ public class Controleur {
                     ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));  //affiche le carreau su lequel il tombe
 
 
-                    if (j.getPositionCourante().getClass() == Gare.class 
-                            || j.getPositionCourante().getClass() == ProprieteAConstruire.class 
-                            || j.getPositionCourante().getClass() == Compagnie.class){ //si il tombe sur une case propriete
-                        Propriete p = (Propriete) j.getPositionCourante();
-                        if (p.getProprietaire() == null){
-                            if (j.getCash() >= p.getPrix()){
-                                boolean reponse = ihm.afficherDemandeAcheterPropriete(p); //demande la reponse
-                                if (reponse == true){
-                                    j.achatPropriété(p);
-                                    ihm.afficherAchatPropriete(p);
-                                }
-                            }
-                        }else{
-                            if (!j.equals(p.getProprietaire())){ //si le joueur n'est pas le proprietaire, il paye
-                                j.payerCash(p.calculLoyer(getMonopoly().getSommeDes()));
-                                p.getProprietaire().recevoirCash(p.calculLoyer(getMonopoly().getSommeDes()));
-                                ihm.afficherPayerLoyer(j, p, p.calculLoyer(getMonopoly().getSommeDes())); //affiche que le joueur doit payer un loyer
-                            }
-                        }
-                    } else if (j.getPositionCourante() instanceof Taxe) {
-                        //a completer (si il tombe sur une case taxe)
-                    } else if (j.getPositionCourante() instanceof CaisseDeCommunaute) {
-                        //a completer (si il tombe sur une case caisse de communaute)
-                    } else if (j.getPositionCourante() instanceof Chance) {
-                        //a completer (si il tombe sur une case chance)
-                    } else if (j.getPositionCourante() instanceof AllerEnPrison) {
-						monopoly.envoyerEnPrison(j);
-					}
+                 
 
 		    // gère les intercations du joueur avec le carreau
 		    interactionCarreau(j);
