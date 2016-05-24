@@ -152,7 +152,7 @@ public class Controleur {
                     }else if(j.getPositionCourante().getClass() == Chance.class){
                         //a completer (si il tombe sur une case chance)
                     }else if(j.getPositionCourante().getNomCarreau().equals("Allez en prison")){
-                        //a completer (si il tombe sur la case aller en prison)
+                        //a completer (si il tombe sur la case aller en prison)   
                     }
                     
                     if (j.getCash() < 0){ //si le joueur n'a plus d'argent, il est eliminé
