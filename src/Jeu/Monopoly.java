@@ -7,6 +7,7 @@ public class Monopoly {
 	private HashMap<Integer,Carreau> Carreaux;
 	private ArrayList<Joueur> joueurs;
         private ArrayList<Integer> des;
+	private Prison carreauPrison;
         
     public Monopoly() {
         Carreaux = new HashMap();
@@ -61,4 +62,11 @@ public class Monopoly {
 	joueurs.remove(j);
     }
 
+    public void setPrison(Prison prison){
+	this.carreauPrison = prison;
+    }
+    
+    public Prison getPrison(){
+	return carreauPrison;
+    }
 }

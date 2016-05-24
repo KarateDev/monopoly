@@ -65,6 +65,7 @@ public class Controleur {
 							break;
 						case "Prison":
 							getMonopoly().addCarreau(new Prison(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
+							getMonopoly().setPrison((Prison) getMonopoly().getCarreaux().get(i)); 
 							break;
 						case "Parc Gratuit":
 							getMonopoly().addCarreau(new ParcPublic(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
@@ -146,7 +147,7 @@ public class Controleur {
                 }while (aFaitUnDouble);
                 if (nbDouble == 3){ //on envoie le joueur en prison  a completer
                     ihm.afficherJoueur3double(j);
-		    j.setPositionCourante(getCarreau(11));
+		    j.setPositionCourante(getMonopoly().getPrison());
                 }
 	}
 
