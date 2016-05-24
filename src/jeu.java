@@ -17,9 +17,13 @@ public class jeu {
     public static void main(String[] args) {
 		// TODO code application logic here
 		Controleur controleur = new Controleur();
-		controleur.creerPlateau("./data.txt");
+		controleur.creerPlateau("./src/Data/data.txt");
+		
+		controleur.initialiserCartes("./src/Data/dataCartes.txt");
+		controleur.getMonopoly().melangerLesCartes();
+		
 		controleur.initialiserUnePartie();
-                
+		
             int numeroJoueur = 0;
             while (controleur.getMonopoly().getJoueurs().size() > 1){ //boucle du jeu tant qu'il reste plus qu'un joueur
                 Joueur j = controleur.getMonopoly().getJoueurs().get(numeroJoueur);

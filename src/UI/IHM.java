@@ -1,6 +1,7 @@
 package UI;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 import Jeu.*;
 
 public class IHM {
@@ -62,12 +63,12 @@ public class IHM {
     
     public void afficherPayerLoyer(Joueur j,Propriete p,int loyer){
          System.out.println("Vous payer un loyer de "+loyer+"€ à "+p.getProprietaire().getNomJoueur());
-         System.out.println("Il vous reste : "+j.getCash()+"€\n");
+         afficherArgentRestant(j);
     }
     
     public void afficherPayerTaxe(Joueur j , Taxe t){
-	System.out.println(t.getNomCarreau() + " : Vous payez " + t.getPrixTaxe() + " au trésor public ");
-        System.out.println("Il vous reste : "+j.getCash()+"€\n");
+		System.out.println(t.getNomCarreau() + " : Vous payez " + -t.getPrixTaxe() + "€ au trésor public ");
+        afficherArgentRestant(j);
     }
     
     public boolean afficherDemandeAcheterPropriete(Propriete p){
@@ -80,9 +81,13 @@ public class IHM {
     
     public void afficherAchatPropriete(Propriete p){
         System.out.println("Vous avez acheté la propriété "+p.getNomCarreau()+" pour "+p.getPrix()+"€");
-        System.out.println("Il vous reste : "+p.getProprietaire().getCash()+"€\n");
+        afficherArgentRestant(p.getProprietaire());
         
     }
+	
+	public void afficherArgentRestant(Joueur j){
+		System.out.println("Il vous reste : "+j.getCash()+"€\n");
+	}
     
     public void afficherJoueurElimine(Joueur j){
         System.out.println("Domage "+j.getNomJoueur()+" vous n'avez plus d'argent ...");
@@ -121,5 +126,15 @@ public class IHM {
 	}
 	return fin;
     }
+	
+	public void afficherCarteChance(ArrayList<String> carte){
+		System.out.println("\nVous avez pioché une carte chance :");
+		System.out.println(carte.get(1)+"\n");
+	}
+	
+	public void afficherCarteCaisseDeCommunaute(ArrayList<String> carte){
+		System.out.println("\nVous avez pioché une carte Caisse de communaute :");
+		System.out.println(carte.get(1)+"\n");
+	}
     
 }

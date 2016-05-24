@@ -8,12 +8,26 @@ public class Joueur {
 	private HashSet<Propriete> proprietes;
 	private String nomJoueur;
 	private int cash = 1500;
+	
+	private int nbCarteLibereDePrison = 0;
         
     public Joueur(String nomjoueur,Carreau depart){ 
         proprietes = new HashSet<>();
         this.nomJoueur = nomjoueur;
         this.positionCourante = depart;
     }
+	
+	public int getNbCarteLibereDePrison(){
+		return nbCarteLibereDePrison;
+	}
+	
+	public void ajouterCarteLibereDePrison(){
+		this.nbCarteLibereDePrison ++;
+	}
+	
+	public void retirerCarteLibereDePrison(){
+		this.nbCarteLibereDePrison --;
+	}
 
 	/**
 	 * @param l
