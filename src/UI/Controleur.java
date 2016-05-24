@@ -65,6 +65,7 @@ public class Controleur {
 							break;
 						case "Prison":
 							getMonopoly().addCarreau(new Prison(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
+							getMonopoly().setPrison((Prison) getMonopoly().getCarreaux().get(i)); 
 							break;
 						case "Parc Gratuit":
 							getMonopoly().addCarreau(new ParcPublic(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
@@ -395,4 +396,7 @@ public class Controleur {
 		}
 	}
 
+	public boolean gestionPrison(Joueur j){
+	    return true;
+	}
 }
