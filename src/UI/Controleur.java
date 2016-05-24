@@ -63,16 +63,16 @@ public class Controleur {
 						case "Chance":
 							getMonopoly().addCarreau(new Chance(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
 							break;
-						case "Prison":
-							getMonopoly().addCarreau(new Prison(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
-							getMonopoly().setPrison((Prison) getMonopoly().getCarreaux().get(i)); 
-							break;
 						case "Parc Gratuit":
 							getMonopoly().addCarreau(new ParcPublic(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
 							break;
 						case "Allez en prison":
-						case "Simple Visite / En Prison":
 							getMonopoly().addCarreau(new AllerEnPrison(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
+							break;
+						case "Simple Visite / En Prison":
+							getMonopoly().addCarreau(new Prison(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
+							getMonopoly().setPrison((Prison) getCarreau(Integer.valueOf(data.get(i)[1]))); 
+							break;
 					}
 				}
 				else
