@@ -238,4 +238,7 @@ public class Controleur {
 		    }
 	}
 
+	public boolean gestionPrison(Joueur j){
+	    return true;
+	}
 }
