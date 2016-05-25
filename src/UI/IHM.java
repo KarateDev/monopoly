@@ -1,6 +1,7 @@
 package UI;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 import Jeu.*;
 
 public class IHM {
@@ -62,7 +63,12 @@ public class IHM {
     
     public void afficherPayerLoyer(Joueur j,Propriete p,int loyer){
          System.out.println("Vous payer un loyer de "+loyer+"€ à "+p.getProprietaire().getNomJoueur());
-         System.out.println("Il vous reste : "+j.getCash()+"€\n");
+         afficherArgentRestant(j);
+    }
+    
+    public void afficherPayerTaxe(Joueur j , Taxe t){
+		System.out.println(t.getNomCarreau() + " : Vous payez " + -t.getPrixTaxe() + "€ au trésor public ");
+        afficherArgentRestant(j);
     }
     
     public boolean afficherDemandeAcheterPropriete(Propriete p){
@@ -75,9 +81,13 @@ public class IHM {
     
     public void afficherAchatPropriete(Propriete p){
         System.out.println("Vous avez acheté la propriété "+p.getNomCarreau()+" pour "+p.getPrix()+"€");
-        System.out.println("Il vous reste : "+p.getProprietaire().getCash()+"€\n");
+        afficherArgentRestant(p.getProprietaire());
         
     }
+	
+	public void afficherArgentRestant(Joueur j){
+		System.out.println("Il vous reste : "+j.getCash()+"€\n");
+	}
     
     public void afficherJoueurElimine(Joueur j){
         System.out.println("Domage "+j.getNomJoueur()+" vous n'avez plus d'argent ...");
@@ -89,10 +99,12 @@ public class IHM {
         System.out.println("Vous etes envoyé en prison !\n");
     }
     
-    public void attendreProchainTour(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Appuyer sur entré pour passer au tour suivant\n");
-        sc.nextLine();
+    public boolean attendreProchainTour(){ // return vrai si le joueur pass au tour suivant et faut si il abandonne la partie
+        boolean continuer = true;
+		Scanner sc = new Scanner(System.in);
+        System.out.println("Appuyer sur entré pour passer au tour suivant ou 'abandonner' pour abandonner\n");
+        continuer = !sc.nextLine().equals("abandonner");
+		return continuer;
     }
     
     public void afficherFaitUnDouble(){
@@ -116,5 +128,39 @@ public class IHM {
 	}
 	return fin;
     }
+	
+	public void afficherCarteChance(ArrayList<String> carte){
+		System.out.println("\nVous avez pioché une carte chance :");
+		System.out.println(carte.get(1)+"\n");
+	}
+	
+	public void afficherCarteCaisseDeCommunaute(ArrayList<String> carte){
+		System.out.println("\nVous avez pioché une carte Caisse de communaute :");
+		System.out.println(carte.get(1)+"\n");
+	}
+	
+	public void afficherFinDePartie(Joueur j){
+		System.out.println("\nLa partie est terminée !");
+		System.out.println("Felicitation au joueur "+j.getNomJoueur()+" pour sa victoire écrasante sur ses enemis !");
+		System.out.println("Il termine avec "+j.getCash()+"€ à son compteur.");
+	}
+	
+	public int afficherMenu(){
+		int choix = 0;
+		do{
+			System.out.println("\nmenu :");
+			System.out.println("1. Inscrire les joueurs");
+			System.out.println("2. Commencer le jeu");
+			System.out.println("3. Quitter");
+			System.out.print("Choix : ");
+			Scanner sc = new Scanner(System.in);
+			try{
+				choix = sc.nextInt();
+			}catch (Exception e){
+				System.out.println("La valeure entré est invalide !");
+			}
+		}while(choix != 1 && choix != 2 && choix != 3);
+		return choix;
+	}
     
 }
