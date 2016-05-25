@@ -99,10 +99,12 @@ public class IHM {
         System.out.println("Vous etes envoyé en prison !\n");
     }
     
-    public void attendreProchainTour(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Appuyer sur entré pour passer au tour suivant\n");
-        sc.nextLine();
+    public boolean attendreProchainTour(){ // return vrai si le joueur pass au tour suivant et faut si il abandonne la partie
+        boolean continuer = true;
+		Scanner sc = new Scanner(System.in);
+        System.out.println("Appuyer sur entré pour passer au tour suivant ou 'abandonner' pour abandonner\n");
+        continuer = !sc.nextLine().equals("abandonner");
+		return continuer;
     }
     
     public void afficherFaitUnDouble(){
@@ -135,6 +137,30 @@ public class IHM {
 	public void afficherCarteCaisseDeCommunaute(ArrayList<String> carte){
 		System.out.println("\nVous avez pioché une carte Caisse de communaute :");
 		System.out.println(carte.get(1)+"\n");
+	}
+	
+	public void afficherFinDePartie(Joueur j){
+		System.out.println("\nLa partie est terminée !");
+		System.out.println("Felicitation au joueur "+j.getNomJoueur()+" pour sa victoire écrasante sur ses enemis !");
+		System.out.println("Il termine avec "+j.getCash()+"€ à son compteur.");
+	}
+	
+	public int afficherMenu(){
+		int choix = 0;
+		do{
+			System.out.println("\nmenu :");
+			System.out.println("1. Inscrire les joueurs");
+			System.out.println("2. Commencer le jeu");
+			System.out.println("3. Quitter");
+			System.out.print("Choix : ");
+			Scanner sc = new Scanner(System.in);
+			try{
+				choix = sc.nextInt();
+			}catch (Exception e){
+				System.out.println("La valeure entré est invalide !");
+			}
+		}while(choix != 1 && choix != 2 && choix != 3);
+		return choix;
 	}
     
 }

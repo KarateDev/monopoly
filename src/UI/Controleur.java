@@ -21,6 +21,10 @@ public class Controleur {
 	public void creerPlateau(String dataFilename){
 		buildGamePlateau(dataFilename);
 	}
+	
+	public IHM getIhm(){
+		return ihm;
+	}
 
 	private void buildGamePlateau(String dataFilename)
 	{
@@ -133,13 +137,21 @@ public class Controleur {
             if (aFaitUnDouble){
                 ihm.afficherFaitUnDouble();
             }
-            ihm.attendreProchainTour();
+            if (!ihm.attendreProchainTour()){ // si le joueur decide d'abandonner
+				ihm.afficherJoueurElimine(j);
+				monopoly.eliminerJoueur(j);
+				break;
+			}
 			
         }while (aFaitUnDouble);
 		
         if (nbDouble == 3){ //si le joueur a fait 3 doubles, on l'envoie en prison
             ihm.afficherJoueur3double(j);
 		    monopoly.envoyerEnPrison(j);
+			if (!ihm.attendreProchainTour()){ // si le joueur decide d'abandonner
+				ihm.afficherJoueurElimine(j);
+				monopoly.eliminerJoueur(j);
+			}
         }
 	}
 
@@ -166,22 +178,32 @@ public class Controleur {
 		return getMonopoly().getCarreaux().get(indice);
 	}
 
-        public void initialiserUnePartie(){
-	    //intialisation du plateau de jeu
-	    int nbJoueurs = 0;
-	    boolean fin = false;
-		int nbj = 1;
-		while(!fin ){
-		    String nom = ihm.saisirNom(nbj); 
-		    if(nbj >= 2){
-			fin = ihm.finSaisie();
-		    }
-		    Joueur j = new Joueur(nom,monopoly.getCarreaux().get(1));
-		    getMonopoly().addJoueur(j);
-		    nbj++;
-		}
-		
-            }
+        public boolean initialiserUnePartie(){ //retourn vrai pour jouer at faux pour quitter le jeu
+	    //intialisation des joueurs
+			boolean fin;
+			int nbj;
+
+			int choixMenu = ihm.afficherMenu();
+			while (choixMenu != 2 || monopoly.getJoueurs().size() < 2){
+				if (choixMenu == 1){
+					nbj = monopoly.getJoueurs().size();
+					fin = false;
+					while(!fin || nbj < 2){
+						String nom = ihm.saisirNom(nbj+1); 
+						Joueur j = new Joueur(nom,monopoly.getCarreaux().get(1));
+						getMonopoly().addJoueur(j);
+						nbj++;
+						if(nbj >= 2){
+							fin = ihm.finSaisie();
+						}
+					}
+				}else if(choixMenu == 3){
+					break;
+				}
+				choixMenu = ihm.afficherMenu();
+			}
+			return choixMenu != 3;
+        }
 
         /**
          * @return the monopoly
