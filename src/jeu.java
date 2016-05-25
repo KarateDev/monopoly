@@ -22,7 +22,7 @@ public class jeu {
 		controleur.initialiserCartes("./src/Data/dataCartes.txt");
 		controleur.getMonopoly().melangerLesCartes();
 		
-		controleur.initialiserUnePartie();
+		if (controleur.initialiserUnePartie()){ // si le joueur lance le jeu
 		
             int numeroJoueur = 0;
             while (controleur.getMonopoly().getJoueurs().size() > 1){ //boucle du jeu tant qu'il reste plus qu'un joueur
@@ -33,6 +33,8 @@ public class jeu {
                     numeroJoueur = 0;
                 }
             }
+			controleur.getIhm().afficherFinDePartie(controleur.getMonopoly().getJoueurs().get(0));
+		}
 	}
     
 }
