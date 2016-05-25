@@ -14,16 +14,16 @@ public class Controleur {
 	private Monopoly monopoly;
 	private int indicePrison;
 	private int indiceParc;
-        
-        public Controleur(){
-            ihm = new IHM(this);
-            monopoly = new Monopoly();
-        }
+
+		public Controleur(){
+			ihm = new IHM(this);
+			monopoly = new Monopoly();
+		}
 
 	public void creerPlateau(String dataFilename) {
 		buildGamePlateau(dataFilename);
 	}
-	
+
 	public IHM getIhm(){
 		return ihm;
 	}
@@ -38,9 +38,9 @@ public class Controleur {
 				if(caseType.compareTo("P") == 0){
 					System.out.println("Propriété :\t" + data.get(i)[2] + "\t@ case " + data.get(i)[1]);
 					getMonopoly().addCarreau(new ProprieteAConstruire(i+1, data.get(i)[2], CouleurPropriete.valueOf(data.get(i)[3]),
-                                        Integer.valueOf(data.get(i)[4]),Integer.valueOf(data.get(i)[5]),Integer.valueOf(data.get(i)[6]),
-                                        Integer.valueOf(data.get(i)[7]),Integer.valueOf(data.get(i)[8]), Integer.valueOf(data.get(i)[9]),
-                                        Integer.valueOf(data.get(i)[10]), Integer.valueOf(data.get(i)[11])));
+										Integer.valueOf(data.get(i)[4]),Integer.valueOf(data.get(i)[5]),Integer.valueOf(data.get(i)[6]),
+										Integer.valueOf(data.get(i)[7]),Integer.valueOf(data.get(i)[8]), Integer.valueOf(data.get(i)[9]),
+										Integer.valueOf(data.get(i)[10]), Integer.valueOf(data.get(i)[11])));
 				}
 				else if(caseType.compareTo("G") == 0){
 					System.out.println("Gare :\t" + data.get(i)[2] + "\t@ case " + data.get(i)[1]);
@@ -68,6 +68,7 @@ public class Controleur {
 						case "Chance":
 							getMonopoly().addCarreau(new Chance(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
 							break;
+
 						case "Parc Gratuit":
 							getMonopoly().addCarreau(new ParcPublic(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
 							indiceParc = Integer.valueOf(data.get(i)[1]);
@@ -80,7 +81,9 @@ public class Controleur {
 							getMonopoly().addCarreau(new Prison(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
 							break;
 					}
+
 				}
+
 				else
 					System.err.println("[buildGamePleateau()] : Invalid Data type");
 			}
@@ -118,7 +121,7 @@ public class Controleur {
 
 		boolean aFaitUnDouble = lancerDesAvancer(j);
 
-		ihm.afficherJoueur(j);    //affichage des données du joueur
+		ihm.afficherJoueur(j);	//affichage des données du joueur
 		ihm.afficherLancerDesDe(getMonopoly().getDes().get(0), getMonopoly().getDes().get(1)); //affiche les resultats des dés
 		if (j.getPositionCourante().getNumero() - getMonopoly().getSommeDes() < 1){ //si le joueur passe par la case depart
 			ihm.affichePassageDepart(((Depart) getCarreau(1)).getGainPourPassage());
@@ -183,15 +186,15 @@ public class Controleur {
 	 */
 	private boolean lancerDesAvancer(Joueur j) { //renvoi vrai si il a fait un double
 		getMonopoly().lancerDes();
-        int valeurdes = getMonopoly().getSommeDes(); //recupere la somme des dés
-		
+		int valeurdes = getMonopoly().getSommeDes(); //recupere la somme des dés
+
 		ihm.afficherLancerDesDe(getMonopoly().getDes().get(0), getMonopoly().getDes().get(1)); //affiche les resultats des dés
-		
-        deplacerJoueur(j, valeurdes); // on deplace le joueur
-			
-        return getMonopoly().getDes().get(0) == getMonopoly().getDes().get(1);
+
+		deplacerJoueur(j, valeurdes); // on deplace le joueur
+
+		return getMonopoly().getDes().get(0) == getMonopoly().getDes().get(1);
 	}
-	
+
 	/**
 	 * 
 	 * @param indice
@@ -200,8 +203,8 @@ public class Controleur {
 		return getMonopoly().getCarreaux().get(indice);
 	}
 
-        public boolean initialiserUnePartie(){ //retourn vrai pour jouer at faux pour quitter le jeu
-	    //intialisation des joueurs
+		public boolean initialiserUnePartie(){ //retourn vrai pour jouer at faux pour quitter le jeu
+		//intialisation des joueurs
 			boolean fin;
 			int nbj;
 
@@ -211,7 +214,7 @@ public class Controleur {
 					nbj = monopoly.getJoueurs().size();
 					fin = false;
 					while(!fin || nbj < 2){
-						String nom = ihm.saisirNom(nbj+1); 
+						String nom = ihm.saisirNom(nbj+1);
 						Joueur j = new Joueur(nom,monopoly.getCarreaux().get(1));
 						getMonopoly().addJoueur(j);
 						nbj++;
@@ -219,70 +222,72 @@ public class Controleur {
 							fin = ihm.finSaisie();
 						}
 					}
+
 				}else if(choixMenu == 3){
 					break;
 				}
 				choixMenu = ihm.afficherMenu();
 			}
 			return choixMenu != 3;
-        }
+		}
 
-        /**
-         * @return the monopoly
-         */
-        public Monopoly getMonopoly() {
-            return monopoly;
-        }
-	
+		/**
+		 * @return the monopoly
+		 */
+		public Monopoly getMonopoly() {
+			return monopoly;
+		}
+
 	/*
 	Le controleur vérifie sur quelle case se trouve le joueur et lui propose une interaction adéquate
 	*/
 	public void interactionCarreau(Joueur j){
-	    // verifie la case sur laquelle se trouve le joueur
-		
-                    if (j.getPositionCourante().getClass() == Gare.class 
-                            || j.getPositionCourante().getClass() == ProprieteAConstruire.class 
-                            || j.getPositionCourante().getClass() == Compagnie.class){ //si il tombe sur une case propriete
-                        Propriete p = (Propriete) j.getPositionCourante();
-			// si il n'y a pas de propriétaire, le joueur peut acheter la case
-                        if (p.getProprietaire() == null){
-                            if (j.getCash() >= p.getPrix()){
-                                boolean reponse = ihm.afficherDemandeAcheterPropriete(p); //demande la reponse
-                                if (reponse == true){
-                                    j.achatPropriété(p);
-                                    ihm.afficherAchatPropriete(p);
-                                }
-                            }
-                        }else{
-			    // si le joueur n'est pas le propriétaire , il paye le loyer
-                            if (!j.equals(p.getProprietaire())){ 
-                                j.payerCash(p.calculLoyer(getMonopoly().getSommeDes()));
-                                p.getProprietaire().recevoirCash(p.calculLoyer(getMonopoly().getSommeDes()));
-                                ihm.afficherPayerLoyer(j, p, p.calculLoyer(getMonopoly().getSommeDes())); //affiche que le joueur doit payer un loyer
-                            }
-                        }
-                    }else if (j.getPositionCourante() instanceof Taxe) {
-                        Taxe caseTaxe = (Taxe) j.getPositionCourante();
+		// verifie la case sur laquelle se trouve le joueur
+
+					if (j.getPositionCourante().getClass() == Gare.class 
+							|| j.getPositionCourante().getClass() == ProprieteAConstruire.class 
+							|| j.getPositionCourante().getClass() == Compagnie.class){ //si il tombe sur une case propriete
+						Propriete p = (Propriete) j.getPositionCourante();
+						if (p.getProprietaire() == null){
+							if (j.getCash() >= p.getPrix()){
+								boolean reponse = ihm.afficherDemandeAcheterPropriete(p); //demande la reponse
+								if (reponse == true){
+									j.achatPropriété(p);
+									ihm.afficherAchatPropriete(p);
+								}
+							}
+						}else{
+
+				// si le joueur n'est pas le propriétaire , il paye le loyer
+							if (!j.equals(p.getProprietaire())){
+								j.payerCash(p.calculLoyer(getMonopoly().getSommeDes()));
+								p.getProprietaire().recevoirCash(p.calculLoyer(getMonopoly().getSommeDes()));
+								ihm.afficherPayerLoyer(j, p, p.calculLoyer(getMonopoly().getSommeDes())); //affiche que le joueur doit payer un loyer
+							}
+						}
+
+					}else if (j.getPositionCourante() instanceof Taxe) {
+						Taxe caseTaxe = (Taxe) j.getPositionCourante();
 						j.payerTaxe(caseTaxe.getPrixTaxe());
 						ParcPublic parc = (ParcPublic) getMonopoly().getCarreaux().get(indiceParc);
 						parc.encaisser(caseTaxe.getPrixTaxe());
 						ihm.afficherPayerTaxe(j, caseTaxe);
-                   } else if (j.getPositionCourante() instanceof CaisseDeCommunaute) {
+					} else if (j.getPositionCourante() instanceof CaisseDeCommunaute) {
 						ArrayList<String> carte = monopoly.piocherUneCarteCaisseDeCommunaute();
 						ihm.afficherCarteCaisseDeCommunaute(carte);
 						actionCartes(carte,j);
-                    } else if (j.getPositionCourante() instanceof Chance) {
+					} else if (j.getPositionCourante() instanceof Chance) {
 						ArrayList<String> carte = monopoly.piocherUneCarteChance();
 						ihm.afficherCarteChance(carte);
 						actionCartes(carte,j);
-                    } else if (j.getPositionCourante() instanceof AllerEnPrison) {
+					} else if (j.getPositionCourante() instanceof AllerEnPrison) {
 						monopoly.envoyerEnPrison(j);
-		    }else if (j.getPositionCourante() instanceof ParcPublic){
+			}else if (j.getPositionCourante() instanceof ParcPublic){
 			ParcPublic parc = (ParcPublic) j.getPositionCourante();
 			parc.viderCaisse(j);
-		    }
+			}
 	}
-	
+
 	public void initialiserCartes(String dataFilename){
 		try {
 			ArrayList<String[]> data = readDataFile(dataFilename, ",");
@@ -312,7 +317,7 @@ public class Controleur {
 					}
 					monopoly.ajouterCarteCaisseDeCommunaute(carte);
 				}
-				
+
 				else
 					System.err.println("[initialiserCartes()] : Invalid Data type");
 			}
@@ -325,11 +330,11 @@ public class Controleur {
 			System.err.println("[initialiserCartes()] : Error while reading file!");
 		}
 	}
-	
+
 	public void deplacerJoueur(Joueur j,int deplacement){ //cette fonction gere le deplacement du joueur avec le passage par la case depart
-		
+
 		int numeroCaseActuel = j.getPositionCourante().getNumero();
-		
+
 		if (deplacement > 0){ // si le deplacement nous fait avancer
 			if (numeroCaseActuel + deplacement > monopoly.getCarreaux().size()){ //si on passe par la case depart
 				j.setPositionCourante(getCarreau(numeroCaseActuel + deplacement - monopoly.getCarreaux().size()));
@@ -339,7 +344,7 @@ public class Controleur {
 			}else{
 				j.setPositionCourante(getCarreau(numeroCaseActuel + deplacement));
 			}
-			
+
 		}else{ // si le deplacement nous fait reculer (pour la carte chance)
 			if (numeroCaseActuel + deplacement < 1){ //si on recule plus loin que la case depart
 				j.setPositionCourante(getCarreau(numeroCaseActuel + deplacement + monopoly.getCarreaux().size()));
@@ -348,7 +353,7 @@ public class Controleur {
 			}
 		}
 	}
-	
+
 	public void actionCartes(ArrayList<String> carte, Joueur j){ //pour faire l'action de la carte
 		switch (carte.get(0)) {
 			case "0": //bouger d'un certain nombre de case
@@ -356,16 +361,16 @@ public class Controleur {
 				ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));
 				interactionCarreau(j);
 				break;
-				
+
 			case "1": //recevoire ou payer de l'argent à la banque
 				j.recevoirCash(Integer.valueOf(carte.get(2)));
 				if(Integer.valueOf(carte.get(2)) < 0){
-				    ParcPublic parc = (ParcPublic) getMonopoly().getCarreaux().get(indiceParc);
-				    parc.encaisser(Integer.valueOf(carte.get(2)));
+					ParcPublic parc = (ParcPublic) getMonopoly().getCarreaux().get(indiceParc);
+					parc.encaisser(Integer.valueOf(carte.get(2)));
 				}
 				ihm.afficherArgentRestant(j);
 				break;
-				
+
 			case "2": //payer de l'argent pour chaque propriete construite
 				ParcPublic parc = (ParcPublic) getMonopoly().getCarreaux().get(indiceParc);
 				for (Propriete p : j.getProprietes()){
@@ -381,7 +386,7 @@ public class Controleur {
 				}
 				ihm.afficherArgentRestant(j);
 				break;
-				
+
 			case "3": //transaction entre tout les joueurs
 				if (Integer.valueOf(carte.get(2)) < 0){ //vous donnez de l'argent aux autes joueur
 					for (Joueur j2 : monopoly.getJoueurs()){
@@ -400,15 +405,15 @@ public class Controleur {
 				}
 				ihm.afficherArgentRestant(j);
 				break;
-				
+
 			case "4": //aller en prison
 				monopoly.envoyerEnPrison(j);
 				break;
-				
+
 			case "5": //carte libere de prison
 				j.ajouterCarteLibereDePrison();
-				break; 
-				
+				break;
+
 			case "6": //aller sur une case
 				int deplacement = 0;	//calcul du deplacement
 				if (Integer.valueOf(carte.get(2)) - j.getPositionCourante().getNumero() < 0){  //le deplacement doit etre positif
@@ -416,16 +421,16 @@ public class Controleur {
 				}else{
 					deplacement = Integer.valueOf(carte.get(2)) - j.getPositionCourante().getNumero();
 				}
-				
+
 				deplacerJoueur(j, deplacement); //deplacement du joueur
 				ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));
 				interactionCarreau(j);
 				break;
-				
+
 			case "7": //avancer jusqu'a la case specifique la plus proche
 				deplacement = 0;
 				int nombreDeTour = 0;	//pour faire le modulo permetant de rester dans le vecteur
-				
+
 				if (carte.get(2).equals("gare")){	// si on doit aller sur la gare la plus proche
 					while (getCarreau(j.getPositionCourante().getNumero() + deplacement).getClass() != Gare.class){
 						deplacement ++;
@@ -434,7 +439,7 @@ public class Controleur {
 							nombreDeTour ++;
 						}
 					}
-					
+
 				}else if (carte.get(2).equals("compagnie")){	//si on doit aller sur la compagnie la plus proche
 					while (getCarreau(j.getPositionCourante().getNumero() + deplacement).getClass() != Compagnie.class){
 						deplacement ++;
@@ -443,9 +448,9 @@ public class Controleur {
 							nombreDeTour ++;
 						}
 					}
-					
+
 				}
-				
+
 				deplacerJoueur(j, deplacement + nombreDeTour*monopoly.getCarreaux().size());	//deplacement du joueur
 				ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));	//affiche le carreau
 				interactionCarreau(j);
@@ -454,6 +459,6 @@ public class Controleur {
 	}
 
 	public boolean gestionPrison(Joueur j){
-	    return true;
+		return true;
 	}
 }
