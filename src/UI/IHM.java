@@ -20,13 +20,11 @@ public class IHM {
     }
 
     public String saisirNom(int i){ //i : numero du joueur 
-	System.out.println("\nEntrez le nom du joueur n°"+i+" : ");
-	Scanner sc = new Scanner(System.in);
-	String nom = sc.nextLine();
-        if (!nom.equals("fin")){
-            System.out.println("Joueur ajouté.");
-        }
-	return nom;
+		System.out.println("\nEntrez le nom du joueur n°"+i+" : ");
+		Scanner sc = new Scanner(System.in);
+		String nom = sc.nextLine();
+        System.out.println("Joueur ajouté.");
+		return nom;
     }
     
     public void afficherLancerDesDe(int i1, int i2){ //i1 et i2 : valeur des dés
@@ -112,21 +110,19 @@ public class IHM {
     }
 
     public boolean finSaisie() {
-	boolean fin = false;
-	String rep = "rien";
-	while(!rep.equals("oui") && !rep.equals("non") ){
-	System.out.println("Voulez vous stoper l'ajout de joueurs ? (oui/non) ");
-	Scanner sc = new Scanner(System.in);
-	rep = sc.nextLine();
-	if(rep.equals("oui")){
-	    fin = true;
-	}else{
-	    if(!rep.equals("non")){
-		System.out.println("Vous devez repondre par oui ou non !");
-	    }
-	}
-	}
-	return fin;
+		boolean fin = false;
+		String rep = "rien";
+		while (!rep.equals("oui") && !rep.equals("non") ) {
+			System.out.println("Voulez vous stoper l'ajout de joueurs ? (oui/non) ");
+			Scanner sc = new Scanner(System.in);
+			rep = sc.nextLine();
+			if (rep.equals("oui")) {
+				fin = true;
+			} else if(!rep.equals("non")) {
+					System.out.println("Vous devez repondre par oui ou non !");
+			}
+		}
+		return fin;
     }
 	
 	public void afficherCarteChance(ArrayList<String> carte){
