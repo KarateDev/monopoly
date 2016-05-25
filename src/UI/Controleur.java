@@ -12,6 +12,8 @@ public class Controleur {
 
 	private IHM ihm;
 	private Monopoly monopoly;
+	private int indicePrison;
+	private int indiceParc;
         
         public Controleur(){
             ihm = new IHM(this);
@@ -65,13 +67,14 @@ public class Controleur {
 							break;
 						case "Parc Gratuit":
 							getMonopoly().addCarreau(new ParcPublic(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
+							indiceParc = Integer.valueOf(data.get(i)[1]);
 							break;
 						case "Allez en prison":
 							getMonopoly().addCarreau(new AllerEnPrison(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
+							indicePrison = Integer.valueOf(data.get(i)[1]);
 							break;
 						case "Simple Visite / En Prison":
 							getMonopoly().addCarreau(new Prison(Integer.valueOf(data.get(i)[1]), data.get(i)[2]));
-							getMonopoly().setPrison((Prison) getCarreau(Integer.valueOf(data.get(i)[1]))); 
 							break;
 					}
 				}
@@ -191,7 +194,7 @@ public class Controleur {
         }
 	
 	/*
-	Le controlleur vérifie sur quelle case se trouve le joueur et lui propose une interaction adéquate
+	Le controleur vérifie sur quelle case se trouve le joueur et lui propose une interaction adéquate
 	*/
 	public void interactionCarreau(Joueur j){
 	    // verifie la case sur laquelle se trouve le joueur
@@ -219,6 +222,8 @@ public class Controleur {
                     }else if (j.getPositionCourante() instanceof Taxe) {
                         Taxe caseTaxe = (Taxe) j.getPositionCourante();
 						j.payerTaxe(caseTaxe.getPrixTaxe());
+						ParcPublic parc = (ParcPublic) getMonopoly().getCarreaux().get(indiceParc);
+						parc.encaisser(caseTaxe.getPrixTaxe());
 						ihm.afficherPayerTaxe(j, caseTaxe);
                    } else if (j.getPositionCourante() instanceof CaisseDeCommunaute) {
 						ArrayList<String> carte = monopoly.piocherUneCarteCaisseDeCommunaute();
@@ -230,6 +235,9 @@ public class Controleur {
 						actionCartes(carte,j);
                     } else if (j.getPositionCourante() instanceof AllerEnPrison) {
 						monopoly.envoyerEnPrison(j);
+		    }else if (j.getPositionCourante() instanceof ParcPublic){
+			ParcPublic parc = (ParcPublic) j.getPositionCourante();
+			parc.viderCaisse(j);
 		    }
 	}
 	
@@ -309,16 +317,23 @@ public class Controleur {
 				
 			case "1": //recevoire ou payer de l'argent à la banque
 				j.recevoirCash(Integer.valueOf(carte.get(2)));
+				if(Integer.valueOf(carte.get(2)) < 0){
+				    ParcPublic parc = (ParcPublic) getMonopoly().getCarreaux().get(indiceParc);
+				    parc.encaisser(Integer.valueOf(carte.get(2)));
+				}
 				ihm.afficherArgentRestant(j);
 				break;
 				
 			case "2": //payer de l'argent pour chaque propriete construite
+				ParcPublic parc = (ParcPublic) getMonopoly().getCarreaux().get(indiceParc);
 				for (Propriete p : j.getProprietes()){
 					if (p.getClass() == ProprieteAConstruire.class){
 						if(((ProprieteAConstruire) p).getNbmaison() < 5){
 							j.payerCash(-Integer.valueOf(carte.get(2)) * ((ProprieteAConstruire) p).getNbmaison());
+							parc.encaisser(Integer.valueOf(carte.get(2)) * ((ProprieteAConstruire) p).getNbmaison());
 						}else{
 							j.payerCash(-Integer.valueOf(carte.get(3)));
+							parc.encaisser(Integer.valueOf(carte.get(3)));
 						}
 					}
 				}
