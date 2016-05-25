@@ -38,7 +38,7 @@ public class ProprieteAConstruire extends Propriete {
             }
         }
         
-        if (nbmaisonmemecouleur == 3 || (this.getCouleur() == CouleurPropriete.bleuFonce && nbmaisonmemecouleur == 2)){
+        if (nbmaisonmemecouleur == 3 || (this.getCouleur() == CouleurPropriete.bleuFonce && nbmaisonmemecouleur == 2) || (this.getCouleur() == CouleurPropriete.mauve && nbmaisonmemecouleur == 2)){
             return getLoyer(getNbmaison()) *2;
         }else{
             return  getLoyer(getNbmaison());

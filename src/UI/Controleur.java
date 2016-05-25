@@ -115,69 +115,49 @@ public class Controleur {
 	 * @param j
 	 */
 	public void jouerUnCoup(Joueur j) {
-		jouerUnCoup(j, 0);
-	}
-	public void jouerUnCoup(Joueur j, int nbDouble) {
-
-		boolean aFaitUnDouble = lancerDesAvancer(j);
-
-		ihm.afficherJoueur(j);	//affichage des données du joueur
-		ihm.afficherLancerDesDe(getMonopoly().getDes().get(0), getMonopoly().getDes().get(1)); //affiche les resultats des dés
-		if (j.getPositionCourante().getNumero() - getMonopoly().getSommeDes() < 1){ //si le joueur passe par la case depart
-			ihm.affichePassageDepart(((Depart) getCarreau(1)).getGainPourPassage());
-		}
-		ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));  //affiche le carreau su lequel il tombe
-
-
-		if (j.getPositionCourante() instanceof Gare
-			|| j.getPositionCourante() instanceof ProprieteAConstruire
-			|| j.getPositionCourante() instanceof Compagnie) { //si il tombe sur une case propriete
-			Propriete p = (Propriete) j.getPositionCourante();
-			if (p.getProprietaire() == null) {
-				if (j.getCash() >= p.getPrix()) {
-					boolean reponse = ihm.afficherDemandeAcheterPropriete(p); //demande la reponse
-					if (reponse == true) {
-						j.achatPropriété(p);
-						ihm.afficherAchatPropriete(p);
-					}
-				}
-			} else {
-				if (!j.equals(p.getProprietaire())) { //si le joueur n'est pas le proprietaire, il paye
-					j.payerCash(p.calculLoyer(getMonopoly().getSommeDes()));
-					p.getProprietaire().recevoirCash(p.calculLoyer(getMonopoly().getSommeDes()));
-					ihm.afficherPayerLoyer(j, p, p.calculLoyer(getMonopoly().getSommeDes())); //affiche que le joueur doit payer un loyer
-				}
+        int nbDouble = 0;
+        boolean aFaitUnDouble;
+                
+        do{      //boucle tant que le joueur fait des doubles
+			ihm.afficherJoueur(j);    //affichage des données du joueur
+            aFaitUnDouble = lancerDesAvancer(j); //on lance les des et on fait avancer le joueur
+                    
+            if (aFaitUnDouble){
+                nbDouble ++;
+                if (nbDouble == 3){ // si il a fait 3 doubles d'affilé,on sort de la boucle
+                    break;
+                }
+            }
+                    
+				//affiche le carreau sur lequel il tombe
+            ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));  
+			
+		    interactionCarreau(j);	// gère les intercations du joueur avec le carreau
+                    
+            if (j.getCash() < 0){ //si le joueur n'a plus d'argent, il est eliminé
+                ihm.afficherJoueurElimine(j);
+                getMonopoly().eliminerJoueur(j);
+                break;
+            }
+            if (aFaitUnDouble){
+                ihm.afficherFaitUnDouble();
+            }
+            if (!ihm.attendreProchainTour()){ // si le joueur decide d'abandonner
+				ihm.afficherJoueurElimine(j);
+				monopoly.eliminerJoueur(j);
+				break;
 			}
-		} else if (j.getPositionCourante() instanceof Taxe) {
-			//a completer (si il tombe sur une case taxe)
-		} else if (j.getPositionCourante() instanceof CaisseDeCommunaute) {
-			//a completer (si il tombe sur une case caisse de communaute)
-		} else if (j.getPositionCourante() instanceof Chance) {
-			//a completer (si il tombe sur une case chance)
-		} else if (j.getPositionCourante() instanceof AllerEnPrison) {
-			monopoly.envoyerEnPrison(j);
-		}
-
-		// gère les intercations du joueur avec le carreau
-		interactionCarreau(j);
-
-		if (j.getCash() < 0) { //si le joueur n'a plus d'argent, il est eliminé
-			ihm.afficherJoueurElimine(j);
-			getMonopoly().eliminerJoueur(j);
-			return;
-		}
-		if (aFaitUnDouble) {
-			nbDouble ++;
-			if (nbDouble == 3) {
-				ihm.afficherJoueur3double(j);
-				monopoly.envoyerEnPrison(j);
-				return;
+			
+        }while (aFaitUnDouble);
+		
+        if (nbDouble == 3){ //si le joueur a fait 3 doubles, on l'envoie en prison
+            ihm.afficherJoueur3double(j);
+		    monopoly.envoyerEnPrison(j);
+			if (!ihm.attendreProchainTour()){ // si le joueur decide d'abandonner
+				ihm.afficherJoueurElimine(j);
+				monopoly.eliminerJoueur(j);
 			}
-			ihm.afficherFaitUnDouble();
-		}
-		ihm.attendreProchainTour();
-
-		jouerUnCoup(j, nbDouble);
+        }
 	}
 
 	/**
