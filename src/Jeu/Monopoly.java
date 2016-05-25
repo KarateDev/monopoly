@@ -7,7 +7,8 @@ public class Monopoly {
 	private HashMap<Integer,Carreau> Carreaux;
 	private ArrayList<Joueur> joueurs;
     private ArrayList<Integer> des;
-	private Prison carreauPrison;
+	
+
 	
 	private ArrayList<ArrayList<String>> piocheCarteChance;
 	private ArrayList<ArrayList<String>> piocheCarteCaisseDeCommunaute;
@@ -105,11 +106,7 @@ public class Monopoly {
 		java.util.Collections.shuffle(piocheCarteCaisseDeCommunaute);
 	}
 
-    public void setPrison(Prison prison){
-	this.carreauPrison = prison;
-    }
+
     
-    public Prison getPrison(){
-	return carreauPrison;
-    }
+    
 }

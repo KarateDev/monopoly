@@ -8,4 +8,12 @@ public class ParcPublic extends Carreau{
         super(num, nomcarreau);
     }
     
+    public void encaisser(int virement){
+	caisse = caisse + virement;
+    }
+    
+    public void viderCaisse(Joueur j){
+	j.recevoirCash(caisse);
+	caisse = 0;
+    }
 }
