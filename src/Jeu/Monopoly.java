@@ -9,9 +9,11 @@ public class Monopoly {
 	private ArrayList<Integer> des;
 
 
-
 	private ArrayList<ArrayList<String>> piocheCarteChance;
 	private ArrayList<ArrayList<String>> piocheCarteCaisseDeCommunaute;
+	
+	private int indicePrison;
+	private int indiceParc;
 	  
 	public Monopoly() {
 		Carreaux = new HashMap();
@@ -34,11 +36,23 @@ public class Monopoly {
 		this.joueurs.add(j);
 	}
 		
-	public void addCarreau(Carreau c){
+	public void addCarreau(Carreau c) {
+		if (c instanceof Prison) {
+			this.indicePrison = c.getNumero();
+		} else if (c instanceof ParcPublic) {
+			this.indiceParc = c.getNumero();
+		}
 		this.Carreaux.put(c.getNumero(),c);
 	}
+	
+	public Prison getPrison() {
+		return (Prison) this.getCarreaux().get(this.indicePrison);
+	}
+	public ParcPublic getParcPublic() {
+		return (ParcPublic) this.getCarreaux().get(this.indiceParc);
+	}
 
-		
+
 	public void envoyerEnPrison(Joueur j) {
 		j.setPositionCourante(this.getCarreaux().get(11));//la prison se trouve être la case 11
 	}
