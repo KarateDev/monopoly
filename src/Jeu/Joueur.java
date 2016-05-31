@@ -80,23 +80,33 @@ public class Joueur {
 	 */
 	public boolean achatPropriété(Propriete propriete) {
 		if(getCash() >= propriete.getPrix()){
-                    propriete.setProprietaire(this);
-                    addPropriete(propriete);
-                    setCash(getCash()-propriete.getPrix());
-                    return true;
-                }else{
-                    return false;
-                }
+            propriete.setProprietaire(this);
+            addPropriete(propriete);
+            setCash(getCash()-propriete.getPrix());
+            return true;
+        }else{
+            return false;
+        }
 	}
         
-        public void achatMaisonSurPropriete(ProprieteAConstruire propriete){
-            if(getCash() >= propriete.PRIXMAISON){
-                if (propriete.getNbmaison() < 5){
-                    setCash(getCash() - propriete.PRIXMAISON);
-                    propriete.addMaison();
+    public void achatMaisonSurPropriete(ProprieteAConstruire propriete){
+		payerCash(propriete.getPrixBatiment());
+		propriete.addMaison();
+    }
+	
+	public boolean asToutesLesProprietesDeCouleur(CouleurPropriete couleur){
+		int nbmaisonmemecouleur = 0;
+        for (Propriete p : proprietes){                     // pour savoir si le joueur possede tout les terrains de meme couleur
+            if (p.getClass() == ProprieteAConstruire.class){
+                if (((ProprieteAConstruire) p).getCouleur() == couleur){
+                    nbmaisonmemecouleur +=1;
                 }
             }
         }
+        
+        return (nbmaisonmemecouleur == 3 || (couleur == CouleurPropriete.bleuFonce && nbmaisonmemecouleur == 2) || (couleur == CouleurPropriete.mauve && nbmaisonmemecouleur == 2));
+
+	}
 
 	public int getCash() {
 		return this.cash;

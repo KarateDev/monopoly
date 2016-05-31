@@ -6,19 +6,6 @@ import Jeu.*;
 
 public class IHM {
 
-	Controleur controleur;
-	public IHM (Controleur controleur) {
-		this.controleur = controleur;
-	}
-
-    public Controleur getControleur() {
-	return controleur;
-    }
-
-    public void setControleur(Controleur controleur) {
-	this.controleur = controleur;
-    }
-
     public String saisirNom(int i){ //i : numero du joueur 
 		System.out.println("\nEntrez le nom du joueur n°"+i+" : ");
 		Scanner sc = new Scanner(System.in);
@@ -48,13 +35,15 @@ public class IHM {
                 System.out.println("Loyer du terain : "+((Propriete)c).calculLoyer(i1+i2));
             }
             if (c.getClass() == ProprieteAConstruire.class){
-                System.out.println("Couleur : "+((ProprieteAConstruire)c).getCouleur()+"\n");
+                System.out.println("Couleur : "+((ProprieteAConstruire)c).getCouleur());
             }
         }
+		System.out.println("");
         
     }
     
     public void afficherJoueur(Joueur j){
+		System.out.println("\n-------------------------------------------------------------------");
         System.out.println("\nTour du joueur : "+j.getNomJoueur());
         System.out.println("Argent disponible : "+j.getCash()+"€\n");
     }
@@ -97,12 +86,15 @@ public class IHM {
         System.out.println("Vous etes envoyé en prison !\n");
     }
     
-    public boolean attendreProchainTour(){ // return vrai si le joueur pass au tour suivant et faut si il abandonne la partie
-        boolean continuer = true;
+    public String attendreProchainTour(Joueur j){ // return la reponse du joueur
+        String reponse;
 		Scanner sc = new Scanner(System.in);
-        System.out.println("Appuyer sur entré pour passer au tour suivant ou 'abandonner' pour abandonner\n");
-        continuer = !sc.nextLine().equals("abandonner");
-		return continuer;
+        System.out.println("\nAppuyer sur entré pour passer au tour suivant");
+		System.out.println("('abandonner' pour abandonner / 'patrimoine' pour voir votre patrimoine / 'batiment' pour acheter des batiments)\n");
+		reponse = sc.nextLine();
+        
+		return reponse;
+		
     }
     
     public void afficherFaitUnDouble(){
@@ -158,5 +150,96 @@ public class IHM {
 		}while(choix != 1 && choix != 2 && choix != 3);
 		return choix;
 	}
-    
+	
+	public boolean demandeAchatBatiment(){ //retourn vrai si il veut acheter
+		Scanner sc = new Scanner(System.in);
+		String reponse;
+		do{
+			System.out.println("Voulez vous continuer à acheter des batiments ? (oui/non) : ");
+			reponse = sc.nextLine();
+		}while (!reponse.equals("oui") && !reponse.equals("non"));
+		return reponse.equals("oui");
+	} 
+	
+	public int afficherProprieteConstructible(ArrayList<ProprieteAConstruire> proprietes, int nbmaisondisponible, int nbhoteldisponible){
+		Scanner sc = new Scanner(System.in);
+		int reponse;
+		ArrayList<Integer> reponsePossible = new ArrayList<>();
+		do{
+			System.out.println("\nNombre de maison disponible : "+nbmaisondisponible+" Nombre d'hotel disponible : "+nbhoteldisponible);
+			System.out.println("Choix du batiment à acheter : ");
+			System.out.println("\n0 : Quitter");
+			reponsePossible.add(0);
+			int i;
+			for (i = 0; i < proprietes.size(); i++){
+				int prix = proprietes.get(i).getPrixBatiment();
+				String type;
+				if (proprietes.get(i).getNbmaison() != 5){ // si il n'y a pas deja le maximum de maison
+					if (proprietes.get(i).getNbmaison() == 4){
+						type = "l'hotel";
+					}else{
+						type = "la maison";
+					}
+					System.out.print(i+1 +" : "+proprietes.get(i).getNomCarreau());
+					System.out.print(" / Couleur : "+proprietes.get(i).getCouleur().toString());
+					System.out.print(" / Nombre de maison : "+proprietes.get(i).getNbmaison());
+					System.out.println(" / Cout de "+type+" : "+prix+"€");
+					reponsePossible.add(i+1);
+				}else{
+					System.out.print("  : "+proprietes.get(i).getNomCarreau());
+					System.out.print(" / Couleur : "+proprietes.get(i).getCouleur().toString());
+					System.out.println(" / Nombre de maison : "+proprietes.get(i).getNbmaison());
+				}
+				
+			}
+			try{
+				reponse = sc.nextInt();
+			}catch (Exception e){
+				sc.reset();
+				System.out.println("Reponse invalide !");
+				reponse = -1;
+			}
+		}while (reponse < 0 || reponse > proprietes.size() || !reponsePossible.contains(reponse));
+		return reponse;
+	}
+	
+	public void afficherAchatBatiment(Joueur j, ProprieteAConstruire p){
+		int prix = p.getPrixBatiment();
+		String type;
+		if (p.getNbmaison() == 5){
+			type = "un hotel";
+		}else{
+			type = "une maison";
+		}
+		System.out.println("Felicitation "+j.getNomJoueur()+", vous avez acheté "+type+" pour "+prix+"€ !");
+		afficherArgentRestant(j);
+	}
+	
+	public void afficherPasAsserArgent(){
+		System.out.println("Desolé, vous n'avez pas asser d'argent pour acheter ce batiment ...");
+	}
+	
+	public void afficherPasAsserDeBatiment(){
+		System.out.println("Desolé, il n'y a plus de batiment de ce type disponible ...");
+	}
+	
+	public void afficherPasDeTerrainConstructible(){
+		System.out.println("Desolé, vous n'avez aucun terrain sur lequels vous pouvez construire ...");
+	}
+	
+	public void afficherPatrimoine(Joueur j){
+		System.out.println("\nJoueur : "+j.getNomJoueur()+"  argent : "+j.getCash()+"€");
+		System.out.println("Proprietes : ");
+		for (Propriete p : j.getProprietes()){
+			System.out.print("Numero de carreau : "+p.getNumero());
+			System.out.print(" / Nom : "+p.getNomCarreau());
+			if (p.getClass() == ProprieteAConstruire.class){
+				System.out.print(" / Couleur : "+((ProprieteAConstruire)p).getCouleur().toString());
+				System.out.print(" / Nombre de maison : "+((ProprieteAConstruire)p).getNbmaison());
+			}
+			System.out.println("");
+		}
+	}
+	
 }
+

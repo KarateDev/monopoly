@@ -8,10 +8,11 @@ public class Monopoly {
 	private ArrayList<Joueur> joueurs;
 	private ArrayList<Integer> des;
 
-
-
 	private ArrayList<ArrayList<String>> piocheCarteChance;
 	private ArrayList<ArrayList<String>> piocheCarteCaisseDeCommunaute;
+	
+	private int nbMaisonDisponible = 32;
+	private int nbHotelDisponible = 12;
 	  
 	public Monopoly() {
 		Carreaux = new HashMap();
@@ -67,6 +68,9 @@ public class Monopoly {
 	public void eliminerJoueur(Joueur j){
 		for(Propriete p : j.getProprietes()){ //les proprietes du joueur retournent à la banque
 			p.setProprietaire(null);
+			if (p.getClass() == ProprieteAConstruire.class){ //on enleve les eventuelles maisons
+				((ProprieteAConstruire) p).setNbMaison(0);
+			}
 		}
 		joueurs.remove(j);
 	}
@@ -104,5 +108,33 @@ public class Monopoly {
 	public void melangerLesCartes() {
 		java.util.Collections.shuffle(piocheCarteChance);
 		java.util.Collections.shuffle(piocheCarteCaisseDeCommunaute);
+	}
+
+	/**
+	 * @return the nbMaisonDisponible
+	 */
+	public int getNbMaisonDisponible() {
+		return nbMaisonDisponible;
+	}
+
+	/**
+	 * @param nbMaisonDisponible the nbMaisonDisponible to set
+	 */
+	public void setNbMaisonDisponible(int nbMaisonDisponible) {
+		this.nbMaisonDisponible = nbMaisonDisponible;
+	}
+
+	/**
+	 * @return the nbHotelDisponible
+	 */
+	public int getNbHotelDisponible() {
+		return nbHotelDisponible;
+	}
+
+	/**
+	 * @param nbHotelDisponible the nbHotelDisponible to set
+	 */
+	public void setNbHotelDisponible(int nbHotelDisponible) {
+		this.nbHotelDisponible = nbHotelDisponible;
 	}
 }
