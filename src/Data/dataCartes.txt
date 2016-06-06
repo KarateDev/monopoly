@@ -1,5 +1,5 @@
 ch,0,Reculer de trois cases,-3
-ch,1,Amande pour exces de vitesse : payez 15€,-15
+ch,1,Amende pour exces de vitesse : payez 15€,-15
 ch,1,Votre immeuble et votre pret rapportent. Vous toucher 150€,150
 ch,1,La banque vous verse un dividende de 50€,50
 ch,2,Vous faites des reparations sur toutes vos proprietes : versez 25€ pour chaque maison et 100€ pour chaque hotel que vous possedez,-25,-100

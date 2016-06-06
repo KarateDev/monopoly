@@ -3,6 +3,7 @@ package UI;
 import java.util.Scanner;
 import java.util.ArrayList;
 import Jeu.*;
+import Jeu.Cartes.Carte;
 
 public class IHM {
 
@@ -117,14 +118,14 @@ public class IHM {
 		return fin;
     }
 	
-	public void afficherCarteChance(ArrayList<String> carte){
+	public void afficherCarteChance(Carte carte){
 		System.out.println("\nVous avez pioché une carte chance :");
-		System.out.println(carte.get(1)+"\n");
+		System.out.println(carte.getIntitule() + "\n");
 	}
 	
-	public void afficherCarteCaisseDeCommunaute(ArrayList<String> carte){
+	public void afficherCarteCaisseDeCommunaute(Carte carte) {
 		System.out.println("\nVous avez pioché une carte Caisse de communaute :");
-		System.out.println(carte.get(1)+"\n");
+		System.out.println(carte.getIntitule() + "\n");
 	}
 	
 	public void afficherFinDePartie(Joueur j){

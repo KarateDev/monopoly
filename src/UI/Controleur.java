@@ -1,6 +1,15 @@
 package UI;
 
 import Jeu.*;
+import Jeu.Cartes.Carte;
+import Jeu.Cartes.CarteAllerPrison;
+import Jeu.Cartes.CarteDeplacementAbsolu;
+import Jeu.Cartes.CarteDeplacementRelatif;
+import Jeu.Cartes.CarteDeplacementSemiAbsolu;
+import Jeu.Cartes.CarteLiberationPrison;
+import Jeu.Cartes.CartePayerParPropriete;
+import Jeu.Cartes.CarteTransactionBanque;
+import Jeu.Cartes.CarteTransactionJoueurs;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -256,15 +265,13 @@ public class Controleur {
 			ihm.afficherPayerTaxe(j, caseTaxe);
 			
 		} else if (j.getPositionCourante() instanceof CaisseDeCommunaute) {
-			ArrayList<String> carte = monopoly.piocherUneCarteCaisseDeCommunaute();
+			Carte carte = monopoly.piocherUneCarteCaisseDeCommunaute();
 			ihm.afficherCarteCaisseDeCommunaute(carte);
-			actionCartes(carte,j);
-			
+			carte.action(j, this);
 		} else if (j.getPositionCourante() instanceof Chance) {
-			ArrayList<String> carte = monopoly.piocherUneCarteChance();
+			Carte carte = monopoly.piocherUneCarteChance();
 			ihm.afficherCarteChance(carte);
-			actionCartes(carte,j);
-			
+			carte.action(j, this);
 		} else if (j.getPositionCourante() instanceof AllerEnPrison) {
 			monopoly.envoyerEnPrison(j);
 			
@@ -275,32 +282,49 @@ public class Controleur {
 		
 	}
 
-	public void initialiserCartes(String dataFilename){
+	public void initialiserCartes(String dataFilename) {
 		try {
 			ArrayList<String[]> data = readDataFile(dataFilename, ",");
 
 			//TODO: create cases instead of displaying
 			for(int i=0; i<data.size(); ++i){
+				
+				Carte carte;
+				switch (data.get(i)[1]) {
+					case "0":
+						carte = new CarteDeplacementRelatif(data.get(i)[2], Integer.parseInt(data.get(i)[3]));
+						break;
+					case "1":
+						carte = new CarteTransactionBanque(data.get(i)[2], Integer.parseInt(data.get(i)[3]));
+						break;
+					case "2":
+						carte = new CartePayerParPropriete(data.get(i)[2], Integer.parseInt(data.get(i)[3]));
+						break;
+					case "3":
+						carte = new CarteTransactionJoueurs(data.get(i)[2], Integer.parseInt(data.get(i)[3]));
+						break;
+					case "4":
+						carte = new CarteAllerPrison(data.get(i)[2]);
+						break;
+					case "5":
+						carte = new CarteLiberationPrison(data.get(i)[2]);
+						break;
+					case "6":
+						carte = new CarteDeplacementAbsolu(data.get(i)[2], monopoly.getCarreaux().get(3));
+						break;
+					case "7":
+						carte = new CarteDeplacementSemiAbsolu(data.get(i)[2], data.get(i)[3]);
+						break;
+					default:
+						System.err.println("Carte de type inconnue: " + data.get(i)[1]);
+						System.exit(1);
+						return;
+				}
+					
 				String caseType = data.get(i)[0];
 				if(caseType.compareTo("ch") == 0) {
-					ArrayList<String> carte = new ArrayList<>();
-					if (data.get(i)[1].equals("4") || data.get(i)[1].equals("5")){
-						carte.add(data.get(i)[1]);carte.add(data.get(i)[2]);
-					} else if (data.get(i)[1].equals("0") || data.get(i)[1].equals("1") || data.get(i)[1].equals("3") || data.get(i)[1].equals("6") || data.get(i)[1].equals("7")) {
-						carte.add(data.get(i)[1]);carte.add(data.get(i)[2]);carte.add(data.get(i)[3]);
-					} else {
-						carte.add(data.get(i)[1]);carte.add(data.get(i)[2]);carte.add(data.get(i)[3]);carte.add(data.get(i)[4]);
-					}
 					monopoly.ajouterCarteChance(carte);
 				} else if(caseType.compareTo("cdc") == 0) {
-					ArrayList<String> carte = new ArrayList<>();
-					if (data.get(i)[1].equals("4") || data.get(i)[1].equals("5")){
-						carte.add(data.get(i)[1]);carte.add(data.get(i)[2]);
-					}else if (data.get(i)[1].equals("0") || data.get(i)[1].equals("1") || data.get(i)[1].equals("3") || data.get(i)[1].equals("6") || data.get(i)[1].equals("7")){
-						carte.add(data.get(i)[1]);carte.add(data.get(i)[2]);carte.add(data.get(i)[3]);
-					}else{
-						carte.add(data.get(i)[1]);carte.add(data.get(i)[2]);carte.add(data.get(i)[3]);carte.add(data.get(i)[4]);
-					}
 					monopoly.ajouterCarteCaisseDeCommunaute(carte);
 				} else System.err.println("[initialiserCartes()] : Invalid Data type");
 			}
@@ -337,109 +361,6 @@ public class Controleur {
 		}
 	}
 
-	public void actionCartes(ArrayList<String> carte, Joueur j){ //pour faire l'action de la carte
-		switch (carte.get(0)) {
-			case "0": //bouger d'un certain nombre de case
-				deplacerJoueur(j, Integer.valueOf(carte.get(2)));
-				ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));
-				interactionCarreau(j);
-				break;
-
-			case "1": //recevoire ou payer de l'argent à la banque
-				j.recevoirCash(Integer.valueOf(carte.get(2)));
-				if(Integer.valueOf(carte.get(2)) < 0){
-					ParcPublic parc = (ParcPublic) getMonopoly().getParcPublic();
-					parc.encaisser(Integer.valueOf(carte.get(2)));
-				}
-				ihm.afficherArgentRestant(j);
-				break;
-
-			case "2": //payer de l'argent pour chaque propriete construite
-				ParcPublic parc = (ParcPublic) getMonopoly().getParcPublic();
-				for (Propriete p : j.getProprietes()){
-					if (p.getClass() == ProprieteAConstruire.class){
-						if(((ProprieteAConstruire) p).getNbmaison() < 5){
-							j.payerCash(-Integer.valueOf(carte.get(2)) * ((ProprieteAConstruire) p).getNbmaison());
-							parc.encaisser(Integer.valueOf(carte.get(2)) * ((ProprieteAConstruire) p).getNbmaison());
-						}else{
-							j.payerCash(-Integer.valueOf(carte.get(3)));
-							parc.encaisser(Integer.valueOf(carte.get(3)));
-						}
-					}
-				}
-				ihm.afficherArgentRestant(j);
-				break;
-
-			case "3": //transaction entre tout les joueurs
-				if (Integer.valueOf(carte.get(2)) < 0){ //vous donnez de l'argent aux autes joueur
-					for (Joueur j2 : monopoly.getJoueurs()){
-						if (!j.equals(j2)){
-							j.payerCash(-Integer.valueOf(carte.get(2)));
-							j2.recevoirCash(-Integer.valueOf(carte.get(2)));
-						}
-					}
-				}else{	// les autes joueur vous donnent de l'argent
-					for (Joueur j2 : monopoly.getJoueurs()){
-						if (!j.equals(j2)){
-							j.recevoirCash(Integer.valueOf(carte.get(2)));
-							j2.payerCash(Integer.valueOf(carte.get(2)));
-						}
-					}
-				}
-				ihm.afficherArgentRestant(j);
-				break;
-
-			case "4": //aller en prison
-				monopoly.envoyerEnPrison(j);
-				break;
-
-			case "5": //carte libere de prison
-				j.ajouterCarteLibereDePrison();
-				break;
-
-			case "6": //aller sur une case
-				int deplacement = 0;	//calcul du deplacement
-				if (Integer.valueOf(carte.get(2)) - j.getPositionCourante().getNumero() < 0){  //le deplacement doit etre positif
-					deplacement = Integer.valueOf(carte.get(2)) - j.getPositionCourante().getNumero() + monopoly.getCarreaux().size();
-				}else{
-					deplacement = Integer.valueOf(carte.get(2)) - j.getPositionCourante().getNumero();
-				}
-
-				deplacerJoueur(j, deplacement); //deplacement du joueur
-				ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));
-				interactionCarreau(j);
-				break;
-
-			case "7": //avancer jusqu'a la case specifique la plus proche
-				deplacement = 0;
-				int nombreDeTour = 0;	//pour faire le modulo permetant de rester dans le vecteur
-
-				if (carte.get(2).equals("gare")){	// si on doit aller sur la gare la plus proche
-					while (getCarreau(j.getPositionCourante().getNumero() + deplacement).getClass() != Gare.class){
-						deplacement ++;
-						if (j.getPositionCourante().getNumero() + deplacement > monopoly.getCarreaux().size()){
-							deplacement -= monopoly.getCarreaux().size();
-							nombreDeTour ++;
-						}
-					}
-
-				}else if (carte.get(2).equals("compagnie")){	//si on doit aller sur la compagnie la plus proche
-					while (getCarreau(j.getPositionCourante().getNumero() + deplacement).getClass() != Compagnie.class){
-						deplacement ++;
-						if (j.getPositionCourante().getNumero() + deplacement > monopoly.getCarreaux().size()){
-							deplacement -= monopoly.getCarreaux().size();
-							nombreDeTour ++;
-						}
-					}
-
-				}
-
-				deplacerJoueur(j, deplacement + nombreDeTour*monopoly.getCarreaux().size());	//deplacement du joueur
-				ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));	//affiche le carreau
-				interactionCarreau(j);
-				break;
-		}
-	}
 
 	public boolean gestionPrison(Joueur j){
 		return true;

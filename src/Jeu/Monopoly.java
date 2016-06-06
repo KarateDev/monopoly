@@ -1,5 +1,7 @@
 package Jeu;
 
+import Jeu.Cartes.Carte;
+import Jeu.Cartes.CarteLiberationPrison;
 import java.util.*;
 
 public class Monopoly {
@@ -8,8 +10,8 @@ public class Monopoly {
 	private ArrayList<Joueur> joueurs;
 	private ArrayList<Integer> des;
 
-	private ArrayList<ArrayList<String>> piocheCarteChance;
-	private ArrayList<ArrayList<String>> piocheCarteCaisseDeCommunaute;
+	private ArrayList<Carte> piocheCarteChance;
+	private ArrayList<Carte> piocheCarteCaisseDeCommunaute;
 	
 	private int nbMaisonDisponible = 32;
 	private int nbHotelDisponible = 12;
@@ -90,33 +92,29 @@ public class Monopoly {
 		joueurs.remove(j);
 	}
 
-	public ArrayList<String> piocherUneCarteChance(){
-		ArrayList<String> carte = new ArrayList();
-
-		carte = piocheCarteChance.get(0); // on recupere la carte du sommet de la pile
+	public Carte piocherUneCarteChance() {
+		Carte carte = piocheCarteChance.get(0); // on recupere la carte du sommet de la pile
 		piocheCarteChance.remove(carte); // on supprime la carte du sommet de la pile
-		if (Integer.valueOf(carte.get(0)) != 5){ // si ce n'est pas la carte "libere de prison"
+		if (!(carte instanceof CarteLiberationPrison)) { // si ce n'est pas la carte "libere de prison"
 			piocheCarteChance.add(carte); // on la met en dessous de la pile
 		}
 		return carte;
 	}
 
-	public ArrayList<String> piocherUneCarteCaisseDeCommunaute(){
-		ArrayList<String> carte = new ArrayList();
-
-		carte = piocheCarteCaisseDeCommunaute.get(0); // on recupere la carte du sommet de la pile
+	public Carte piocherUneCarteCaisseDeCommunaute(){
+		Carte carte = piocheCarteCaisseDeCommunaute.get(0); // on recupere la carte du sommet de la pile
 		piocheCarteCaisseDeCommunaute.remove(carte); // on supprime la carte du sommet de la pile
-		if (Integer.valueOf(carte.get(0)) != 5){
+		if (!(carte instanceof CarteLiberationPrison)) {
 			piocheCarteCaisseDeCommunaute.add(carte); // on la met en dessous de la pile
 		}
 		return carte;
 	}
 
-	public void ajouterCarteChance(ArrayList<String> carte){
+	public void ajouterCarteChance(Carte carte){
 		piocheCarteChance.add(carte);
 	}
 
-	public void ajouterCarteCaisseDeCommunaute(ArrayList<String> carte){
+	public void ajouterCarteCaisseDeCommunaute(Carte carte){
 		piocheCarteCaisseDeCommunaute.add(carte);
 	}
 
