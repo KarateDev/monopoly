@@ -23,16 +23,16 @@ public class Controleur {
 	private IHM ihm;
 	private Monopoly monopoly;
 
-		public Controleur(){
-			ihm = new IHM();
-			monopoly = new Monopoly();
+		public Controleur() {
+			ihm = new IHM(this);
+			monopoly = new Monopoly((Observateur)ihm);
 		}
 
 	public void creerPlateau(String dataFilename) {
 		buildGamePlateau(dataFilename);
 	}
 
-	public IHM getIhm(){
+	public IHM getIhm() {
 		return ihm;
 	}
 
@@ -126,6 +126,14 @@ public class Controleur {
                 
         do{      //boucle tant que le joueur fait des doubles
 			ihm.afficherJoueur(j);    //affichage des données du joueur
+			
+			if (j.getPositionCourante().getNumero() == getMonopoly().getPrison().getNumero() && j.getNbTourEnPrison() > 1){ //si il est en prison
+				boolean libere = gestionPrison(j);
+				if (!libere){ // si il n'est pas libéré
+					break; // on sort de la boucle pour qu'il ne joue pas
+				} // si il est libéré, il joue normalement
+			}
+			
             aFaitUnDouble = lancerDesAvancer(j); //on lance les des et on fait avancer le joueur
                     
             if (aFaitUnDouble){
@@ -138,7 +146,7 @@ public class Controleur {
 				//affiche le carreau sur lequel il tombe
             ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));  
 			
-		    interactionCarreau(j);	// gère les intercations du joueur avec le carreau
+		    monopoly.interactionCarreau(j);	// gère les intercations du joueur avec le carreau
                     
             if (j.getCash() < 0){ //si le joueur n'a plus d'argent, il est eliminé
                 ihm.afficherJoueurElimine(j);
@@ -189,17 +197,9 @@ public class Controleur {
 
 		ihm.afficherLancerDesDe(getMonopoly().getDes().get(0), getMonopoly().getDes().get(1)); //affiche les resultats des dés
 
-		deplacerJoueur(j, valeurdes); // on deplace le joueur
+		monopoly.deplacerJoueur(j, valeurdes); // on deplace le joueur
 
 		return getMonopoly().getDes().get(0) == getMonopoly().getDes().get(1);
-	}
-
-	/**
-	 * 
-	 * @param indice
-	 */
-	public Carreau getCarreau(int indice) {
-		return getMonopoly().getCarreaux().get(indice);
 	}
 
 	public void initialiserUnJoueur(String nomJoueur){
@@ -271,11 +271,11 @@ public class Controleur {
 		} else if (j.getPositionCourante() instanceof CaisseDeCommunaute) {
 			Carte carte = monopoly.piocherUneCarteCaisseDeCommunaute();
 			ihm.afficherCarteCaisseDeCommunaute(carte);
-			carte.action(j, this);
+			carte.action(j, ihm, monopoly);
 		} else if (j.getPositionCourante() instanceof Chance) {
 			Carte carte = monopoly.piocherUneCarteChance();
 			ihm.afficherCarteChance(carte);
-			carte.action(j, this);
+			carte.action(j, ihm, monopoly);
 		} else if (j.getPositionCourante() instanceof AllerEnPrison) {
 			monopoly.envoyerEnPrison(j);
 			
@@ -342,32 +342,32 @@ public class Controleur {
 		}
 	}
 
-	public void deplacerJoueur(Joueur j,int deplacement){ //cette fonction gere le deplacement du joueur avec le passage par la case depart
-
-		int numeroCaseActuel = j.getPositionCourante().getNumero();
-
-		if (deplacement > 0){ // si le deplacement nous fait avancer
-			if (numeroCaseActuel + deplacement > monopoly.getCarreaux().size()){ //si on passe par la case depart
-				j.setPositionCourante(getCarreau(numeroCaseActuel + deplacement - monopoly.getCarreaux().size()));
-				j.recevoirCash(((Depart) getCarreau(1)).getGainPourPassage());   //gain pour etre passe par la case depart
-				ihm.affichePassageDepart(((Depart) getCarreau(1)).getGainPourPassage());
-				ihm.afficherArgentRestant(j);
-			}else{
-				j.setPositionCourante(getCarreau(numeroCaseActuel + deplacement));
-			}
-
-		}else{ // si le deplacement nous fait reculer (pour la carte chance)
-			if (numeroCaseActuel + deplacement < 1){ //si on recule plus loin que la case depart
-				j.setPositionCourante(getCarreau(numeroCaseActuel + deplacement + monopoly.getCarreaux().size()));
-			}else{
-				j.setPositionCourante(getCarreau(numeroCaseActuel + deplacement));
-			}
-		}
-	}
-
 
 	public boolean gestionPrison(Joueur j){
-		return true;
+		int choix = ihm.afficherInteractionPrison(j);
+		if (choix == 1){ // si il tente de faire un double
+			monopoly.lancerDes();
+			ihm.afficherLancerDesDe( monopoly.getDes().get(0),  monopoly.getDes().get(1));
+			if (monopoly.getDes().get(0) == monopoly.getDes().get(1)){ // si il a fait un double
+				j.setNbTourEnPrison(0);
+				ihm.afficherFaitUnDouble();
+				ihm.afficherLibereDePrison();
+				return true;
+			}else{
+				j.setNbTourEnPrison(j.getNbTourEnPrison()-1);
+				if (j.getNbTourEnPrison() == 0){ // si c'etait son dernier tour en prison
+					j.payerCash(50);
+					ihm.afficherDernierTourEnPrison();
+					ihm.afficherArgentRestant(j);
+					return true;
+				}
+				return false;
+			}
+		}else{ // si il utilise une carte pour se libere de prison
+			j.setNbTourEnPrison(0);
+			j.retirerCarteLibereDePrison();
+			return true;
+		}
 	}
 	
 	public void achatBatiment(Joueur j, ProprieteAConstruire p){ //gere l'achat d'un batiment

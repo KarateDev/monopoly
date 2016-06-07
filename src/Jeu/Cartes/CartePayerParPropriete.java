@@ -6,10 +6,13 @@
 package Jeu.Cartes;
 
 import Jeu.Joueur;
+import Jeu.Monopoly;
 import Jeu.ParcPublic;
 import Jeu.Propriete;
 import Jeu.ProprieteAConstruire;
 import UI.Controleur;
+import UI.Message;
+import UI.Observateur;
 
 /**
  *
@@ -24,8 +27,8 @@ public class CartePayerParPropriete extends Carte {
 	}
 	
 	@Override
-public void action(Joueur j, Controleur ctrl) {
-		ParcPublic parc = (ParcPublic) ctrl.getMonopoly().getParcPublic();
+public void action(Joueur j, Observateur observateur, Monopoly monopoly) {
+		ParcPublic parc = (ParcPublic) monopoly.getParcPublic();
 		for (Propriete p : j.getProprietes()){
 			if (p.getClass() == ProprieteAConstruire.class){
 				if(((ProprieteAConstruire) p).getNbmaison() < 5){
@@ -37,6 +40,8 @@ public void action(Joueur j, Controleur ctrl) {
 				}
 			}
 		}
-		ctrl.getIhm().afficherArgentRestant(j);
+		Message msg = new Message(Message.Type.AFFICHER_ARGENT_RESTANT);
+		msg.joueur = j;
+		observateur.notifier(msg);
 	}
 }

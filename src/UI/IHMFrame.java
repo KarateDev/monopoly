@@ -11,11 +11,11 @@ import javax.swing.*;
  *
  * @author sorindoc
  */
-public class IHMFrame extends JFrame implements Observateur{
+public class IHMFrame extends JFrame implements Observateur {
 
     @Override
     public void notifier(Message message) {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
