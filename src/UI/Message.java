@@ -43,7 +43,6 @@ public class Message {
 	public int loyer;
 	public Carreau carreau;
 	public Carte carte;
-	public int argent;
 	
 	public int de1;
 	public int de2;

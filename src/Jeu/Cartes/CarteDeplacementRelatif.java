@@ -33,6 +33,6 @@ public class CarteDeplacementRelatif extends Carte {
 		msg.de2 = monopoly.getDes().get(1);
 		observateur.notifier(msg);
 
-		monopoly.interactionCarreau(j, observateur);
+		monopoly.interactionCarreau(j);
 	}
 }

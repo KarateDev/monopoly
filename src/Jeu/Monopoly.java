@@ -153,7 +153,7 @@ public class Monopoly {
 				observateur.notifier(msg1);
 				
 				Message msg2 = new Message(AFFICHER_ARGENT_RESTANT);
-				msg2.argent = j.getCash();
+				msg2.joueur = j;
 				observateur.notifier(msg2);
 			}else{
 				j.setPositionCourante(getCarreau(numeroCaseActuel + deplacement));
@@ -171,12 +171,13 @@ public class Monopoly {
 	public void acheterProprieteGenreVraiment(Joueur j, Propriete p, Observateur observateur) {
 		j.achatPropriété(p);
 		Message msg = new Message(AFFICHER_ACHAT_PROPRIETE);
+		msg.propriete = p;
 		observateur.notifier(msg);
 	}
 	/*
 	Le controleur vérifie sur quelle case se trouve le joueur et lui propose une interaction adéquate
 	*/
-	public void interactionCarreau(Joueur j, Observateur observateur) {
+	public void interactionCarreau(Joueur j) {
 		// verifie la case sur laquelle se trouve le joueur
 		if (j.getPositionCourante() instanceof Gare
 				|| j.getPositionCourante() instanceof ProprieteAConstruire
@@ -185,6 +186,7 @@ public class Monopoly {
 			if (p.getProprietaire() == null) {
 				if (j.getCash() >= p.getPrix()) {
 					Message msg = new Message(AFFICHER_DEMANDE_ACHETER_PROPRIETE);
+					msg.joueur = j;
 					msg.propriete = p;
 					observateur.notifier(msg);
 				}
