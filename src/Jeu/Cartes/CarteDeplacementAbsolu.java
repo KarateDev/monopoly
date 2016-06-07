@@ -8,6 +8,7 @@ package Jeu.Cartes;
 import Jeu.Carreau;
 import Jeu.Joueur;
 import Jeu.Monopoly;
+import UI.Message;
 import UI.Observateur;
 
 /**
@@ -26,15 +27,21 @@ public class CarteDeplacementAbsolu extends Carte {
 	@Override
 	public void action(Joueur j, Observateur observateur, Monopoly monopoly) {
 		System.out.println("Le joueur se déplace de façon absolue");
-		/*int deplacement = 0;	//calcul du deplacement
-		if (Integer.valueOf(carte.get(2)) - j.getPositionCourante().getNumero() < 0){  //le deplacement doit etre positif
-			deplacement = Integer.valueOf(carte.get(2)) - j.getPositionCourante().getNumero() + monopoly.getCarreaux().size();
+		int deplacement = 0;	//calcul du deplacement
+		if (caseCible.getNumero() - j.getPositionCourante().getNumero() < 0){  //le deplacement doit etre positif
+			deplacement = caseCible.getNumero() - j.getPositionCourante().getNumero() + monopoly.getCarreaux().size();
 		}else{
-			deplacement = Integer.valueOf(carte.get(2)) - j.getPositionCourante().getNumero();
+			deplacement = caseCible.getNumero() - j.getPositionCourante().getNumero();
 		}
 
-		deplacerJoueur(j, deplacement); //deplacement du joueur
-		ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));
-		interactionCarreau(j);*/
+		monopoly.deplacerJoueur(j, deplacement); //deplacement du joueur
+		
+		Message msg  = new Message(Message.Type.AFFICHER_CARREAU);
+		msg.joueur = j;
+		msg.de1 = monopoly.getDes().get(0);
+		msg.de2 = monopoly.getDes().get(1);
+		observateur.notifier(msg);
+		
+		monopoly.interactionCarreau(j);
 	}
 }

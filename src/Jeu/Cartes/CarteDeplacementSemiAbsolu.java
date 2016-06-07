@@ -5,8 +5,11 @@
  */
 package Jeu.Cartes;
 
+import Jeu.Compagnie;
+import Jeu.Gare;
 import Jeu.Joueur;
 import Jeu.Monopoly;
+import UI.Message;
 import UI.Observateur;
 
 /**
@@ -25,11 +28,11 @@ public class CarteDeplacementSemiAbsolu extends Carte {
 	@Override
 	public void action(Joueur j, Observateur observateur, Monopoly monopoly) {
 		System.out.println("Le joueur se déplace de façon semi-absolue");
-		/*deplacement = 0;
+		int deplacement = 0;
 		int nombreDeTour = 0;	//pour faire le modulo permetant de rester dans le vecteur
 
-		if (carte.get(2).equals("gare")){	// si on doit aller sur la gare la plus proche
-			while (getCarreau(j.getPositionCourante().getNumero() + deplacement).getClass() != Gare.class){
+		if (classCible.equals("gare")){	// si on doit aller sur la gare la plus proche
+			while (!(monopoly.getCarreau(j.getPositionCourante().getNumero() + deplacement) instanceof Gare)) {
 				deplacement ++;
 				if (j.getPositionCourante().getNumero() + deplacement > monopoly.getCarreaux().size()){
 					deplacement -= monopoly.getCarreaux().size();
@@ -37,8 +40,8 @@ public class CarteDeplacementSemiAbsolu extends Carte {
 				}
 			}
 
-		}else if (carte.get(2).equals("compagnie")){	//si on doit aller sur la compagnie la plus proche
-			while (getCarreau(j.getPositionCourante().getNumero() + deplacement).getClass() != Compagnie.class){
+		} else if (classCible.equals("compagnie")){	//si on doit aller sur la compagnie la plus proche
+			while (!(monopoly.getCarreau(j.getPositionCourante().getNumero() + deplacement) instanceof Compagnie)) {
 				deplacement ++;
 				if (j.getPositionCourante().getNumero() + deplacement > monopoly.getCarreaux().size()){
 					deplacement -= monopoly.getCarreaux().size();
@@ -48,8 +51,14 @@ public class CarteDeplacementSemiAbsolu extends Carte {
 
 		}
 
-		deplacerJoueur(j, deplacement + nombreDeTour*monopoly.getCarreaux().size());	//deplacement du joueur
-		ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));	//affiche le carreau
-		interactionCarreau(j);*/
+		monopoly.deplacerJoueur(j, deplacement + nombreDeTour*monopoly.getCarreaux().size());	//deplacement du joueur
+		
+		Message msg = new Message(Message.Type.AFFICHER_CARREAU);
+		msg.joueur = j;
+		msg.de1 = monopoly.getDes().get(0);
+		msg.de2 = monopoly.getDes().get(1);
+		observateur.notifier(msg);
+		
+		monopoly.interactionCarreau(j);
 	}
 }

@@ -7,7 +7,6 @@ package Jeu.Cartes;
 
 import Jeu.Joueur;
 import Jeu.Monopoly;
-import UI.Controleur;
 import UI.Message;
 import UI.Observateur;
 

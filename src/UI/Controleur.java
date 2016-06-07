@@ -146,7 +146,7 @@ public class Controleur {
 				//affiche le carreau sur lequel il tombe
             ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));  
 			
-		    monopoly.interactionCarreau(j, ihm);	// gère les intercations du joueur avec le carreau
+		    monopoly.interactionCarreau(j);	// gère les intercations du joueur avec le carreau
                     
             if (j.getCash() < 0){ //si le joueur n'a plus d'argent, il est eliminé
                 ihm.afficherJoueurElimine(j);
