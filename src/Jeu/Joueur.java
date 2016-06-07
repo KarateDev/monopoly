@@ -10,6 +10,7 @@ public class Joueur {
 	private int cash = 1500;
 	
 	private int nbCarteLibereDePrison = 0;
+	private int nbTourEnPrison = 0;
         
     public Joueur(String nomjoueur,Carreau depart){ 
         proprietes = new HashSet<>();
@@ -141,4 +142,18 @@ public class Joueur {
         private void setCash(int cash) {
             this.cash = cash;
         }
+
+	/**
+	 * @return the nbTourEnPrison
+	 */
+	public int getNbTourEnPrison() {
+		return nbTourEnPrison;
+	}
+
+	/**
+	 * @param nbTourEnPrison the nbTourEnPrison to set
+	 */
+	public void setNbTourEnPrison(int nbTourEnPrison) {
+		this.nbTourEnPrison = nbTourEnPrison;
+	}
 }

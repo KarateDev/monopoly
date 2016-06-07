@@ -283,5 +283,41 @@ public class IHM implements Observateur  {
 				
 		}
     }
+
+	public int afficherInteractionPrison(Joueur j) {
+		int choix = 0;
+		
+		while (choix != 1 && choix != 2){
+			System.out.println("Vous etes en prison pour encore "+j.getNbTourEnPrison()+" tours !");
+			System.out.println("Que voulez-vous faire ? :");
+			System.out.println("1 : Tenter de faire un double");
+			System.out.println("2 : Utiliser une carte 'Sortir de prison'");
+			Scanner sc = new Scanner(System.in);
+			try{
+				choix = sc.nextInt();
+			}catch (Exception e){
+				System.out.println("La reponse est invalide !");
+				choix = 0;
+			}
+			
+			if (choix == 2 && j.getNbCarteLibereDePrison() == 0){
+				System.out.println("Vous n'avez pas de carte pour sortir de prison ...");
+				choix = 0;
+			}else if (choix == 2 && j.getNbCarteLibereDePrison() > 0){
+				System.out.println("Vous utilisez une carte pour vous liberer de prison");
+			}
+		}
+		
+		return choix;
+	}
+
+	void afficherLibereDePrison() {
+		System.out.println("Vous etes liberé de prison");
+	}
+
+	void afficherDernierTourEnPrison() {
+		System.out.println("C'était votre dernier tour en prison et vous n'avez pas fait de double ...");
+		System.out.println("Vous payer une amande de 50€ pour etre libére");
+	}
 }
 

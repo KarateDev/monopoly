@@ -64,7 +64,8 @@ public class Monopoly {
 
 
 	public void envoyerEnPrison(Joueur j) {
-		j.setPositionCourante(this.getCarreaux().get(11));//la prison se trouve être la case 11
+		j.setPositionCourante(getPrison());//la prison se trouve être la case 11
+		j.setNbTourEnPrison(3);
 	}
 	/**
 	 * @return the Carreaux

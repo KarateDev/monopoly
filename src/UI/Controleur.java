@@ -126,6 +126,14 @@ public class Controleur {
                 
         do{      //boucle tant que le joueur fait des doubles
 			ihm.afficherJoueur(j);    //affichage des données du joueur
+			
+			if (j.getPositionCourante().getNumero() == getMonopoly().getPrison().getNumero() && j.getNbTourEnPrison() > 1){ //si il est en prison
+				boolean libere = gestionPrison(j);
+				if (!libere){ // si il n'est pas libéré
+					break; // on sort de la boucle pour qu'il ne joue pas
+				} // si il est libéré, il joue normalement
+			}
+			
             aFaitUnDouble = lancerDesAvancer(j); //on lance les des et on fait avancer le joueur
                     
             if (aFaitUnDouble){
@@ -287,7 +295,30 @@ public class Controleur {
 
 
 	public boolean gestionPrison(Joueur j){
-		return true;
+		int choix = ihm.afficherInteractionPrison(j);
+		if (choix == 1){ // si il tente de faire un double
+			monopoly.lancerDes();
+			ihm.afficherLancerDesDe( monopoly.getDes().get(0),  monopoly.getDes().get(1));
+			if (monopoly.getDes().get(0) == monopoly.getDes().get(1)){ // si il a fait un double
+				j.setNbTourEnPrison(0);
+				ihm.afficherFaitUnDouble();
+				ihm.afficherLibereDePrison();
+				return true;
+			}else{
+				j.setNbTourEnPrison(j.getNbTourEnPrison()-1);
+				if (j.getNbTourEnPrison() == 0){ // si c'etait son dernier tour en prison
+					j.payerCash(50);
+					ihm.afficherDernierTourEnPrison();
+					ihm.afficherArgentRestant(j);
+					return true;
+				}
+				return false;
+			}
+		}else{ // si il utilise une carte pour se libere de prison
+			j.setNbTourEnPrison(0);
+			j.retirerCarteLibereDePrison();
+			return true;
+		}
 	}
 	
 	public void achatBatiment(Joueur j, ProprieteAConstruire p){ //gere l'achat d'un batiment
