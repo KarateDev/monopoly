@@ -19,9 +19,11 @@ public class CarreauProprieteAConstruireIhm extends CarreauProprieteIhm{
 	
 	private final int hauteurCouleur = 30; // hauteur de la partie en couleur
 	private final Point positionMaison = new Point(2, 2); // position de la maison pour la partie basse
-	private final Point translationMaison = new Point(getLargeur()/5, 0); // translation pour obtenir le point de la seconde maison
+	
 	private final int tailleMaison = 10;  // maison : carre de taille 10
 	private final int tailleHotel = 20;
+	
+	private final Point translationMaison = new Point(tailleMaison+5, 0); // translation pour obtenir le point de la seconde maison
 	
 	public CarreauProprieteAConstruireIhm(Carreau c, int x, int y){
 		super(c, x, y);
@@ -85,7 +87,13 @@ public class CarreauProprieteAConstruireIhm extends CarreauProprieteIhm{
 		g.setColor(Color.white);
 		int nbmaison = ((ProprieteAConstruire)getCarreau()).getNbmaison(); //pour construire les maisons
 		if (nbmaison == 5){
-			g.fillRect(positionMaison.x, positionMaison.y, tailleHotel, tailleHotel);
+			if (numero > 11 && numero < 21){ // pour les hotels il faut changer la position 
+				g.fillRect(positionMaison.x-tailleMaison, positionMaison.y, tailleHotel, tailleHotel);
+			}else if (numero > 21 && numero < 31){
+				g.fillRect(positionMaison.x, positionMaison.y-tailleMaison, tailleHotel, tailleHotel);
+			}else{
+				g.fillRect(positionMaison.x, positionMaison.y, tailleHotel, tailleHotel);
+			}
 		}else{
 			for (int i = 0; i < ((ProprieteAConstruire)getCarreau()).getNbmaison(); i++){ 
 				g.fillRect(positionMaison.x+(i*translationMaison.x), positionMaison.y+(i*translationMaison.y), tailleMaison, tailleMaison);
