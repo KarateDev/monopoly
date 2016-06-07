@@ -202,6 +202,10 @@ public class Controleur {
 		return getMonopoly().getCarreaux().get(indice);
 	}
 
+	public void initialiserUnJoueur(String nomJoueur){
+	    Joueur nouveauJoueur = new Joueur(nomJoueur, monopoly.getCarreaux().get(0));
+	}
+	
 		public boolean initialiserUnePartie(){ //retourn vrai pour jouer at faux pour quitter le jeu
 		//intialisation des joueurs
 			boolean fin;
@@ -254,7 +258,7 @@ public class Controleur {
 			} else if (j != p.getProprietaire()) { // si le joueur n'est pas le propriétaire , il paye le loyer
 				j.payerCash(p.calculLoyer(getMonopoly().getSommeDes()));
 				p.getProprietaire().recevoirCash(p.calculLoyer(getMonopoly().getSommeDes()));
-				ihm.afficherPayerLoyer(j, p, p.calculLoyer(getMonopoly().getSommeDes())); //affiche que le joueur doit payer un loyer
+				ihm.afficherPayerLoyer(j, p, p.calculLoyer(getMonopoly().getSommeDes()));  //affiche que le joueur doit payer un loyer
 			}
 
 		} else if (j.getPositionCourante() instanceof Taxe) {
@@ -420,4 +424,5 @@ public class Controleur {
 		
 		
 	}
+	
 }
