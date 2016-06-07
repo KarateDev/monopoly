@@ -8,7 +8,11 @@ package UI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 
@@ -56,11 +60,14 @@ public class IHMMenu extends JPanel{
 	joueurs.add(panelVide);
 	
 	JPanel titre = new JPanel();
-	JLabel labelTitre = new JLabel("MONOPOLY");
-	labelTitre.setForeground(Color.red);
-	labelTitre.setFont(new Font(labelTitre.getFont().getName(), labelTitre.getFont().getStyle(), 80));
+	try {
+		BufferedImage myPicture = ImageIO.read(new File("./src/Data/Monopoly_pack_logo.png"));
+		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+		titre.add(picLabel);
+	} catch (IOException err) {
+		System.err.println("Mdr trolol l'image elle load pas xptdr");
+	}
 
-	titre.add(labelTitre);
 	
 	this.add(titre, BorderLayout.NORTH);
 
