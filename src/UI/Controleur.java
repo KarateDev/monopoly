@@ -200,10 +200,12 @@ public class Controleur {
 		monopoly.deplacerJoueur(j, valeurdes); // on deplace le joueur
 
 		return getMonopoly().getDes().get(0) == getMonopoly().getDes().get(1);
+
 	}
 
 	public void initialiserUnJoueur(String nomJoueur){
 	    Joueur nouveauJoueur = new Joueur(nomJoueur, monopoly.getCarreaux().get(0));
+
 	}
 	
 		public boolean initialiserUnePartie(){ //retourn vrai pour jouer at faux pour quitter le jeu
@@ -240,6 +242,7 @@ public class Controleur {
 		public Monopoly getMonopoly() {
 			return monopoly;
 		}
+
 
 	/*
 	Le controleur vérifie sur quelle case se trouve le joueur et lui propose une interaction adéquate
