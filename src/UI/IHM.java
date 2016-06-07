@@ -4,8 +4,15 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import Jeu.*;
 import Jeu.Cartes.Carte;
+import static UI.Message.Type.*;
 
-public class IHM {
+public class IHM implements Observateur  {
+	Controleur controleur;
+	
+	public IHM(Controleur controleur) {
+		this.controleur = controleur;
+	}
+
 
     public String saisirNom(int i){ //i : numero du joueur 
 		System.out.println("\nEntrez le nom du joueur n°"+i+" : ");
@@ -49,7 +56,7 @@ public class IHM {
         System.out.println("Argent disponible : "+j.getCash()+"€\n");
     }
     
-    public void afficherPayerLoyer(Joueur j,Propriete p,int loyer){
+    public void afficherPayerLoyer(Joueur j, Propriete p ,int loyer) {
          System.out.println("Vous payer un loyer de "+loyer+"€ à "+p.getProprietaire().getNomJoueur());
          afficherArgentRestant(j);
     }
@@ -216,19 +223,19 @@ public class IHM {
 		afficherArgentRestant(j);
 	}
 	
-	public void afficherPasAsserArgent(){
+	public void afficherPasAsserArgent() {
 		System.out.println("Desolé, vous n'avez pas asser d'argent pour acheter ce batiment ...");
 	}
 	
-	public void afficherPasAsserDeBatiment(){
+	public void afficherPasAsserDeBatiment() {
 		System.out.println("Desolé, il n'y a plus de batiment de ce type disponible ...");
 	}
 	
-	public void afficherPasDeTerrainConstructible(){
+	public void afficherPasDeTerrainConstructible() {
 		System.out.println("Desolé, vous n'avez aucun terrain sur lequels vous pouvez construire ...");
 	}
 	
-	public void afficherPatrimoine(Joueur j){
+	public void afficherPatrimoine(Joueur j) {
 		System.out.println("\nJoueur : "+j.getNomJoueur()+"  argent : "+j.getCash()+"€");
 		System.out.println("Proprietes : ");
 		for (Propriete p : j.getProprietes()){
@@ -241,6 +248,40 @@ public class IHM {
 			System.out.println("");
 		}
 	}
-	
+	@Override
+    public void notifier(Message msg) {
+		switch (msg.type) {
+			case AFFICHER_ACHAT_PROPRIETE:
+				this.afficherAchatPropriete(msg.propriete);
+				break;
+			case AFFICHER_DEMANDE_ACHETER_PROPRIETE:
+				if (this.afficherDemandeAcheterPropriete(msg.propriete)) {
+					controleur.getMonopoly().acheterProprieteGenreVraiment(msg.joueur, msg.propriete, this);
+				}
+				break;
+			case AFFICHER_PAYER_LOYER:
+				afficherPayerLoyer(msg.joueur, msg.propriete, msg.loyer);
+				break;
+			case AFFICHER_PAYER_TAXE:
+				afficherPayerTaxe(msg.joueur, (Taxe)msg.carreau);
+				break;
+			case AFFICHER_CARTE_CAISSE_DE_COMMUNAUTE:
+				afficherCarteCaisseDeCommunaute(msg.carte);
+				break;
+			case AFFICHER_CARTE_CHANCE:
+				afficherCarteChance(msg.carte);
+				break;
+			case AFFICHER_PASSAGE_DEPART:
+				affichePassageDepart(((Depart) msg.carreau).getGainPourPassage());
+				break;
+			case AFFICHER_CARREAU:
+				afficherCarreau(msg.joueur.getPositionCourante(), msg.de1, msg.de2);
+				break;
+			case AFFICHER_ARGENT_RESTANT:
+				afficherArgentRestant(msg.joueur);
+				break;
+				
+		}
+    }
 }
 

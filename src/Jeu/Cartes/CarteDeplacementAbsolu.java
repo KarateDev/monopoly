@@ -7,7 +7,8 @@ package Jeu.Cartes;
 
 import Jeu.Carreau;
 import Jeu.Joueur;
-import UI.Controleur;
+import Jeu.Monopoly;
+import UI.Observateur;
 
 /**
  *
@@ -23,7 +24,7 @@ public class CarteDeplacementAbsolu extends Carte {
 	}
 
 	@Override
-	public void action(Joueur j, Controleur ctrl) {
+	public void action(Joueur j, Observateur observateur, Monopoly monopoly) {
 		System.out.println("Le joueur se déplace de façon absolue");
 		/*int deplacement = 0;	//calcul du deplacement
 		if (Integer.valueOf(carte.get(2)) - j.getPositionCourante().getNumero() < 0){  //le deplacement doit etre positif

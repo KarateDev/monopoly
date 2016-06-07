@@ -6,8 +6,10 @@
 package Jeu.Cartes;
 
 import Jeu.Joueur;
+import Jeu.Monopoly;
 import Jeu.ParcPublic;
-import UI.Controleur;
+import UI.Message;
+import UI.Observateur;
 
 /**
  *
@@ -22,13 +24,15 @@ public class CarteTransactionBanque extends Carte {
 	}
 
 	@Override
-	public void action(Joueur j, Controleur ctrl) {
+	public void action(Joueur j, Observateur observateur, Monopoly monopoly) {
 		System.out.println("Il y a transaction entre le joueur et la banque");
 		j.recevoirCash(this.montant);
 		if(this.montant < 0){
-			ParcPublic parc = (ParcPublic) ctrl.getMonopoly().getParcPublic();
+			ParcPublic parc = (ParcPublic) monopoly.getParcPublic();
 			parc.encaisser(this.montant);
 		}
-		ctrl.getIhm().afficherArgentRestant(j);
+		Message msg = new Message(Message.Type.AFFICHER_ARGENT_RESTANT);
+		msg.joueur = j;
+		observateur.notifier(msg);
 	}
 }

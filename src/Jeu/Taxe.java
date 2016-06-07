@@ -1,6 +1,6 @@
 package Jeu;
 
-public class Taxe extends Carreau{
+public class Taxe extends Carreau {
     
     private int prixTaxe;
 

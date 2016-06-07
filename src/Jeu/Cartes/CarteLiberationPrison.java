@@ -6,7 +6,9 @@
 package Jeu.Cartes;
 
 import Jeu.Joueur;
+import Jeu.Monopoly;
 import UI.Controleur;
+import UI.Observateur;
 
 /**
  *
@@ -19,7 +21,7 @@ public class CarteLiberationPrison extends Carte {
 	}
 
 	@Override
-	public void action(Joueur j, Controleur ctrl) {
+	public void action(Joueur j, Observateur observateur, Monopoly monopoly) {
 		j.ajouterCarteLibereDePrison();
 	}
 	

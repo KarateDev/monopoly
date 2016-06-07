@@ -6,7 +6,8 @@
 package Jeu.Cartes;
 
 import Jeu.Joueur;
-import UI.Controleur;
+import Jeu.Monopoly;
+import UI.Observateur;
 
 /**
  *
@@ -22,7 +23,7 @@ public class CarteDeplacementSemiAbsolu extends Carte {
 	}
 
 	@Override
-	public void action(Joueur j, Controleur ctrl) {
+	public void action(Joueur j, Observateur observateur, Monopoly monopoly) {
 		System.out.println("Le joueur se déplace de façon semi-absolue");
 		/*deplacement = 0;
 		int nombreDeTour = 0;	//pour faire le modulo permetant de rester dans le vecteur

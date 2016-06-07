@@ -6,7 +6,10 @@
 package Jeu.Cartes;
 
 import Jeu.Joueur;
-import UI.Controleur;
+import Jeu.Monopoly;
+import UI.Message;
+import static UI.Message.Type.*;
+import UI.Observateur;
 
 /**
  *
@@ -21,9 +24,15 @@ public class CarteDeplacementRelatif extends Carte {
 	}
 
 	@Override
-	public void action(Joueur j, Controleur ctrl) {
-		ctrl.deplacerJoueur(j, this.deplacement);
-		ctrl.getIhm().afficherCarreau(j.getPositionCourante(), ctrl.getMonopoly().getDes().get(0), ctrl.getMonopoly().getDes().get(1));
-		ctrl.interactionCarreau(j);
+	public void action(Joueur j, Observateur observateur, Monopoly monopoly) {
+		monopoly.deplacerJoueur(j, this.deplacement);
+		
+		Message msg = new Message(AFFICHER_CARREAU);
+		msg.joueur = j;
+		msg.de1 = monopoly.getDes().get(0);
+		msg.de2 = monopoly.getDes().get(1);
+		observateur.notifier(msg);
+
+		monopoly.interactionCarreau(j, observateur);
 	}
 }

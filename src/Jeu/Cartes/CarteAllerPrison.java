@@ -6,7 +6,8 @@
 package Jeu.Cartes;
 
 import Jeu.Joueur;
-import UI.Controleur;
+import Jeu.Monopoly;
+import UI.Observateur;
 
 /**
  *
@@ -19,8 +20,8 @@ public class CarteAllerPrison extends Carte {
 	}
 
 	@Override
-	public void action(Joueur j, Controleur ctrl) {
-		ctrl.getMonopoly().envoyerEnPrison(j);
+	public void action(Joueur j, Observateur observateur, Monopoly monopoly) {
+		monopoly.envoyerEnPrison(j);
 	}
 	
 }

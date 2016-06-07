@@ -6,7 +6,8 @@
 package Jeu.Cartes;
 
 import Jeu.Joueur;
-import UI.Controleur;
+import Jeu.Monopoly;
+import UI.Observateur;
 
 /**
  *
@@ -18,7 +19,7 @@ public abstract class Carte {
 	Carte(String intitule) {
 		this.intitule = intitule;
 	}
-	public abstract void action(Joueur j, Controleur ctrl);
+	public abstract void action(Joueur j, Observateur observateur, Monopoly monopoly);
 
 	/**
 	 * @return the intitule

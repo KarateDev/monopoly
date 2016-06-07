@@ -6,7 +6,10 @@
 package Jeu.Cartes;
 
 import Jeu.Joueur;
+import Jeu.Monopoly;
 import UI.Controleur;
+import UI.Message;
+import UI.Observateur;
 
 /**
  *
@@ -21,22 +24,24 @@ public class CarteTransactionJoueurs extends Carte {
 	}
 
 	@Override
-	public void action(Joueur j, Controleur ctrl) {
+	public void action(Joueur j, Observateur observateur, Monopoly monopoly) {
 		if (this.montant < 0){ //vous donnez de l'argent aux autes joueur
-			for (Joueur j2 : ctrl.getMonopoly().getJoueurs()){
+			for (Joueur j2 : monopoly.getJoueurs()){
 				if (!j.equals(j2)){
 					j.payerCash(-this.montant);
 					j2.recevoirCash(-this.montant);
 				}
 			}
 		} else {	// les autes joueur vous donnent de l'argent
-			for (Joueur j2 : ctrl.getMonopoly().getJoueurs()){
+			for (Joueur j2 : monopoly.getJoueurs()){
 				if (!j.equals(j2)){
 					j.recevoirCash(this.montant);
 					j2.payerCash(this.montant);
 				}
 			}
 		}
-		ctrl.getIhm().afficherArgentRestant(j);
+		Message msg = new Message(Message.Type.AFFICHER_ARGENT_RESTANT);
+		msg.joueur = j;
+		observateur.notifier(msg);
 	}
 }
