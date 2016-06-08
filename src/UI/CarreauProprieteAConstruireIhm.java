@@ -39,7 +39,7 @@ public class CarreauProprieteAConstruireIhm extends CarreauProprieteIhm{
 		}else if (numero > 11 && numero < 21){ //partie gauche  ]11..21[
 			positionMaison.setLocation(largeur-2-tailleMaison, 2);
 			translationMaison.setLocation(0,translationMaison.x);
-			setPositionProprietaire(new Point(0, hauteur-getTailleProprietaire()));
+			setPositionProprietaire(new Point(largeur-hauteurCouleur-getTailleProprietaire(), hauteur-getTailleProprietaire()));
 				
 		}else if (numero > 21 && numero < 31){ //partie haute  ]21..31[
 			setPositionCash(new Point(getPositionCash().x, getPositionCash().y-hauteurCouleur));
