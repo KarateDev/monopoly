@@ -93,7 +93,13 @@ public class Monopoly {
 		for(Propriete p : j.getProprietes()){ //les proprietes du joueur retournent à la banque
 			p.setProprietaire(null);
 			if (p.getClass() == ProprieteAConstruire.class){ //on enleve les eventuelles maisons
-				((ProprieteAConstruire) p).setNbMaison(0);
+				int nbmaison = ((ProprieteAConstruire) p).getNbmaison();
+				if (nbmaison < 4){
+					setNbMaisonDisponible(getNbMaisonDisponible()+nbmaison); //on rajoute les maisons au nombre de maison disponible dans la jeu
+				}else{
+					setNbHotelDisponible(getNbHotelDisponible()+1); // on rajoute 1 hotel
+				}
+				((ProprieteAConstruire) p).setNbMaison(0); // on enleve les maisons de la propriete
 			}
 		}
 		joueurs.remove(j);
