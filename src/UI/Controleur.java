@@ -127,7 +127,7 @@ public class Controleur {
         do{      //boucle tant que le joueur fait des doubles
 			ihm.afficherJoueur(j);    //affichage des données du joueur
 			
-			if (j.getPositionCourante().getNumero() == getMonopoly().getPrison().getNumero() && j.getNbTourEnPrison() > 1){ //si il est en prison
+			if (j.getPositionCourante().getNumero() == getMonopoly().getPrison().getNumero() && j.getNbTourEnPrison() > 0){ //si il est en prison
 				boolean libere = gestionPrison(j);
 				if (!libere){ // si il n'est pas libéré
 					break; // on sort de la boucle pour qu'il ne joue pas
@@ -147,6 +147,10 @@ public class Controleur {
             ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));  
 			
 		    monopoly.interactionCarreau(j);	// gère les intercations du joueur avec le carreau
+			
+			if (j.getNbTourEnPrison() == 3){ // pour que si le joueur est envoyé en prison, son tour prend fin meme si il a fait un double
+				aFaitUnDouble = false;
+			}
                     
             if (j.getCash() < 0){ //si le joueur n'a plus d'argent, il est eliminé
                 ihm.afficherJoueurElimine(j);
@@ -366,6 +370,7 @@ public class Controleur {
 		}else{ // si il utilise une carte pour se libere de prison
 			j.setNbTourEnPrison(0);
 			j.retirerCarteLibereDePrison();
+			monopoly.ajouterCarteLibereDePrison();
 			return true;
 		}
 	}
