@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
+import Jeu.CouleurPropriete;
 
 
 /**
@@ -18,21 +19,24 @@ import javax.swing.*;
  */
 public class IHMMenu extends JPanel{
  
-    Controleur controleur;
+    private Controleur controleur;
     
-    JPanel joueurs; 
-    JPanel titre;
-    JPanel pBouttons;
+    private JPanel joueurs; 
+    private JPanel titre;
+    private JPanel pBouttons;
     
-    ArrayList<JPanel> listePanelNom;
-    ArrayList<JTextField> listeChampNom;
-
+    private ArrayList<JPanel> listePanelNom;
+    private ArrayList<JTextField> listeChampNom;
+    private final CouleurPropriete[] listeCouleurs = {CouleurPropriete.bleuFonce, CouleurPropriete.orange, CouleurPropriete.mauve, CouleurPropriete.violet, CouleurPropriete.bleuCiel, CouleurPropriete.jaune, CouleurPropriete.vert, CouleurPropriete.rouge};
+    private final String[] choixCouleur = {"Couleur","Beu Ciel","Orange","Mauve","Violet","Bleu Fonce","Jaune","Vert","Rouge"};
+    private ArrayList<CouleurPropriete> couleursSelect;
+    private ArrayList<JComboBox> listeChoixCouleurs;
     
-    JButton AjouterJ;
-    JButton RetirerJ;
-    JButton Demarrer;
+    private JButton AjouterJ;
+    private JButton RetirerJ;
+    private JButton Demarrer;
     
-    int nbJoueurs;
+    private int nbJoueurs;
 
 	
     
@@ -40,11 +44,13 @@ public class IHMMenu extends JPanel{
     public IHMMenu(Controleur controleur){
 	super();
 	this.controleur = controleur;
-    
+	
+	
 	InitUIComponents();
 	
     }
     
+    //initialise les composants de la fenètre
     public void InitUIComponents(){
 	this.setLayout(new BorderLayout());
 	titre = new JPanel();
@@ -68,6 +74,8 @@ public class IHMMenu extends JPanel{
 	
 	listePanelNom = new ArrayList<>();
 	listeChampNom = new ArrayList<>();
+	listeChoixCouleurs = new ArrayList<>();
+	couleursSelect = new ArrayList<>();
 	
 	RetirerJ = new JButton(" Retire un joueur ");
 	AjouterJ = new JButton(" Ajouter un joueur ");
@@ -101,26 +109,7 @@ public class IHMMenu extends JPanel{
 	Demarrer.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-		boolean complet = true;
-		for(int i = 0; i <= (nbJoueurs-1); i++){
-		    if(listeChampNom.get(i).getText().equals("")){
-			complet = false;
-		    }
-		}
-		
-		if(complet){
-		    for(int i = 0; i < (nbJoueurs-1); i++){
-			controleur.initialiserUnJoueur((listeChampNom.get(i).toString()));
-		    }
-		    
-		    System.out.println("Joueurs Ajoutées");
-		}else{
-		            JOptionPane.showConfirmDialog(   null, 
-                                                "Il est impossible d'avoir un nom vide", 
-                                                "Erreur",
-                                                JOptionPane.DEFAULT_OPTION, 
-                                                JOptionPane.ERROR_MESSAGE);
-		}
+		demarrer();
 	    }
 	});
 	    
@@ -151,19 +140,139 @@ public class IHMMenu extends JPanel{
 	
     }
     
+    //initialise les panels qui contiennent les champs de nom des joueurs
     private JPanel initPanelNom(String message){
 	JPanel panel = new JPanel();
 	JLabel label = new JLabel(message);
 	listePanelNom.add(panel);
 	JTextField champNom = new JTextField(30);
 	listeChampNom.add(champNom);
+	JComboBox cb = initComboBox();
+	listeChoixCouleurs.add(cb);
 	panel.add(label);
 	panel.add(champNom);
-	
-
+	panel.add(cb);
 	
 	return panel;
     }
     
-  
+    private JComboBox initComboBox(){
+	JComboBox cb = new JComboBox();
+	for(int i = 0; i < 9; i++){
+	    cb.addItem(choixCouleur[i]);
+	}
+	return cb;
+    }
+    
+    //vérifie les données entrés par les joueur et lance la partie
+    private void demarrer(){
+	boolean complet = true;
+	    for(int i = 0; i <= (nbJoueurs-1); i++){
+		if(listeChampNom.get(i).getText().equals("") && complet){
+		    complet = false;
+		    
+		}
+	    }
+	    
+	couleursSelect.removeAll(couleursSelect);
+	boolean couleursAttribués = true;
+	boolean	couleurDoublons = true;
+	for(int i = 0; i < (nbJoueurs); i++){
+	    if(listeChoixCouleurs.get(i).getSelectedIndex() == 0){
+		System.out.println(" couleursAttribué = false");
+		couleursAttribués = false;
+	
+	    }else if(couleursSelect.contains(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()])){
+		System.out.println(" couleurDoublons = false");
+		couleurDoublons = false;
+	    }else{
+	    couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()]);
+	    }
+	    System.out.println(i);
+	}
+	
+	if(couleursAttribués && couleurDoublons && complet){
+	    for(int i = 0; i <= (nbJoueurs-1); i++){
+		couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()]);
+		controleur.initialiserUnJoueur((listeChampNom.get(i).toString()),couleursSelect.get(i));
+	    }
+	    JOptionPane.showConfirmDialog(   null, 
+		"Les joueurs ont été ajoutés", 
+		"Dema",
+		JOptionPane.DEFAULT_OPTION, 
+		JOptionPane.INFORMATION_MESSAGE);
+	}else if(!complet && !couleursAttribués){
+	    JOptionPane.showConfirmDialog(   null, 
+		"Il faut saisir un nom et sélectionner une couleur pour chaque joueurs", 
+		"Erreur",
+		JOptionPane.DEFAULT_OPTION, 
+		JOptionPane.ERROR_MESSAGE);
+	}else if(!complet){
+	    JOptionPane.showConfirmDialog(   null, 
+		"Il faut saisir un nom pour chaque joueur", 
+		"Erreur",
+		JOptionPane.DEFAULT_OPTION, 
+		JOptionPane.ERROR_MESSAGE);
+	}else if(!couleursAttribués){
+		JOptionPane.showConfirmDialog(   null, 
+			"Il faut sélectionner une couleur pour chaque joueur !", 
+			"Erreur",
+			JOptionPane.DEFAULT_OPTION, 
+			JOptionPane.ERROR_MESSAGE);
+	}else if(!couleurDoublons){
+		    JOptionPane.showConfirmDialog(   null, 
+				    "Deux joueurs ne peuvent pas voir la même couleur !", 
+				    "Erreur",
+				    JOptionPane.DEFAULT_OPTION, 
+				    JOptionPane.ERROR_MESSAGE);
+	}
+	    
+    }
+    
+    
+    
 }
+		
+		
+		
+		
+		
+		
+		/*
+		if(complet){
+		    couleursSelect.removeAll(couleursSelect);
+		    boolean couleursCorrecte = true;		    
+		    for(int i = 0; i < (nbJoueurs-1); i++){
+			if(listeChoixCouleurs.get(i).getSelectedIndex() == 0){
+			    couleursCorrecte = false;
+			}else{
+			    if(couleursSelect.contains(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1]) && couleursCorrecte){
+				    JOptionPane.showConfirmDialog(   null, 
+						    "Deux joueurs ne peuvent pas voir la même couleur !", 
+						    "Erreur",
+						    JOptionPane.DEFAULT_OPTION, 
+						    JOptionPane.ERROR_MESSAGE);
+				    couleursCorrecte = false;
+			    }
+			}
+			if(couleursCorrecte){
+			     couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1]);
+			     controleur.initialiserUnJoueur((listeChampNom.get(i).toString()),couleursSelect.get(i));
+			}
+		    }
+			   
+		    System.out.println("Joueurs Ajoutées");
+		}else{
+		    JOptionPane.showConfirmDialog(   null, 
+					"Il faut saisir un nom pour chaque joueur", 
+					"Erreur",
+					JOptionPane.DEFAULT_OPTION, 
+					JOptionPane.ERROR_MESSAGE);
+		}
+	    
+    }
+    */
+		
+		
+
+  

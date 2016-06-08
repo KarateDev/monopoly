@@ -13,7 +13,7 @@ import javax.swing.JFrame;
  * @author sorindoc
  */
 public class Test {
-    
+
     /**
      * @param args the command line arguments
      */
@@ -21,14 +21,14 @@ public class Test {
 	// TODO code application logic here
 	JFrame frame = new JFrame();
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	frame.setSize(800,800);
-	
+	frame.setSize(800, 800);
+
 	Controleur controleur = new Controleur();
-	
+
 	IHMMenu menu = new IHMMenu(controleur);
 	frame.getContentPane().setLayout(new BorderLayout());
-        frame.add(menu, BorderLayout.CENTER);
+	frame.add(menu, BorderLayout.CENTER);
 	frame.setVisible(true);
     }
-    
+
 }

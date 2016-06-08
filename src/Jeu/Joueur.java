@@ -11,11 +11,13 @@ public class Joueur {
 	
 	private int nbCarteLibereDePrison = 0;
 	private int nbTourEnPrison = 0;
+	private CouleurPropriete couleurJoueur;
         
-    public Joueur(String nomjoueur,Carreau depart){ 
+    public Joueur(String nomjoueur,CouleurPropriete couleur,Carreau depart){ 
         proprietes = new HashSet<>();
         this.nomJoueur = nomjoueur;
         this.positionCourante = depart;
+	this.couleurJoueur = couleur;
     }
 	
 	public int getNbCarteLibereDePrison(){
