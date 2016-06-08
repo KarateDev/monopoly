@@ -135,7 +135,16 @@ public class Monopoly {
 		java.util.Collections.shuffle(piocheCarteChance);
 		java.util.Collections.shuffle(piocheCarteCaisseDeCommunaute);
 	}
-
+	
+	public void ajouterCarteLibereDePrison(){ // pour remetre la carte sous la pioche quand le joueur l'utilise
+		CarteLiberationPrison carte = new CarteLiberationPrison("Vous etes libere de prison");
+		
+		if (piocheCarteChance.contains(CarteLiberationPrison.class)){
+			ajouterCarteCaisseDeCommunaute(carte);
+		}else{
+			ajouterCarteChance(carte);
+		}
+	}
 
 	/**
 	 * 

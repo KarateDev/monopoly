@@ -373,6 +373,7 @@ public class Controleur {
 		}else{ // si il utilise une carte pour se libere de prison
 			j.setNbTourEnPrison(0);
 			j.retirerCarteLibereDePrison();
+			monopoly.ajouterCarteLibereDePrison();
 			return true;
 		}
 	}
