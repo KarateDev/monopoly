@@ -283,9 +283,6 @@ public class Controleur {
 		} else if (j.getPositionCourante() instanceof AllerEnPrison) {
 			monopoly.envoyerEnPrison(j);
 			
-		} else if (j.getPositionCourante() instanceof ParcPublic) {
-			ParcPublic parc = (ParcPublic) j.getPositionCourante();
-			parc.viderCaisse(j);
 		}
 		
 	}

@@ -12,5 +12,11 @@ public class Depart extends Carreau {
     public int getGainPourPassage(){
         return this.gainPourPassage;
     }
+
+    @Override
+    public void action(Joueur j) {
+	j.recevoirCash(gainPourPassage);
+    }
+    
     
 }

@@ -16,4 +16,8 @@ public class ParcPublic extends Carreau{
 		j.recevoirCash(caisse);
 		caisse = 0;
     }
+
+    @Override
+    public void action(Joueur j) {
+    }
 }
