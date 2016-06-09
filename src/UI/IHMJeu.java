@@ -680,6 +680,6 @@ public class IHMJeu extends JPanel{
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 	}
-	
-	
+
+
 }

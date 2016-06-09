@@ -21,7 +21,7 @@ import Jeu.CouleurPropriete;
  *
  * @author sorindoc
  */
-public class IHMMenu extends JPanel{
+public class IHMMenu extends JPanel implements Observateur {
  
     private Controleur controleur;
     
@@ -42,17 +42,17 @@ public class IHMMenu extends JPanel{
     
     private int nbJoueurs;
 
-	
+
+
+    public IHMMenu(){
+		super();
     
-    
-    public IHMMenu(Controleur controleur){
-	super();
-	this.controleur = controleur;
-	
-	
-	InitUIComponents();
-	
+		InitUIComponents();
     }
+	
+	public void setControleur(Controleur controleur) {
+		this.controleur = controleur;
+	}
     
     //initialise les composants de la fenètre
     public void InitUIComponents(){
@@ -162,6 +162,11 @@ public class IHMMenu extends JPanel{
 	
 	return panel;
     }
+
+	@Override
+	public void notifier(Message message) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
     
     private JComboBox initComboBox(){
 	JComboBox cb = new JComboBox();

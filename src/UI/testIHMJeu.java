@@ -19,8 +19,12 @@ public class testIHMJeu {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1300,800);
+		
+		// ----------------------------------
 	
-		Controleur controleur = new Controleur();
+		
+		Controleur controleur = new Controleur(null);
+	
 		controleur.creerPlateau("./src/Data/data.txt");
 		controleur.initialiserCartes("./src/Data/dataCartes.txt");
 		
