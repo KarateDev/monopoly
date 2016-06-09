@@ -32,7 +32,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author bouchval
  */
-public class IHMJeu extends JPanel{
+public class IHMJeu extends JPanel implements Observateur {
 	
 	private Controleur controleur;
 	
@@ -67,8 +67,7 @@ public class IHMJeu extends JPanel{
 	private JLabel de2;
 	private JLabel sommeDes;
 	
-	public IHMJeu(Controleur controleur){
-		this.controleur = controleur;
+	public IHMJeu(){
 		
 		this.setLayout(new BorderLayout(10,10));
 		
@@ -79,6 +78,10 @@ public class IHMJeu extends JPanel{
 		ajouterListner();
 		
 		initialisationDebutTour();
+	}
+	
+	public void setControleur(Controleur controleur) {
+		this.controleur = controleur;
 	}
 	
 
@@ -391,6 +394,11 @@ public class IHMJeu extends JPanel{
 			}
 			// a completer (affiche les information du joueur)
 		}
+	}
+
+	@Override
+	public void notifier(Message message) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 	
 	

@@ -6,10 +6,17 @@ import Jeu.*;
 import Jeu.Cartes.Carte;
 import static UI.Message.Type.*;
 
-public class IHM implements Observateur  {
+public class IHM implements Observateur {
 	Controleur controleur;
 	
-	public IHM(Controleur controleur) {
+   
+    public static void main(String[] args) {
+		IHM ihm = new IHM();
+		Controleur controleur = new Controleur(ihm);
+		ihm.setControleur(controleur);
+	}
+
+	public void setControleur(Controleur controleur) {
 		this.controleur = controleur;
 	}
 
@@ -94,12 +101,13 @@ public class IHM implements Observateur  {
         System.out.println("Vous etes envoyé en prison !\n");
     }
     
-    public String attendreProchainTour(Joueur j){ // return la reponse du joueur
+    public String attendreProchainTour(Joueur j) { // return la reponse du joueur
         String reponse;
 		Scanner sc = new Scanner(System.in);
         System.out.println("\nAppuyer sur entré pour passer au tour suivant");
 		System.out.println("('abandonner' pour abandonner / 'patrimoine' pour voir votre patrimoine / 'batiment' pour acheter des batiments)\n");
 		reponse = sc.nextLine();
+		
         
 		return reponse;
 		
@@ -259,6 +267,23 @@ public class IHM implements Observateur  {
 					controleur.getMonopoly().acheterProprieteGenreVraiment(msg.joueur, msg.propriete, this);
 				}
 				break;
+			case AFFICHER_ACHAT_BATIMENT:
+				this.afficherAchatBatiment(msg.joueur, (ProprieteAConstruire)msg.propriete);
+				break;
+			case AFFICHER_PROPRIETE_CONSTRUCTIBLE:
+				int reponse = this.afficherProprieteConstructible(msg.proprieteConstructible, controleur.getMonopoly().getNbMaisonDisponible(), controleur.getMonopoly().getNbHotelDisponible()); //affiche les batiments constructibles et demande une reponse
+				if (reponse != 0){ // si il achete une propriete
+						if (msg.proprieteConstructible.get(reponse-1).getPrixBatiment() <= msg.joueur.getCash()){ // si il peut acheter le batiment
+							if ((msg.proprieteConstructible.get(reponse-1).getNbmaison() == 4 && controleur.getMonopoly().getNbHotelDisponible() > 0) || (msg.proprieteConstructible.get(reponse-1).getNbmaison() < 4 && controleur.getMonopoly().getNbMaisonDisponible() > 0) ){ // si il reste des batiments du type qu'il veut construire
+								controleur.achatBatiment(msg.joueur, msg.proprieteConstructible.get(reponse-1));
+							}else{
+								this.afficherPasAsserDeBatiment();
+							}
+						}else{
+							this.afficherPasAsserArgent();
+						}
+					}
+				break;
 			case AFFICHER_PAYER_LOYER:
 				afficherPayerLoyer(msg.joueur, msg.propriete, msg.loyer);
 				break;
@@ -279,6 +304,79 @@ public class IHM implements Observateur  {
 				break;
 			case AFFICHER_ARGENT_RESTANT:
 				afficherArgentRestant(msg.joueur);
+				break;
+			case AFFICHER_FIN_PARTIE:
+				afficherFinDePartie(msg.joueur);
+				break;
+			case AFFICHER_JOUEUR:
+				afficherJoueur(msg.joueur);
+				break;
+			case AFFICHER_JOUEUR_ELIMINE:
+				afficherJoueurElimine(msg.joueur);
+				break;
+			case AFFICHER_PATRIMOINE:
+				afficherPatrimoine(msg.joueur);
+				break;
+			case AFFICHER_3D_DOUBLE:
+				afficherJoueur3double(msg.joueur);
+				break;
+			case AFFICHER_ATTENDRE_PROCHAIN_TOUR:
+				System.err.println("afficherAttndreProchainTour (Changez ce string)");
+				break;
+			case AFFICHER_MENU:
+				int choixMenu = 666;
+				boolean fin;
+				int nbj;
+
+				while (choixMenu != 2 || controleur.getMonopoly().getJoueurs().size() < 2) {
+					if (choixMenu == 1) {
+						nbj = controleur.getMonopoly().getJoueurs().size();
+						fin = false;
+						while(!fin || nbj < 2){
+							String nom = this.saisirNom(nbj+1);
+							Joueur j = new Joueur(nom, CouleurPropriete.rouge, controleur.getMonopoly().getCarreaux().get(1));
+						controleur.getMonopoly().addJoueur(j);
+							nbj++;
+							if(nbj >= 2){
+								fin = this.finSaisie();
+							}
+						}
+
+					} else if(choixMenu == 3) {
+						controleur.quitterJeu();
+						break;
+					}
+					choixMenu = this.afficherMenu();
+				}
+				break;
+			case AFFICHER_INTERACTION_PRISON:
+				int choix = this.afficherInteractionPrison(msg.joueur);
+				if (choix == 1){ // si il tente de faire un double
+					controleur.tenteSortiePrisonDouble(msg.joueur);
+				}else{ // si il utilise une carte pour se libere de prison
+					controleur.tenterSortiePrisonCarte(msg.joueur);
+				}
+				break;
+			case AFFICHER_LANCER_DES:
+				this.afficherLancerDesDe(msg.de1, msg.de2);
+				break;
+			case AFFICHER_FAIT_UN_DOUBLE:
+				this.afficherFaitUnDouble();
+				break;
+			case AFFICHER_LIBERE_PRISON:
+				this.afficherLibereDePrison();
+				break;
+			case AFFICHER_DERNIER_TOUR_EN_PRISON:
+				this.afficherDernierTourEnPrison();
+				break;
+			case AFFICHER_PAS_ASSEZ_DE_BATIMENTS:
+				this.afficherPasAsserDeBatiment();
+				break;
+			case AFFICHER_PAS_DE_TERRAIN_CONSTRUCTIBLE:
+				this.afficherPasDeTerrainConstructible();
+				break;
+			case AFFICHER_PAS_ASSEZ_DARGENT:
+				this.afficherPasAsserArgent();
 				break;
 				
 		}

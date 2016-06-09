@@ -19,8 +19,14 @@ public class testIHMJeu {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1300,800);
+		
+		// ----------------------------------
 	
-		Controleur controleur = new Controleur();
+		IHMJeu jeu = new IHMJeu();
+		Controleur controleur = new Controleur(jeu);
+		jeu.setControleur(controleur);
+		
+	
 		controleur.creerPlateau("./src/Data/data.txt");
 		controleur.initialiserCartes("./src/Data/dataCartes.txt");
 		
@@ -30,9 +36,6 @@ public class testIHMJeu {
 		controleur.getMonopoly().addJoueur(new Joueur("joueur3", CouleurPropriete.bleuCiel, controleur.getMonopoly().getCarreau(1)));
 		controleur.getMonopoly().addJoueur(new Joueur("joueur4", CouleurPropriete.violet, controleur.getMonopoly().getCarreau(1)));
 		
-		// ----------------------------------
-	
-		IHMJeu jeu = new IHMJeu(controleur);
 		frame.getContentPane().setLayout(new BorderLayout());
         frame.add(jeu, BorderLayout.CENTER);
 		frame.setVisible(true);
