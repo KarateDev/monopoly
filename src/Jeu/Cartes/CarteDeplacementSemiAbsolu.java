@@ -9,7 +9,7 @@ import Jeu.Compagnie;
 import Jeu.Gare;
 import Jeu.Joueur;
 import Jeu.Monopoly;
-import UI.Message;
+import static UI.Message.*;
 import UI.Observateur;
 
 /**
@@ -53,11 +53,7 @@ public class CarteDeplacementSemiAbsolu extends Carte {
 
 		monopoly.deplacerJoueur(j, deplacement + nombreDeTour*monopoly.getCarreaux().size());	//deplacement du joueur
 		
-		Message msg = new Message(Message.Type.AFFICHER_CARREAU);
-		msg.joueur = j;
-		msg.de1 = monopoly.getDes().get(0);
-		msg.de2 = monopoly.getDes().get(1);
-		observateur.notifier(msg);
+		observateur.notifier(AFFICHER_CARREAU);
 		
 		monopoly.interactionCarreau(j);
 	}

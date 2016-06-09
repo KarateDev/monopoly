@@ -5,20 +5,11 @@
  */
 package UI;
 
-import Jeu.Carreau;
-import Jeu.Cartes.Carte;
-import Jeu.Joueur;
-import Jeu.Propriete;
-import Jeu.ProprieteAConstruire;
-import java.util.ArrayList;
-
 /**
  *
  * @author sorindoc
  */
-public class Message {
-	
-	public enum Type {
+public enum Message {
 		AFFICHER_DEMANDE_ACHETER_PROPRIETE,
 		AFFICHER_ACHAT_PROPRIETE,
 
@@ -62,22 +53,4 @@ public class Message {
 		
 		AFFICHER_SORTIE_PRISON_AMANDE,
 		AFFICHER_SORTIE_PRISON_DOUBLE
-
-	}
-
-	public Message(Type type) {
-		this.type = type;
-	}
-	
-    
-	public Type type;
-	public Propriete propriete;
-	public ArrayList<ProprieteAConstruire> proprieteConstructible;
-	public Joueur joueur;
-	public int loyer;
-	public Carreau carreau;
-	public Carte carte;
-	
-	public int de1;
-	public int de2;
 }

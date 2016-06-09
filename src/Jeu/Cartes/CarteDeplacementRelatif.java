@@ -7,8 +7,7 @@ package Jeu.Cartes;
 
 import Jeu.Joueur;
 import Jeu.Monopoly;
-import UI.Message;
-import static UI.Message.Type.*;
+import static UI.Message.*;
 import UI.Observateur;
 
 /**
@@ -27,11 +26,7 @@ public class CarteDeplacementRelatif extends Carte {
 	public void action(Joueur j, Observateur observateur, Monopoly monopoly) {
 		monopoly.deplacerJoueur(j, this.deplacement);
 		
-		Message msg = new Message(AFFICHER_CARREAU);
-		msg.joueur = j;
-		msg.de1 = monopoly.getDes().get(0);
-		msg.de2 = monopoly.getDes().get(1);
-		observateur.notifier(msg);
+		observateur.notifier(AFFICHER_CARREAU);
 
 		monopoly.interactionCarreau(j);
 	}
