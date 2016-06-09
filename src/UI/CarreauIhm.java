@@ -75,7 +75,7 @@ public class CarreauIhm extends Canvas{
 		for (Joueur j : getJoueurs()){ // pour afficher les joueurs
 			
 			if (j.getPositionCourante() == getCarreau()){ // si un joueur est sur ce carreau
-				g.setColor(Color.red); // doit etre la couleur du joueur
+				g.setColor(j.getColorJoueurIhm()); // doit etre la couleur du joueur
 				g.fillOval(getxPositionDessinJoueur() + numJoueur*(getLargeur()/getJoueurs().size()), getPositionText().y+10+ nbLigne*g.getFont().getSize(), 20, 20);
 				numJoueur ++;
 			}
