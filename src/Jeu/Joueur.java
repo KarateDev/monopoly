@@ -9,6 +9,7 @@ public class Joueur {
 	private HashSet<Propriete> proprietes;
 	private String nomJoueur;
 	private int cash = 1500;
+	private boolean aFaitUnDouble ;
 	
 	private int nbCarteLibereDePrison = 0;
 	private int nbTourEnPrison = 0;
@@ -130,6 +131,14 @@ public class Joueur {
 	 */
 	public void setPositionCourante(Carreau pos) {
 		this.positionCourante = pos;
+	}
+
+	public boolean isAFaitUnDouble() {
+	    return aFaitUnDouble;
+	}
+
+	public void setAFaitUnDouble(boolean aFaitUnDouble) {
+	    this.aFaitUnDouble = aFaitUnDouble;
 	}
 
         /**

@@ -8,7 +8,7 @@ package Jeu.Cartes;
 import Jeu.Joueur;
 import Jeu.Monopoly;
 import Jeu.ParcPublic;
-import UI.Message;
+import static UI.Message.*;
 import UI.Observateur;
 
 /**
@@ -31,8 +31,6 @@ public class CarteTransactionBanque extends Carte {
 			ParcPublic parc = (ParcPublic) monopoly.getParcPublic();
 			parc.encaisser(this.montant);
 		}
-		Message msg = new Message(Message.Type.AFFICHER_ARGENT_RESTANT);
-		msg.joueur = j;
-		observateur.notifier(msg);
+		observateur.notifier(AFFICHER_ARGENT_RESTANT);
 	}
 }

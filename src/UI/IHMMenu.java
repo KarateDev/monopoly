@@ -244,12 +244,12 @@ public class IHMMenu extends JPanel implements Observateur {
     
     
 }
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		/*
 		if(complet){
 		    couleursSelect.removeAll(couleursSelect);

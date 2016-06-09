@@ -12,6 +12,11 @@ public class Taxe extends Carreau {
     public int getPrixTaxe(){
         return this.prixTaxe;
     }
+
+    @Override
+    public void action(Joueur j) {
+	j.payerTaxe(prixTaxe);
+    }
     
     
 }

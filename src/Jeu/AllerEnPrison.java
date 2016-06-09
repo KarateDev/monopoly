@@ -14,5 +14,10 @@ public class AllerEnPrison extends Carreau {
 	public AllerEnPrison(int num, String nom) {
 		super(num, nom);
 	}
+
+    @Override
+    public void action(Joueur j) {
+	j.setNbTourEnPrison(0);
+    }
 	
 }
