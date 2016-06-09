@@ -1,5 +1,6 @@
 package Jeu;
 
+import java.awt.Color;
 import java.util.*;
 
 public class Joueur {
@@ -166,5 +167,35 @@ public class Joueur {
 	 */
 	public void setNbTourEnPrison(int nbTourEnPrison) {
 		this.nbTourEnPrison = nbTourEnPrison;
+	}
+
+	/**
+	 * @return the couleurJoueur
+	 */
+	public CouleurPropriete getCouleurJoueur() {
+		return couleurJoueur;
+	}
+	
+	public Color getColorJoueurIhm(){ // pour avoire la couleur du joueur
+		switch (getCouleurJoueur()){
+			case bleuFonce :
+				return Color.blue;
+			case orange :
+				return Color.orange;
+			case mauve :
+				return Color.magenta;
+			case violet :
+				return Color.pink;
+			case bleuCiel :
+				return Color.cyan;
+			case jaune :
+				return Color.yellow;
+			case vert :
+				return Color.green;
+			case rouge :
+				return Color.red;
+				
+		}
+		return null;
 	}
 }

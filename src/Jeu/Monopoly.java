@@ -114,7 +114,7 @@ public class Monopoly {
 		return carte;
 	}
 
-	public Carte piocherUneCarteCaisseDeCommunaute(){
+	public Carte piocherUneCarteCaisseDeCommunaute() {
 		Carte carte = piocheCarteCaisseDeCommunaute.get(0); // on recupere la carte du sommet de la pile
 		piocheCarteCaisseDeCommunaute.remove(carte); // on supprime la carte du sommet de la pile
 		if (!(carte instanceof CarteLiberationPrison)) {
@@ -123,11 +123,11 @@ public class Monopoly {
 		return carte;
 	}
 
-	public void ajouterCarteChance(Carte carte){
+	public void ajouterCarteChance(Carte carte) {
 		piocheCarteChance.add(carte);
 	}
 
-	public void ajouterCarteCaisseDeCommunaute(Carte carte){
+	public void ajouterCarteCaisseDeCommunaute(Carte carte) {
 		piocheCarteCaisseDeCommunaute.add(carte);
 	}
 

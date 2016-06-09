@@ -35,7 +35,7 @@ public class CarreauProprieteIhm extends CarreauIhm{
 		
 		if (((Propriete)getCarreau()).getProprietaire() != null){ // si il y a un proprietaire on affiche le loyer et une pastille qui represente le proprietaire sinon le prix d'achat
 			g.drawString(((Propriete)getCarreau()).calculLoyer(0)+"€", getPositionCash().x, getPositionCash().y);
-			g.setColor(Color.black); // couleur du proprietaire
+			g.setColor(((Propriete)getCarreau()).getProprietaire().getColorJoueurIhm()); // couleur du proprietaire
 			g.fillRect(getPositionProprietaire().x, getPositionProprietaire().y, getTailleProprietaire(), getTailleProprietaire()); //doit etre la couleur du proprietaire
 		}else{
 			g.drawString(((Propriete)getCarreau()).getPrix()+"€", getPositionCash().x, getPositionCash().y);

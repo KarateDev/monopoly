@@ -1,6 +1,7 @@
 package UI;
 
 import Jeu.*;
+import static UI.Message.Type.*;
 import Jeu.Cartes.Carte;
 import Jeu.Cartes.CarteAllerPrison;
 import Jeu.Cartes.CarteDeplacementAbsolu;
@@ -10,6 +11,7 @@ import Jeu.Cartes.CarteLiberationPrison;
 import Jeu.Cartes.CartePayerParPropriete;
 import Jeu.Cartes.CarteTransactionBanque;
 import Jeu.Cartes.CarteTransactionJoueurs;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -20,20 +22,38 @@ import java.util.Comparator;
 public class Controleur {
 
 
-	private IHM ihm;
+	private Observateur ihm;
 	private Monopoly monopoly;
 
-		public Controleur() {
-			ihm = new IHM(this);
-			monopoly = new Monopoly((Observateur)ihm);
+	public Controleur(Observateur ihm) {
+		this.monopoly = new Monopoly((Observateur)ihm);
+		this.ihm = ihm;
+
+		this.creerPlateau("./src/Data/data.txt");
+		
+		this.initialiserCartes("./src/Data/dataCartes.txt");
+		this.getMonopoly().melangerLesCartes();
+
+		this.initialiserUnePartie();
+		
+		int numeroJoueur = 0;
+		while (this.getMonopoly().getJoueurs().size() > 1){ //boucle du jeu tant qu'il reste plus d'un joueur
+			Joueur j = this.getMonopoly().getJoueurs().get(numeroJoueur);
+			this.jouerUnCoup(j);
+			numeroJoueur += 1;
+			if (numeroJoueur > this.getMonopoly().getJoueurs().size()-1){
+				numeroJoueur = 0;
+			}
 		}
+
+		Message msg = new Message(AFFICHER_FIN_PARTIE);
+		msg.joueur = this.getMonopoly().getJoueurs().get(0);
+		ihm.notifier(msg);
+	}
+	
 
 	public void creerPlateau(String dataFilename) {
 		buildGamePlateau(dataFilename);
-	}
-
-	public IHM getIhm() {
-		return ihm;
 	}
 
 	private void buildGamePlateau(String dataFilename) {
@@ -125,10 +145,12 @@ public class Controleur {
         boolean aFaitUnDouble;
                 
         do{      //boucle tant que le joueur fait des doubles
-			ihm.afficherJoueur(j);    //affichage des données du joueur
+			Message msg = new Message(AFFICHER_JOUEUR);
+			msg.joueur = j;
+			ihm.notifier(msg); //affichage des données du joueur
 			
 			if (j.getPositionCourante().getNumero() == getMonopoly().getPrison().getNumero() && j.getNbTourEnPrison() > 0){ //si il est en prison
-				boolean libere = gestionPrison(j);
+				boolean libere = j.getPositionCourante() instanceof Prison;//gestionPrison(j);
 				if (!libere){ // si il n'est pas libéré
 					break; // on sort de la boucle pour qu'il ne joue pas
 				} // si il est libéré, il joue normalement
@@ -143,52 +165,69 @@ public class Controleur {
                 }
             }
                     
-				//affiche le carreau sur lequel il tombe
-            ihm.afficherCarreau(j.getPositionCourante(), getMonopoly().getDes().get(0), getMonopoly().getDes().get(1));  
-			
+			//affiche le carreau sur lequel il tombe
+			Message msg2 = new Message(AFFICHER_CARREAU);
+			msg.joueur = j;
+			msg.de1 = getMonopoly().getDes().get(0);
+			msg.de2 = getMonopoly().getDes().get(1);
+			ihm.notifier(msg2);
+
 		    monopoly.interactionCarreau(j);	// gère les intercations du joueur avec le carreau
-			
-			if (j.getNbTourEnPrison() == 3){ // pour que si le joueur est envoyé en prison, son tour prend fin meme si il a fait un double
+
+			if (j.getNbTourEnPrison() == 3) { // pour que si le joueur est envoyé en prison, son tour prend fin meme si il a fait un double
 				aFaitUnDouble = false;
 			}
-                    
-            if (j.getCash() < 0){ //si le joueur n'a plus d'argent, il est eliminé
-                ihm.afficherJoueurElimine(j);
-                getMonopoly().eliminerJoueur(j);
+
+            if (j.getCash() < 0) { //si le joueur n'a plus d'argent, il est eliminé
+				Message msg3 = new Message(AFFICHER_JOUEUR_ELIMINE);
+				msg3.joueur = j;
+				ihm.notifier(msg3);
                 break;
             }
-						
-            if (aFaitUnDouble){
-                ihm.afficherFaitUnDouble();
+
+            if (aFaitUnDouble) {
+				Message msg3 = new Message(AFFICHER_FAIT_UN_DOUBLE);
+				ihm.notifier(msg3);
             }
-			
-			if(!interactionFinDeTour(j)){ // interaction pour les choix de fin de tour
+
+			if(!interactionFinDeTour(j)) { // interaction pour les choix de fin de tour
 				break;
 			}
-			
-        }while (aFaitUnDouble);
-		
+
+        } while (aFaitUnDouble);
+
         if (nbDouble == 3){ //si le joueur a fait 3 doubles, on l'envoie en prison
-            ihm.afficherJoueur3double(j);
+			Message msg3 = new Message(AFFICHER_3D_DOUBLE);
+			msg3.joueur = j;
+			ihm.notifier(msg3);
 		    monopoly.envoyerEnPrison(j);
 			interactionFinDeTour(j);
         }
 	}
 	
-	public boolean interactionFinDeTour(Joueur j){ // retourn vrai pour continuer, faux pour abandonner
-		String reponse = ihm.attendreProchainTour(j); // interaction de fin de tour
-			if (reponse.equals("patrimoine")){ // si le joueur veut voir sont patrimoine
-				ihm.afficherPatrimoine(j);
-				return interactionFinDeTour(j); // relance l'interaction à la fin de l'achat
-			}else if(reponse.equals("abandonner")){ // si le joueur decide d'abandonner
-				ihm.afficherJoueurElimine(j);
-				monopoly.eliminerJoueur(j);
-				return false;
-			}else if(reponse.equals("batiment")){ // si le joueur veut acheter des batiments
-				interactionAchatBatiment(j);
-				return interactionFinDeTour(j);
-			}
-			return true;
+	public boolean interactionFinDeTour(Joueur j) { // retourn vrai pour continuer, faux pour abandonner
+		Message msg = new Message(AFFICHER_ATTENDRE_PROCHAIN_TOUR);
+		msg.joueur = j;
+		ihm.notifier(msg); // interaction de fin de tour
+		return true;//changez moi !
+	}
+	public boolean finInteractionJoueur(String reponse, Joueur j) {
+		if (reponse.equals("patrimoine")){ // si le joueur veut voir sont patrimoine
+			Message msg = new Message(AFFICHER_PATRIMOINE);
+			msg.joueur = j;
+			ihm.notifier(msg);
+			return interactionFinDeTour(j); // relance l'interaction à la fin de l'achat
+		}else if(reponse.equals("abandonner")) { // si le joueur decide d'abandonner
+			Message msg = new Message(AFFICHER_JOUEUR_ELIMINE);
+			msg.joueur = j;
+			ihm.notifier(msg);
+			monopoly.eliminerJoueur(j);
+			return false;
+		}else if(reponse.equals("batiment")) { // si le joueur veut acheter des batiments
+			interactionAchatBatiment(j);
+			return interactionFinDeTour(j);
+		}
+		return true;
 	}
 
 	/**
@@ -199,7 +238,11 @@ public class Controleur {
 		getMonopoly().lancerDes();
 		int valeurdes = getMonopoly().getSommeDes(); //recupere la somme des dés
 
-		ihm.afficherLancerDesDe(getMonopoly().getDes().get(0), getMonopoly().getDes().get(1)); //affiche les resultats des dés
+		Message msg = new Message(AFFICHER_LANCER_DES);
+		msg.de1 = getMonopoly().getDes().get(0);
+		msg.de2 = getMonopoly().getDes().get(1);
+		ihm.notifier(msg);
+		//ihm.afficherLancerDesDe(getMonopoly().getDes().get(0), getMonopoly().getDes().get(1)); //affiche les resultats des dés
 
 		monopoly.deplacerJoueur(j, valeurdes); // on deplace le joueur
 
@@ -210,33 +253,16 @@ public class Controleur {
 	    Joueur nouveauJoueur = new Joueur(nomJoueur,couleur, monopoly.getCarreaux().get(0));
 	}
 	
-		public boolean initialiserUnePartie(){ //retourn vrai pour jouer at faux pour quitter le jeu
+	public void initialiserUnePartie() { //retourn vrai pour jouer at faux pour quitter le jeu
 		//intialisation des joueurs
-			boolean fin;
-			int nbj;
 
-			int choixMenu = ihm.afficherMenu();
-			while (choixMenu != 2 || monopoly.getJoueurs().size() < 2){
-				if (choixMenu == 1){
-					nbj = monopoly.getJoueurs().size();
-					fin = false;
-					while(!fin || nbj < 2){
-						String nom = ihm.saisirNom(nbj+1);
-						Joueur j = new Joueur(nom,CouleurPropriete.bleuCiel,monopoly.getCarreaux().get(1));
-						getMonopoly().addJoueur(j);
-						nbj++;
-						if(nbj >= 2){
-							fin = ihm.finSaisie();
-						}
-					}
-
-				}else if(choixMenu == 3){
-					break;
-				}
-				choixMenu = ihm.afficherMenu();
-			}
-			return choixMenu != 3;
-		}
+		//int choixMenu = ihm.afficherMenu();
+		Message msg = new Message(AFFICHER_MENU);
+		ihm.notifier(msg);
+	}
+	public void quitterJeu() {
+		System.exit(0);
+	}
 
 		/**
 		 * @return the monopoly
@@ -255,14 +281,19 @@ public class Controleur {
 				|| j.getPositionCourante() instanceof Compagnie) { //si il tombe sur une case propriete
 			Propriete p = (Propriete) j.getPositionCourante();
 			if (p.getProprietaire() == null) {
-				if (j.getCash() >= p.getPrix() && ihm.afficherDemandeAcheterPropriete(p)) {
-					j.achatPropriété(p);
-					ihm.afficherAchatPropriete(p);
+				if (j.getCash() >= p.getPrix()) {
+					Message msg = new Message(AFFICHER_DEMANDE_ACHETER_PROPRIETE);
+					msg.propriete = p;
+					ihm.notifier(msg);
 				}
 			} else if (j != p.getProprietaire()) { // si le joueur n'est pas le propriétaire , il paye le loyer
 				j.payerCash(p.calculLoyer(getMonopoly().getSommeDes()));
 				p.getProprietaire().recevoirCash(p.calculLoyer(getMonopoly().getSommeDes()));
-				ihm.afficherPayerLoyer(j, p, p.calculLoyer(getMonopoly().getSommeDes()));  //affiche que le joueur doit payer un loyer
+				Message msg = new Message(AFFICHER_PAYER_LOYER);
+				msg.joueur = j;
+				msg.propriete = p;
+				msg.loyer = p.calculLoyer(getMonopoly().getSommeDes());
+				ihm.notifier(msg); //affiche que le joueur doit payer un loyer
 			}
 
 		} else if (j.getPositionCourante() instanceof Taxe) {
@@ -270,15 +301,27 @@ public class Controleur {
 			j.payerTaxe(caseTaxe.getPrixTaxe());
 			ParcPublic parc = (ParcPublic) getMonopoly().getParcPublic();
 			parc.encaisser(caseTaxe.getPrixTaxe());
-			ihm.afficherPayerTaxe(j, caseTaxe);
+			
+			Message msg = new Message(AFFICHER_PAYER_TAXE);
+			msg.joueur = j;
+			msg.carreau = caseTaxe;
+			ihm.notifier(msg);
 			
 		} else if (j.getPositionCourante() instanceof CaisseDeCommunaute) {
 			Carte carte = monopoly.piocherUneCarteCaisseDeCommunaute();
-			ihm.afficherCarteCaisseDeCommunaute(carte);
+			
+			Message msg = new Message(AFFICHER_CARTE_CAISSE_DE_COMMUNAUTE);
+			msg.carte = carte;
+			ihm.notifier(msg);
+			//ihm.afficherCarteCaisseDeCommunaute(carte);
 			carte.action(j, ihm, monopoly);
 		} else if (j.getPositionCourante() instanceof Chance) {
 			Carte carte = monopoly.piocherUneCarteChance();
-			ihm.afficherCarteChance(carte);
+			
+			Message msg = new Message(AFFICHER_CARTE_CHANCE);
+			msg.carte = carte;
+			ihm.notifier(msg);
+			//ihm.afficherCarteChance(carte);
 			carte.action(j, ihm, monopoly);
 		} else if (j.getPositionCourante() instanceof AllerEnPrison) {
 			monopoly.envoyerEnPrison(j);
@@ -344,32 +387,46 @@ public class Controleur {
 	}
 
 
-	public boolean gestionPrison(Joueur j){
-		int choix = ihm.afficherInteractionPrison(j);
-		if (choix == 1){ // si il tente de faire un double
+	public void gestionPrison(Joueur j) {
+		Message msg = new Message(AFFICHER_INTERACTION_PRISON);
+		msg.joueur = j;
+		ihm.notifier(msg);
+	}
+	public void tenteSortiePrisonDouble(Joueur j) {
 			monopoly.lancerDes();
-			ihm.afficherLancerDesDe( monopoly.getDes().get(0),  monopoly.getDes().get(1));
+			Message msg = new Message(AFFICHER_LANCER_DES);
+			msg.de1 = monopoly.getDes().get(0);
+			msg.de2 = monopoly.getDes().get(1);
+			ihm.notifier(msg);
+			
 			if (monopoly.getDes().get(0) == monopoly.getDes().get(1)){ // si il a fait un double
 				j.setNbTourEnPrison(0);
-				ihm.afficherFaitUnDouble();
-				ihm.afficherLibereDePrison();
-				return true;
+				Message msg2 = new Message(AFFICHER_FAIT_UN_DOUBLE);
+				ihm.notifier(msg2);
+				
+				Message msg3 = new Message(AFFICHER_LIBERE_PRISON);
+				ihm.notifier(msg3);
+				//return true;
 			}else{
 				j.setNbTourEnPrison(j.getNbTourEnPrison()-1);
 				if (j.getNbTourEnPrison() == 0){ // si c'etait son dernier tour en prison
 					j.payerCash(50);
-					ihm.afficherDernierTourEnPrison();
-					ihm.afficherArgentRestant(j);
-					return true;
+					Message msg4 = new Message(AFFICHER_DERNIER_TOUR_EN_PRISON);
+					ihm.notifier(msg4);
+					
+					Message msg5 = new Message(AFFICHER_ARGENT_RESTANT);
+					msg5.joueur = j;
+					ihm.notifier(msg5);
+					//return true;
 				}
-				return false;
+				//return false;
 			}
-		}else{ // si il utilise une carte pour se libere de prison
+	}
+	public void tenterSortiePrisonCarte(Joueur j) {
 			j.setNbTourEnPrison(0);
 			j.retirerCarteLibereDePrison();
 			monopoly.ajouterCarteLibereDePrison();
-			return true;
-		}
+			//return true;
 	}
 	
 	public void achatBatiment(Joueur j, ProprieteAConstruire p){ //gere l'achat d'un batiment
@@ -381,7 +438,9 @@ public class Controleur {
 			monopoly.setNbMaisonDisponible(monopoly.getNbMaisonDisponible()+4); // on remet en jeu les 4 maisons qui sont remplacées par l'hotel
 		}
 		j.achatMaisonSurPropriete(p);
-		ihm.afficherAchatBatiment(j, p);
+		Message msg = new Message(AFFICHER_ACHAT_BATIMENT);
+		ihm.notifier(msg);
+		
 	}
 	
 	public void interactionAchatBatiment(Joueur j){ //gere l'interaction entre le joueur et les batiments
@@ -401,9 +460,14 @@ public class Controleur {
 						return o1.getCouleur().toString().compareTo(o2.getCouleur().toString());
 					}
 				});
-				if (!proprieteConstructible.isEmpty()){ //si il y a des proprietes constructibles
-					int reponse = ihm.afficherProprieteConstructible(proprieteConstructible,monopoly.getNbMaisonDisponible(),monopoly.getNbHotelDisponible()); //affiche les batiments constructibles et demande une reponse
-					if (reponse != 0){ // si il achete une propriete
+				if (!proprieteConstructible.isEmpty()) { //si il y a des proprietes constructibles
+					Message msg = new Message(AFFICHER_PROPRIETE_CONSTRUCTIBLE);
+					msg.proprieteConstructible = proprieteConstructible;
+					msg.joueur = j;
+					ihm.notifier(msg);
+					
+					//int reponse = ihm.afficherProprieteConstructible(proprieteConstructible,monopoly.getNbMaisonDisponible(),monopoly.getNbHotelDisponible()); //affiche les batiments constructibles et demande une reponse
+					/*if (reponse != 0){ // si il achete une propriete
 						if (proprieteConstructible.get(reponse-1).getPrixBatiment() <= j.getCash()){ // si il peut acheter le batiment
 							if ((proprieteConstructible.get(reponse-1).getNbmaison() == 4 && monopoly.getNbHotelDisponible() > 0) || (proprieteConstructible.get(reponse-1).getNbmaison() < 4 && monopoly.getNbMaisonDisponible() > 0) ){ // si il reste des batiments du type qu'il veut construire
 								achatBatiment(j, proprieteConstructible.get(reponse-1));
@@ -415,16 +479,32 @@ public class Controleur {
 						}
 					}else{ // si il quite l'achat de batiment
 						break;
-					}
-				}else{
-					ihm.afficherPasDeTerrainConstructible();
+					}*/
+				} else {
+					Message msg = new Message(AFFICHER_PAS_DE_TERRAIN_CONSTRUCTIBLE);
+					ihm.notifier(msg);
 				}
 			}else{
-				ihm.afficherPasAsserDeBatiment();
+				Message msg = new Message(AFFICHER_PAS_ASSEZ_DE_BATIMENTS);
+				ihm.notifier(msg);
 			}
-		}while ((monopoly.getNbHotelDisponible() > 0 || monopoly.getNbMaisonDisponible() > 0) && !proprieteConstructible.isEmpty() && ihm.demandeAchatBatiment()); // boucle tant que le joueur veut acheter et peut acheter
+		}while ((monopoly.getNbHotelDisponible() > 0 || monopoly.getNbMaisonDisponible() > 0) && !proprieteConstructible.isEmpty()/* && ihm.demandeAchatBatiment()*/); // boucle tant que le joueur veut acheter et peut acheter
 		
 		
+	}
+	
+	public void acheterBatiment(ArrayList<ProprieteAConstruire> proprieteConstructible, int reponse, Joueur j) {
+		if (proprieteConstructible.get(reponse-1).getPrixBatiment() <= j.getCash()){ // si il peut acheter le batiment
+			if ((proprieteConstructible.get(reponse-1).getNbmaison() == 4 && monopoly.getNbHotelDisponible() > 0) || (proprieteConstructible.get(reponse-1).getNbmaison() < 4 && monopoly.getNbMaisonDisponible() > 0) ){ // si il reste des batiments du type qu'il veut construire
+				achatBatiment(j, proprieteConstructible.get(reponse-1));
+			}else{
+				Message msg = new Message(AFFICHER_PAS_ASSEZ_DE_BATIMENTS);
+				ihm.notifier(msg);
+			}
+		}else{
+			Message msg1 = new Message(AFFICHER_PAS_ASSEZ_DARGENT);
+			ihm.notifier(msg1);
+		}
 	}
 	
 }
