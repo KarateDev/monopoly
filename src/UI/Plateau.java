@@ -95,6 +95,8 @@ public class Plateau extends JPanel{
                 }
             panelgauche.add(gridgauche,BorderLayout.CENTER);
         this.add(panelgauche,BorderLayout.WEST);
+		
+		this.repaintCarreau(carreaux.get(1), joueurs); // pour afficher les joueurs sur le premier carreau
 	}
 	
 	
