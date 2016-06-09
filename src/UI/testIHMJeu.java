@@ -36,7 +36,7 @@ public class testIHMJeu {
 
 		// ----------------------------------
 	
-		IHMJeu jeu = new IHMJeu(controleur.getMonopoly().getCarreaux(), controleur.getMonopoly().getJoueurs(), controleur.getMonopoly().getJoueurs().get(0));
+		IHMJeu jeu = new IHMJeu(controleur, controleur.getMonopoly().getCarreaux(), controleur.getMonopoly().getJoueurs(), controleur.getMonopoly().getJoueurs().get(0));
 		frame.getContentPane().setLayout(new BorderLayout());
         frame.add(jeu, BorderLayout.CENTER);
 		frame.setVisible(true);
