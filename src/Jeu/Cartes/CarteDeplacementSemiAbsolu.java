@@ -27,7 +27,6 @@ public class CarteDeplacementSemiAbsolu extends Carte {
 
 	@Override
 	public void action(Joueur j, Observateur observateur, Monopoly monopoly) {
-		System.out.println("Le joueur se déplace de façon semi-absolue");
 		int deplacement = 0;
 		int nombreDeTour = 0;	//pour faire le modulo permetant de rester dans le vecteur
 

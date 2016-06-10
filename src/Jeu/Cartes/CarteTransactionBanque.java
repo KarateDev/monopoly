@@ -25,7 +25,6 @@ public class CarteTransactionBanque extends Carte {
 
 	@Override
 	public void action(Joueur j, Observateur observateur, Monopoly monopoly) {
-		System.out.println("Il y a transaction entre le joueur et la banque");
 		j.recevoirCash(this.montant);
 		if(this.montant < 0){
 			ParcPublic parc = (ParcPublic) monopoly.getParcPublic();

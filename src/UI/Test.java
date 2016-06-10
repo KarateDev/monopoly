@@ -32,7 +32,6 @@ public class Test {
 	frame.getContentPane().setLayout(new BorderLayout());
 	frame.add(menu, BorderLayout.CENTER);
 	frame.setVisible(true);
-	
     }
 
 }
