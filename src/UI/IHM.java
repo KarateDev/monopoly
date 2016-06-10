@@ -327,7 +327,7 @@ public class IHM implements Observateur {
 				System.err.println("afficherAttndreProchainTour (Changez ce string)");
 				break;
 			case AFFICHER_MENU:
-				int choixMenu = 666;
+				int choixMenu = 4;
 				boolean fin;
 				int nbj;
 

@@ -22,11 +22,11 @@ import java.util.Comparator;
 public class Controleur {
 
 
-	private Observateur ihm;
 	private Monopoly monopoly;
 	private Joueur joueurCourant;
+	private Observateur ihm;
 	
-	private int nbDouble = 0;
+	private int nbDouble;
 
 	public Controleur() {
 		this.monopoly = new Monopoly();
@@ -58,7 +58,8 @@ public class Controleur {
 		joueurCourant = monopoly.getJoueurs().get(0);
 	}
 	
-
+	
+	
 	public void creerPlateau(String dataFilename) {
 		buildGamePlateau(dataFilename);
 	}
@@ -248,6 +249,7 @@ public class Controleur {
 
 	public void initialiserUnJoueur(String nomJoueur, CouleurPropriete couleur){
 	    Joueur nouveauJoueur = new Joueur(nomJoueur,couleur, monopoly.getCarreaux().get(0));
+	    monopoly.addJoueur(nouveauJoueur);
 	}
 	
 	public void initialiserUnePartie() { //retourn vrai pour jouer at faux pour quitter le jeu
@@ -442,16 +444,16 @@ public class Controleur {
 				if (!getProprieteConstructibles(j).isEmpty()) { //si il y a des proprietes constructibles
 					ihm.notifier(AFFICHER_PROPRIETE_CONSTRUCTIBLE);
 					
-					//int reponse = ihm.afficherProprieteConstructible(proprieteConstructible,monopoly.getNbMaisonDisponible(),monopoly.getNbHotelDisponible()); //affiche les batiments constructibles et demande une reponse
+					//int reponse = obs.afficherProprieteConstructible(proprieteConstructible,monopoly.getNbMaisonDisponible(),monopoly.getNbHotelDisponible()); //affiche les batiments constructibles et demande une reponse
 					/*if (reponse != 0){ // si il achete une propriete
 						if (proprieteConstructible.get(reponse-1).getPrixBatiment() <= j.getCash()){ // si il peut acheter le batiment
 							if ((proprieteConstructible.get(reponse-1).getNbmaison() == 4 && monopoly.getNbHotelDisponible() > 0) || (proprieteConstructible.get(reponse-1).getNbmaison() < 4 && monopoly.getNbMaisonDisponible() > 0) ){ // si il reste des batiments du type qu'il veut construire
 								achatBatiment(j, proprieteConstructible.get(reponse-1));
 							}else{
-								ihm.afficherPasAsserDeBatiment();
+								obs.afficherPasAsserDeBatiment();
 							}
 						}else{
-							ihm.afficherPasAsserArgent();
+							obs.afficherPasAsserArgent();
 						}
 					}else{ // si il quite l'achat de batiment
 						break;

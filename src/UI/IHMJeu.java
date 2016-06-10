@@ -82,28 +82,18 @@ public class IHMJeu extends JPanel implements Observateur{
 	private JLabel labelDe2;
 	private JLabel labelSommeDes;
 	
-	public IHMJeu(Controleur controleur, HashMap<Integer, Carreau> carreaux, ArrayList<Joueur> joueurs, Joueur joueur){
-		
-		this.controleur = controleur;
-		
-		joueurCourant = joueur;
-		this.joueurs = joueurs;
-
+	public IHMJeu(Controleur controleur){
 		
 		this.setLayout(new BorderLayout(10,10));
 		
-		initPartiePlateau(carreaux, joueurs);
+		initPartiePlateau(controleur.getMonopoly().getCarreaux(), controleur.getMonopoly().getJoueurs());
 		
 		this.add(initPartieJeu(),BorderLayout.CENTER);
 		
 		ajouterListner();
 		ajouterListnerAutreJoueur();
 		
-		initialisationDebutTour(joueurs, joueur);
-	}
-	
-	public AchatBatimentIhm getIhmAchatBatiment(){
-		return achatBatimentIhm;
+		initialisationDebutTour(controleur.getMonopoly().getJoueurs(), controleur.getMonopoly().getJoueurs().get(0));
 	}
 	
 
@@ -131,7 +121,7 @@ public class IHMJeu extends JPanel implements Observateur{
 
 			panelPlateau.add(panelHaut,BorderLayout.NORTH);
 		
-			plateau = new Plateau(carreaux,joueurs,800);
+			plateau = new Plateau(carreaux,joueurs,850);
 			panelPlateau.add(plateau,BorderLayout.SOUTH);
 						
 		this.add(panelPlateau,BorderLayout.EAST);
@@ -390,6 +380,8 @@ public class IHMJeu extends JPanel implements Observateur{
 	}
 	
 	private void initialisationDebutTour(ArrayList<Joueur> joueurs, Joueur joueur){
+		
+		joueurCourant = joueur;
 		
 		// partie info joueur --------------------------------------------------------------
 		
@@ -865,6 +857,8 @@ public class IHMJeu extends JPanel implements Observateur{
 				
 		}
 	}
+
+
 
 
 }
