@@ -143,16 +143,36 @@ public class AchatBatimentIhm extends JPanel{
 					int numeroLigne = tablePropriete.getSelectedRow();
 					String nomPropriete = tablePropriete.getValueAt(numeroLigne, 0).toString();
 					ProprieteAConstruire pro = null;
+					int nbMaisonMin = 5;
+					
 					for (Propriete p : proprietes){
 						if (p.getNomCarreau().equals(nomPropriete)){
 							pro = (ProprieteAConstruire) p;
 						}
+					
 					}
-
+					for (Propriete p : proprietes){
+						if (((ProprieteAConstruire)p).getCouleur().equals(pro.getCouleur()) && ((ProprieteAConstruire)p).getNbmaison() < nbMaisonMin){
+						    nbMaisonMin = ((ProprieteAConstruire)p).getNbmaison();
+						}
+						
+					
+					}
 					if (!(pro == null)){
 						if (joueur.getCash() >= pro.getPrixBatiment()){
 							if (pro.getNbmaison() < 5){
-						controleur.achatBatiment(pro.getProprietaire(), pro);
+							    if(pro.getNbmaison() == nbMaisonMin){
+								controleur.achatBatiment(pro.getProprietaire(), pro);
+							    }else{
+								JOptionPane.showConfirmDialog(null, 
+									"Désolé, vous ne pouvez avoir un terrain possédant 2 maisons de plus que les autres terrains",
+									"...", 
+									JOptionPane.DEFAULT_OPTION, 
+									JOptionPane.INFORMATION_MESSAGE);
+							    }
+							    
+
+						
 						// ------------------------------------------------------------------------- action controleur a faire (acheter une maison sur la propriete de nom nomPropriete)
 							}else{
 								JOptionPane.showConfirmDialog(null, 

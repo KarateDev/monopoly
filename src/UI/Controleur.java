@@ -56,6 +56,11 @@ public class Controleur {
 		this.ihm = ihm;
 		monopoly.setObservateur(ihm);
 	}
+
+	public void setJoueurCourant(Joueur joueurCourant) {
+	    this.joueurCourant = joueurCourant;
+	}
+	
 	
 	
 	

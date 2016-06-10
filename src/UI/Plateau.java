@@ -8,9 +8,16 @@ package UI;
 import Jeu.*;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -96,6 +103,19 @@ public class Plateau extends JPanel{
             panelgauche.add(gridgauche,BorderLayout.CENTER);
         this.add(panelgauche,BorderLayout.WEST);
 		
+	JPanel centre = new JPanel(new BorderLayout());
+	centre.setBackground(Color.white);
+	
+	try {
+		BufferedImage myPicture = ImageIO.read(new File("./src/Data/monopolyPlateau.png"));
+		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+		centre.add(picLabel,BorderLayout.CENTER);
+	} catch (IOException err) {
+		System.err.println("Mdr trolol l'image elle load pas xptdr");
+	}
+	
+	this.add(centre,BorderLayout.CENTER);
+	
 		this.repaintCarreau(carreaux.get(1), joueurs); // pour afficher les joueurs sur le premier carreau
 	}
 	

@@ -58,9 +58,9 @@ public class IHMFrame extends JFrame /*implements Observateurimplements Observat
     
     
     public void afficherJeu(Controleur controleur){
-	
+	controleur.setJoueurCourant(controleur.getMonopoly().getJoueurs().get(0));
 	this.setSize(1400,900);
-	jeu = new IHMJeu(controleur);
+	jeu = new IHMJeu(controleur,this);
 	controleur.setObservateur(jeu);
 	panelFenetre.removeAll();
 	panelFenetre.add(jeu,BorderLayout.CENTER);

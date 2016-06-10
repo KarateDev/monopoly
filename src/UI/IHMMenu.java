@@ -32,7 +32,7 @@ public class IHMMenu extends JPanel implements Observateur {
     private ArrayList<JPanel> listePanelNom;
     private ArrayList<JTextField> listeChampNom;
     private final CouleurPropriete[] listeCouleurs = {CouleurPropriete.bleuFonce, CouleurPropriete.orange, CouleurPropriete.mauve, CouleurPropriete.violet, CouleurPropriete.bleuCiel, CouleurPropriete.jaune, CouleurPropriete.vert, CouleurPropriete.rouge};
-    private final String[] choixCouleur = {"Couleur","Bleu Ciel","Orange","Mauve","Violet","Bleu Fonce","Jaune","Vert","Rouge"};
+    private final String[] choixCouleur = {"Couleur","Bleu Foncé","Orange","Violet","Rose","Bleu Ciel","Jaune","Vert","Rouge"};
     private ArrayList<CouleurPropriete> couleursSelect;
     private ArrayList<JComboBox> listeChoixCouleurs;
     
@@ -196,18 +196,18 @@ public class IHMMenu extends JPanel implements Observateur {
 		System.out.println(" couleursAttribué = false");
 		couleursAttribués = false;
 	
-	    }else if(couleursSelect.contains(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()])){
+	    }else if(couleursSelect.contains(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1])){
 		System.out.println(" couleurDoublons = false");
 		couleurDoublons = false;
 	    }else{
-	    couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()]);
+	    couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1]);
 	    }
 	    System.out.println(i);
 	}
 	
 	if(couleursAttribués && couleurDoublons && complet){
 	    for(int i = 0; i <= (nbJoueurs-1); i++){
-		couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()]);
+		couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1]);
 		controleur.initialiserUnJoueur((listeChampNom.get(i).getText()),couleursSelect.get(i));
 	    }
 	    JOptionPane.showConfirmDialog(   null, 

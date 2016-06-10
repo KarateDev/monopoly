@@ -14,6 +14,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -82,9 +83,12 @@ public class IHMJeu extends JPanel implements Observateur{
 	private JLabel labelDe2;
 	private JLabel labelSommeDes;
 	
-	public IHMJeu(Controleur controleur){
+	private IHMFrame frame;
+	
+	public IHMJeu(Controleur controleur, IHMFrame frame){
 		
 		this.controleur = controleur;
+		this.frame = frame;
 		
 		joueurCourant = controleur.getMonopoly().getJoueurs().get(0);
 		this.joueurs = controleur.getMonopoly().getJoueurs();
@@ -699,6 +703,12 @@ public class IHMJeu extends JPanel implements Observateur{
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 		this.setVisible(false);
+		frame.removeAll();
+		frame.setVisible(false);
+		frame.dispose();
+		
+			
+		
 	}
 	
 	public void afficherPasDeTerrainConstructible() {
