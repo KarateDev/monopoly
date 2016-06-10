@@ -32,7 +32,7 @@ public class IHMMenu extends JPanel implements Observateur {
     private ArrayList<JPanel> listePanelNom;
     private ArrayList<JTextField> listeChampNom;
     private final CouleurPropriete[] listeCouleurs = {CouleurPropriete.bleuFonce, CouleurPropriete.orange, CouleurPropriete.mauve, CouleurPropriete.violet, CouleurPropriete.bleuCiel, CouleurPropriete.jaune, CouleurPropriete.vert, CouleurPropriete.rouge};
-    private final String[] choixCouleur = {"Couleur","Beu Ciel","Orange","Mauve","Violet","Bleu Fonce","Jaune","Vert","Rouge"};
+    private final String[] choixCouleur = {"Couleur","Bleu Ciel","Orange","Mauve","Violet","Bleu Fonce","Jaune","Vert","Rouge"};
     private ArrayList<CouleurPropriete> couleursSelect;
     private ArrayList<JComboBox> listeChoixCouleurs;
     
@@ -86,7 +86,7 @@ public class IHMMenu extends JPanel implements Observateur {
 	listeChoixCouleurs = new ArrayList<>();
 	couleursSelect = new ArrayList<>();
 	
-	retirerJ = new JButton(" Retire un joueur ");
+	retirerJ = new JButton(" Retirer un joueur ");
 	ajouterJ = new JButton(" Ajouter un joueur ");
 	enregistrer = new JButton(" Enregistrer les joueurs ");
 	

@@ -22,7 +22,6 @@ import java.util.Comparator;
 public class Controleur {
 
 
-	private Observateur obs;
 	private Monopoly monopoly;
 	private Joueur joueurCourant;
 	private Observateur ihm;
@@ -301,13 +300,13 @@ public class Controleur {
 			
 			ihm.notifier(AFFICHER_CARTE_CAISSE_DE_COMMUNAUTE);
 			//ihm.afficherCarteCaisseDeCommunaute(carte);
-			carte.action(j, obs, monopoly);
+			carte.action(j, ihm, monopoly);
 		} else if (j.getPositionCourante() instanceof Chance) {
 			Carte carte = monopoly.piocherUneCarteChance();
 			
 			ihm.notifier(AFFICHER_CARTE_CHANCE);
 			//ihm.afficherCarteChance(carte);
-			carte.action(j, obs, monopoly);
+			carte.action(j, ihm, monopoly);
 		} else if (j.getPositionCourante() instanceof AllerEnPrison) {
 			monopoly.envoyerEnPrison(j);
 			

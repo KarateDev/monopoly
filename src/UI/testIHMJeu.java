@@ -26,6 +26,8 @@ public class testIHMJeu {
 	
 		controleur.creerPlateau("./src/Data/data.txt");
 		controleur.initialiserCartes("./src/Data/dataCartes.txt");
+		controleur.getMonopoly().addJoueur(new Joueur("Phil", CouleurPropriete.rouge, controleur.getMonopoly().getCarreau(0)));
+		controleur.getMonopoly().addJoueur(new Joueur("Nina", CouleurPropriete.vert, controleur.getMonopoly().getCarreau(0)));
 		
 		IHMMenu menu = new IHMMenu(controleur);
 		
