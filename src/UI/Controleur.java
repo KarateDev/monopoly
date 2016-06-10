@@ -55,7 +55,6 @@ public class Controleur {
 	public void setObservateur(Observateur ihm){
 		this.ihm = ihm;
 		monopoly.setObservateur(ihm);
-		joueurCourant = monopoly.getJoueurs().get(0);
 	}
 	
 	
@@ -248,7 +247,7 @@ public class Controleur {
 	}
 
 	public void initialiserUnJoueur(String nomJoueur, CouleurPropriete couleur){
-	    Joueur nouveauJoueur = new Joueur(nomJoueur,couleur, monopoly.getCarreaux().get(0));
+	    Joueur nouveauJoueur = new Joueur(nomJoueur,couleur, monopoly.getCarreau(1));
 	    monopoly.addJoueur(nouveauJoueur);
 	}
 	
