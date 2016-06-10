@@ -29,12 +29,20 @@ public class testIHMJeu {
 		controleur.getMonopoly().addJoueur(new Joueur("Phil", CouleurPropriete.rouge, controleur.getMonopoly().getCarreau(0)));
 		controleur.getMonopoly().addJoueur(new Joueur("Nina", CouleurPropriete.vert, controleur.getMonopoly().getCarreau(0)));
 		
-		IHMMenu menu = new IHMMenu(controleur);
+		// pour les tests -------------------
+		controleur.getMonopoly().addJoueur(new Joueur("joueur1", CouleurPropriete.rouge, controleur.getMonopoly().getCarreau(1)));
+		controleur.getMonopoly().addJoueur(new Joueur("joueur2", CouleurPropriete.bleuFonce, controleur.getMonopoly().getCarreau(1)));
+		controleur.getMonopoly().addJoueur(new Joueur("joueur3", CouleurPropriete.bleuCiel, controleur.getMonopoly().getCarreau(1)));
+		controleur.getMonopoly().addJoueur(new Joueur("joueur4", CouleurPropriete.violet, controleur.getMonopoly().getCarreau(1)));
 		
-
+		
+		controleur.getMonopoly().getJoueurs().get(0).achatPropriété((Propriete)controleur.getMonopoly().getCarreau(12));
+		controleur.getMonopoly().getJoueurs().get(0).achatPropriété((Propriete)controleur.getMonopoly().getCarreau(14));
+		controleur.getMonopoly().getJoueurs().get(0).achatPropriété((Propriete)controleur.getMonopoly().getCarreau(15));
 		// ----------------------------------
 	
 		IHMJeu jeu = new IHMJeu(controleur);
+		controleur.setObservateur(jeu);
 		frame.getContentPane().setLayout(new BorderLayout());
         frame.add(jeu, BorderLayout.CENTER);
 		frame.setVisible(true);

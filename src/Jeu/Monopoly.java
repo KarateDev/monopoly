@@ -5,6 +5,10 @@ import Jeu.Cartes.CarteLiberationPrison;
 import UI.Message;
 import static UI.Message.*;
 import UI.Observateur;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class Monopoly {
@@ -25,8 +29,22 @@ public class Monopoly {
 	private Observateur observateur;
 	
 	private Carte carte = null;
-	  
+	
+	private int tricheId = 0;
+
+	ArrayList<String[]> tricheArray;
+	
 	public Monopoly() {
+		try {//pour tricher
+			tricheArray = readDataFile("./src/Data/data.txt", ",");
+		}
+		catch(FileNotFoundException e){
+			System.err.println("[initialiserCartes()] : File is not found!");
+		}
+		catch(IOException e){
+			System.err.println("[initialiserCartes()] : Error while reading file!");
+		}
+		
 		Carreaux = new HashMap();
 		joueurs = new ArrayList<>();
 		des = new ArrayList<>();
@@ -46,11 +64,16 @@ public class Monopoly {
 
 	public void lancerDes() {
 		this.getDes().clear();
-		Random rand = new Random();
-		int de = rand.nextInt(6)+1;
-		getDes().add(de);
-		de = rand.nextInt(6)+1;
-		getDes().add(de);
+		if (false) { //mode triche
+			getDes().add(Integer.parseInt(tricheArray.get(tricheId++)[0]));
+			
+		} else {
+			Random rand = new Random();
+			int de = rand.nextInt(6)+1;
+			getDes().add(de);
+			de = rand.nextInt(6)+1;
+			getDes().add(de);
+		}
 	}
 
 	public void addJoueur(Joueur j){
@@ -236,6 +259,11 @@ public class Monopoly {
 		} else if (j.getPositionCourante() instanceof AllerEnPrison) {
 			this.envoyerEnPrison(j);
 			
+		}else if (j.getPositionCourante() instanceof Prison) {
+			if (j.getNbTourEnPrison() > 0){
+				observateur.notifier(AFFICHER_INTERACTION_PRISON);
+			}
+			
 		} else if (j.getPositionCourante() instanceof ParcPublic) {
 			ParcPublic parc = (ParcPublic) j.getPositionCourante();
 			parc.viderCaisse(j);
@@ -282,5 +310,19 @@ public class Monopoly {
 	 */
 	public ArrayList<Carte> getPiocheCarteCaisseDeCommunaute() {
 		return piocheCarteCaisseDeCommunaute;
+	}
+
+	private ArrayList<String[]> readDataFile(String filename, String token) throws FileNotFoundException, IOException
+	{
+		ArrayList<String[]> data = new ArrayList<String[]>();
+
+		BufferedReader reader = new BufferedReader(new FileReader(filename));
+		String line = null;
+		while((line = reader.readLine()) != null){
+			data.add(line.split(token));
+		}
+		reader.close();
+
+		return data;
 	}
 }

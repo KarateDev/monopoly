@@ -28,12 +28,14 @@ import javax.swing.JOptionPane;
 public class AchatBatimentIhm extends JPanel{
 	
 	private Controleur controleur;
-	
+		
 	private JTable tablePropriete;
 	
 	private JLabel labelNom;
 	private JLabel labelNom2;
 	private JLabel labelArgent;
+	
+	private Joueur joueur;
 	
 	private JButton boutonQuitter;
 	private JButton boutonAcheter;
@@ -42,7 +44,8 @@ public class AchatBatimentIhm extends JPanel{
 	
 	public AchatBatimentIhm(Controleur controleur, Joueur joueur, ArrayList<ProprieteAConstruire> proprietes){
 
-		this.controleur = controleur;
+		this.joueur = joueur;
+		this.controleur = controleur;		
 		this.setLayout(new BorderLayout());
 		initComponent();
 		ajouterListner();
@@ -98,12 +101,35 @@ public class AchatBatimentIhm extends JPanel{
 			this.add(panelCentre, BorderLayout.CENTER);
 			
 	}
+	
+	public void actualiserPropriete(Joueur joueur){
+		DefaultTableModel model = new DefaultTableModel(){ 
+                @Override
+                public boolean isCellEditable(int row, int column){ //pour rendre les cellules non modifiable
+                return false;
+            }};
+        String [] colonnes = {"Nom","Loyer","Batiment","Couleur","Prix batiment"};
+        model.setColumnIdentifiers(colonnes);
+            
+        for (Propriete p : proprietes){
+		String [] donnees = {p.getNomCarreau(),
+			String.valueOf(p.calculLoyer(0)),
+			((ProprieteAConstruire) p).getCouleur().toString(),
+			((ProprieteAConstruire) p).getNbmaison()+" maisons",
+			((ProprieteAConstruire) p).getPrixBatiment()+"€"};
+
+			
+            model.addRow(donnees);
+        }
+        tablePropriete.setModel(model);
+	}
 
 	private void ajouterListner() {
 		
 		boutonQuitter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				controleur.arretInteractionAchatBatiment();
 				// --------------------------------------------------------------------- action controleur a faire (notifier un message quitterAchatBatiment)
 			}
 		});
@@ -112,19 +138,41 @@ public class AchatBatimentIhm extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				int numeroLigne = tablePropriete.getSelectedRow();
-				String nomPropriete = tablePropriete.getValueAt(numeroLigne, 0).toString();
-				ProprieteAConstruire pro = null;
-				for (Propriete p : proprietes){
-					if (p.getNomCarreau().equals(nomPropriete)){
-						pro = (ProprieteAConstruire) p;
+				
+				try{
+					int numeroLigne = tablePropriete.getSelectedRow();
+					String nomPropriete = tablePropriete.getValueAt(numeroLigne, 0).toString();
+					ProprieteAConstruire pro = null;
+					for (Propriete p : proprietes){
+						if (p.getNomCarreau().equals(nomPropriete)){
+							pro = (ProprieteAConstruire) p;
+						}
 					}
+
+					if (!(pro == null)){
+						if (joueur.getCash() >= pro.getPrixBatiment()){
+							if (pro.getNbmaison() < 5){
+						controleur.achatBatiment(pro.getProprietaire(), pro);
+						// ------------------------------------------------------------------------- action controleur a faire (acheter une maison sur la propriete de nom nomPropriete)
+							}else{
+								JOptionPane.showConfirmDialog(null, 
+									"Désolé, vous ne pouvez plus construire de batiment sur cette propriete",
+									"...", 
+									JOptionPane.DEFAULT_OPTION, 
+									JOptionPane.INFORMATION_MESSAGE);
+							}
+						}else{
+							JOptionPane.showConfirmDialog(null, 
+								"Désolé, vous n'avez pas assez d'argent ....",
+								"...", 
+								JOptionPane.DEFAULT_OPTION, 
+								JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+				}catch (Exception ex){
+					// ne rien faire
 				}
 				
-				if (!(pro == null)){
-					controleur.achatBatiment(pro.getProprietaire(), pro);
-					// ------------------------------------------------------------------------- action controleur a faire (acheter une maison sur la propriete de nom nomPropriete)
-				}
 			}
 		});
 		
@@ -162,17 +210,17 @@ public class AchatBatimentIhm extends JPanel{
 	
 	public void afficherAchatBatiment(Joueur joueur){
 		JOptionPane.showConfirmDialog(null, 
+			"Vous avez achate un batiment !",
 			"Achat", 
-			"Vous avez achater un batiment !",
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 		labelArgent.setText("Argent : "+joueur.getCash()+"€");
 	}
 
-	void afficherPasDeBatiment() {
+	public void afficherPasDeBatiment() {
 		JOptionPane.showConfirmDialog(null, 
-			"Achat", 
 			"Désolé ... il n'y a plus de batiment de ce type",
+			"Achat", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 	}

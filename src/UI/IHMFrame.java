@@ -15,13 +15,14 @@ import javax.swing.*;
  *
  * @author sorindoc
  */
-public class IHMFrame extends JFrame implements Observateur/*implements Observateur */{
+public class IHMFrame extends JFrame /*implements Observateurimplements Observateur */{
     
     private Controleur controleur;
     private IHMMenu menu;
     private IHMJeu jeu;
     private JButton demarrer;
     private JPanel boutonsMenu;
+	private JPanel panelFenetre;
    /* @Override
     public void notifier(Message message) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -30,9 +31,8 @@ public class IHMFrame extends JFrame implements Observateur/*implements Observat
     
     public IHMFrame(Controleur controleur){
 	super("Monopoly");
-	
+	panelFenetre = new JPanel(new BorderLayout());
 	this.controleur = controleur;
-	controleur.setObservateur(this);
 		
     }
     
@@ -48,8 +48,8 @@ public class IHMFrame extends JFrame implements Observateur/*implements Observat
 	initBoutonDemarrer();
 	boutonsMenu.add(demarrer);
 
-	this.getContentPane().setLayout(new BorderLayout());
-	this.add(menu, BorderLayout.CENTER);
+	panelFenetre.add(menu, BorderLayout.CENTER);
+	this.add(panelFenetre);
 
 	this.setVisible(true);
 	
@@ -59,7 +59,12 @@ public class IHMFrame extends JFrame implements Observateur/*implements Observat
     
     public void afficherJeu(Controleur controleur){
 	
-	this.setSize(1350,900);
+	this.setSize(1400,900);
+	jeu = new IHMJeu(controleur);
+	controleur.setObservateur(jeu);
+	panelFenetre.removeAll();
+	panelFenetre.add(jeu,BorderLayout.CENTER);
+	panelFenetre.revalidate();
 	
     }
     
@@ -69,10 +74,11 @@ public class IHMFrame extends JFrame implements Observateur/*implements Observat
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		if(menu.isPret()){
+			System.out.println(controleur.getMonopoly().getJoueurs().get(0).getNomJoueur());
+		    System.out.println(controleur.getMonopoly().getJoueurs().get(1).getNomJoueur());
 		    afficherJeu(controleur);
 		    System.out.println(" pret ");
-		    System.out.println(controleur.getMonopoly().getJoueurs().get(0).getNomJoueur());
-		    System.out.println(controleur.getMonopoly().getJoueurs().get(1).getNomJoueur());
+		    
 		}else{
 		    JOptionPane.showConfirmDialog(   null, 
 				    " Il faut d'abord enregistré les joueurs !", 
@@ -87,18 +93,11 @@ public class IHMFrame extends JFrame implements Observateur/*implements Observat
 	menu.getpBouttons().add(demarrer);
 	
     }
-    
-     @Override
-    public void notifier(Message message) {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
+        
     public static void main(String[] args) {
 	    Controleur controleur = new Controleur();
 	    IHMFrame ihm = new IHMFrame(controleur);
 	    ihm.afficherMenu(controleur);
-	    
 
 	    }
 
