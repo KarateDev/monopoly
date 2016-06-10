@@ -36,24 +36,26 @@ public class IHMMenu extends JPanel implements Observateur {
     private ArrayList<CouleurPropriete> couleursSelect;
     private ArrayList<JComboBox> listeChoixCouleurs;
     
-    private JButton AjouterJ;
-    private JButton RetirerJ;
-    private JButton Demarrer;
+    private JButton ajouterJ;
+    private JButton retirerJ;
+    private JButton enregistrer;
     
     private int nbJoueurs;
+    private boolean pret;
 
 
-
-    public IHMMenu(){
+    public IHMMenu(Controleur controleur){
 		super();
-    
+		
+		this.controleur = controleur;
 		InitUIComponents();
+		pret = false;
     }
 	
-	public void setControleur(Controleur controleur) {
-		this.controleur = controleur;
-	}
+
     
+	
+	
     //initialise les composants de la fenètre
     public void InitUIComponents(){
 	this.setLayout(new BorderLayout());
@@ -84,11 +86,11 @@ public class IHMMenu extends JPanel implements Observateur {
 	listeChoixCouleurs = new ArrayList<>();
 	couleursSelect = new ArrayList<>();
 	
-	RetirerJ = new JButton(" Retire un joueur ");
-	AjouterJ = new JButton(" Ajouter un joueur ");
-	Demarrer = new JButton(" Demarrer la partie ");
+	retirerJ = new JButton(" Retire un joueur ");
+	ajouterJ = new JButton(" Ajouter un joueur ");
+	enregistrer = new JButton(" Enregistrer les joueurs ");
 	
-	AjouterJ.addActionListener(new ActionListener() {
+	ajouterJ.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		if(nbJoueurs < 6){
@@ -100,7 +102,7 @@ public class IHMMenu extends JPanel implements Observateur {
 	    }
 	});
 	
-	RetirerJ.addActionListener(new ActionListener() {
+	retirerJ.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		if(nbJoueurs >2){
@@ -113,10 +115,10 @@ public class IHMMenu extends JPanel implements Observateur {
 	    }
 	});
 	
-	Demarrer.addActionListener(new ActionListener() {
+	enregistrer.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-		demarrer();
+		pret = enregistrer();
 	    }
 	});
 	    
@@ -136,9 +138,9 @@ public class IHMMenu extends JPanel implements Observateur {
 	this.add(joueurs,BorderLayout.CENTER);
 	
 	pBouttons = new JPanel();
-	pBouttons.add(AjouterJ);
-	pBouttons.add(RetirerJ);
-	pBouttons.add(Demarrer);
+	pBouttons.add(ajouterJ);
+	pBouttons.add(retirerJ);
+	pBouttons.add(enregistrer);
 	
 	this.add(pBouttons,BorderLayout.SOUTH);
 	
@@ -177,7 +179,7 @@ public class IHMMenu extends JPanel implements Observateur {
     }
     
     //vérifie les données entrés par les joueur et lance la partie
-    private void demarrer(){
+    private boolean enregistrer(){
 	boolean complet = true;
 	    for(int i = 0; i <= (nbJoueurs-1); i++){
 		if(listeChampNom.get(i).getText().equals("") && complet){
@@ -210,7 +212,7 @@ public class IHMMenu extends JPanel implements Observateur {
 	    }
 	    JOptionPane.showConfirmDialog(   null, 
 		"Les joueurs ont été ajoutés", 
-		"Dema",
+		"Enregistré",
 		JOptionPane.DEFAULT_OPTION, 
 		JOptionPane.INFORMATION_MESSAGE);
 	}else if(!complet && !couleursAttribués){
@@ -239,52 +241,18 @@ public class IHMMenu extends JPanel implements Observateur {
 				    JOptionPane.ERROR_MESSAGE);
 	}
 	    
+	return complet && couleurDoublons && couleursAttribués;
     }
+
+    public JPanel getpBouttons() {
+	return pBouttons;
+    }
+
+    public boolean isPret() {
+	return pret;
+    }
+    
     
     
     
 }
-		
-		
-		
-		
-		
-		
-		/*
-		if(complet){
-		    couleursSelect.removeAll(couleursSelect);
-		    boolean couleursCorrecte = true;		    
-		    for(int i = 0; i < (nbJoueurs-1); i++){
-			if(listeChoixCouleurs.get(i).getSelectedIndex() == 0){
-			    couleursCorrecte = false;
-			}else{
-			    if(couleursSelect.contains(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1]) && couleursCorrecte){
-				    JOptionPane.showConfirmDialog(   null, 
-						    "Deux joueurs ne peuvent pas voir la même couleur !", 
-						    "Erreur",
-						    JOptionPane.DEFAULT_OPTION, 
-						    JOptionPane.ERROR_MESSAGE);
-				    couleursCorrecte = false;
-			    }
-			}
-			if(couleursCorrecte){
-			     couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1]);
-			     controleur.initialiserUnJoueur((listeChampNom.get(i).toString()),couleursSelect.get(i));
-			}
-		    }
-			   
-		    System.out.println("Joueurs Ajoutées");
-		}else{
-		    JOptionPane.showConfirmDialog(   null, 
-					"Il faut saisir un nom pour chaque joueur", 
-					"Erreur",
-					JOptionPane.DEFAULT_OPTION, 
-					JOptionPane.ERROR_MESSAGE);
-		}
-	    
-    }
-    */
-		
-		
-
-  

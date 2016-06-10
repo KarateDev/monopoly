@@ -22,19 +22,19 @@ import java.util.Comparator;
 public class Controleur {
 
 
-	private Observateur ihm;
+	private Observateur obs;
 	private Monopoly monopoly;
 
-	public Controleur(Observateur ihm) {
-		this.monopoly = new Monopoly((Observateur)ihm);
-		this.ihm = ihm;
+	public Controleur() {
+		this.monopoly = new Monopoly((Observateur)obs);
+		this.obs = obs;
 
 		this.creerPlateau("./src/Data/data.txt");
 		
 		this.initialiserCartes("./src/Data/dataCartes.txt");
 		this.getMonopoly().melangerLesCartes();
 
-		this.initialiserUnePartie();
+		/*this.initialiserUnePartie();
 		
 		int numeroJoueur = 0;
 		while (this.getMonopoly().getJoueurs().size() > 1){ //boucle du jeu tant qu'il reste plus d'un joueur
@@ -48,10 +48,20 @@ public class Controleur {
 
 		Message msg = new Message(AFFICHER_FIN_PARTIE);
 		msg.joueur = this.getMonopoly().getJoueurs().get(0);
-		ihm.notifier(msg);
+		obs.notifier(msg)
+		*/
+	}
+
+	public Observateur getObservateur() {
+	    return obs;
+	}
+
+	public void setObservateur(Observateur obs) {
+	    this.obs = obs;
 	}
 	
-
+	
+	
 	public void creerPlateau(String dataFilename) {
 		buildGamePlateau(dataFilename);
 	}
@@ -147,7 +157,7 @@ public class Controleur {
         do{      //boucle tant que le joueur fait des doubles
 			Message msg = new Message(AFFICHER_JOUEUR);
 			msg.joueur = j;
-			ihm.notifier(msg); //affichage des données du joueur
+			obs.notifier(msg); //affichage des données du joueur
 			
 			if (j.getPositionCourante().getNumero() == getMonopoly().getPrison().getNumero() && j.getNbTourEnPrison() > 0){ //si il est en prison
 				boolean libere = j.getPositionCourante() instanceof Prison;//gestionPrison(j);
@@ -170,7 +180,7 @@ public class Controleur {
 			msg.joueur = j;
 			msg.de1 = getMonopoly().getDes().get(0);
 			msg.de2 = getMonopoly().getDes().get(1);
-			ihm.notifier(msg2);
+			obs.notifier(msg2);
 
 		    monopoly.interactionCarreau(j);	// gère les intercations du joueur avec le carreau
 
@@ -181,13 +191,13 @@ public class Controleur {
             if (j.getCash() < 0) { //si le joueur n'a plus d'argent, il est eliminé
 				Message msg3 = new Message(AFFICHER_JOUEUR_ELIMINE);
 				msg3.joueur = j;
-				ihm.notifier(msg3);
+				obs.notifier(msg3);
                 break;
             }
 
             if (aFaitUnDouble) {
 				Message msg3 = new Message(AFFICHER_FAIT_UN_DOUBLE);
-				ihm.notifier(msg3);
+				obs.notifier(msg3);
             }
 
 			if(!interactionFinDeTour(j)) { // interaction pour les choix de fin de tour
@@ -199,7 +209,7 @@ public class Controleur {
         if (nbDouble == 3){ //si le joueur a fait 3 doubles, on l'envoie en prison
 			Message msg3 = new Message(AFFICHER_3D_DOUBLE);
 			msg3.joueur = j;
-			ihm.notifier(msg3);
+			obs.notifier(msg3);
 		    monopoly.envoyerEnPrison(j);
 			interactionFinDeTour(j);
         }
@@ -208,19 +218,19 @@ public class Controleur {
 	public boolean interactionFinDeTour(Joueur j) { // retourn vrai pour continuer, faux pour abandonner
 		Message msg = new Message(AFFICHER_ATTENDRE_PROCHAIN_TOUR);
 		msg.joueur = j;
-		ihm.notifier(msg); // interaction de fin de tour
+		obs.notifier(msg); // interaction de fin de tour
 		return true;//changez moi !
 	}
 	public boolean finInteractionJoueur(String reponse, Joueur j) {
 		if (reponse.equals("patrimoine")){ // si le joueur veut voir sont patrimoine
 			Message msg = new Message(AFFICHER_PATRIMOINE);
 			msg.joueur = j;
-			ihm.notifier(msg);
+			obs.notifier(msg);
 			return interactionFinDeTour(j); // relance l'interaction à la fin de l'achat
 		}else if(reponse.equals("abandonner")) { // si le joueur decide d'abandonner
 			Message msg = new Message(AFFICHER_JOUEUR_ELIMINE);
 			msg.joueur = j;
-			ihm.notifier(msg);
+			obs.notifier(msg);
 			monopoly.eliminerJoueur(j);
 			return false;
 		}else if(reponse.equals("batiment")) { // si le joueur veut acheter des batiments
@@ -241,7 +251,7 @@ public class Controleur {
 		Message msg = new Message(AFFICHER_LANCER_DES);
 		msg.de1 = getMonopoly().getDes().get(0);
 		msg.de2 = getMonopoly().getDes().get(1);
-		ihm.notifier(msg);
+		obs.notifier(msg);
 		//ihm.afficherLancerDesDe(getMonopoly().getDes().get(0), getMonopoly().getDes().get(1)); //affiche les resultats des dés
 
 		monopoly.deplacerJoueur(j, valeurdes); // on deplace le joueur
@@ -251,14 +261,15 @@ public class Controleur {
 
 	public void initialiserUnJoueur(String nomJoueur, CouleurPropriete couleur){
 	    Joueur nouveauJoueur = new Joueur(nomJoueur,couleur, monopoly.getCarreaux().get(0));
+	    monopoly.addJoueur(nouveauJoueur);
 	}
 	
 	public void initialiserUnePartie() { //retourn vrai pour jouer at faux pour quitter le jeu
 		//intialisation des joueurs
 
-		//int choixMenu = ihm.afficherMenu();
+		//int choixMenu = obs.afficherMenu();
 		Message msg = new Message(AFFICHER_MENU);
-		ihm.notifier(msg);
+		obs.notifier(msg);
 	}
 	public void quitterJeu() {
 		System.exit(0);
@@ -284,7 +295,7 @@ public class Controleur {
 				if (j.getCash() >= p.getPrix()) {
 					Message msg = new Message(AFFICHER_DEMANDE_ACHETER_PROPRIETE);
 					msg.propriete = p;
-					ihm.notifier(msg);
+					obs.notifier(msg);
 				}
 			} else if (j != p.getProprietaire()) { // si le joueur n'est pas le propriétaire , il paye le loyer
 				j.payerCash(p.calculLoyer(getMonopoly().getSommeDes()));
@@ -293,7 +304,7 @@ public class Controleur {
 				msg.joueur = j;
 				msg.propriete = p;
 				msg.loyer = p.calculLoyer(getMonopoly().getSommeDes());
-				ihm.notifier(msg); //affiche que le joueur doit payer un loyer
+				obs.notifier(msg); //affiche que le joueur doit payer un loyer
 			}
 
 		} else if (j.getPositionCourante() instanceof Taxe) {
@@ -305,24 +316,24 @@ public class Controleur {
 			Message msg = new Message(AFFICHER_PAYER_TAXE);
 			msg.joueur = j;
 			msg.carreau = caseTaxe;
-			ihm.notifier(msg);
+			obs.notifier(msg);
 			
 		} else if (j.getPositionCourante() instanceof CaisseDeCommunaute) {
 			Carte carte = monopoly.piocherUneCarteCaisseDeCommunaute();
 			
 			Message msg = new Message(AFFICHER_CARTE_CAISSE_DE_COMMUNAUTE);
 			msg.carte = carte;
-			ihm.notifier(msg);
+			obs.notifier(msg);
 			//ihm.afficherCarteCaisseDeCommunaute(carte);
-			carte.action(j, ihm, monopoly);
+			carte.action(j, obs, monopoly);
 		} else if (j.getPositionCourante() instanceof Chance) {
 			Carte carte = monopoly.piocherUneCarteChance();
 			
 			Message msg = new Message(AFFICHER_CARTE_CHANCE);
 			msg.carte = carte;
-			ihm.notifier(msg);
+			obs.notifier(msg);
 			//ihm.afficherCarteChance(carte);
-			carte.action(j, ihm, monopoly);
+			carte.action(j, obs, monopoly);
 		} else if (j.getPositionCourante() instanceof AllerEnPrison) {
 			monopoly.envoyerEnPrison(j);
 			
@@ -390,33 +401,33 @@ public class Controleur {
 	public void gestionPrison(Joueur j) {
 		Message msg = new Message(AFFICHER_INTERACTION_PRISON);
 		msg.joueur = j;
-		ihm.notifier(msg);
+		obs.notifier(msg);
 	}
 	public void tenteSortiePrisonDouble(Joueur j) {
 			monopoly.lancerDes();
 			Message msg = new Message(AFFICHER_LANCER_DES);
 			msg.de1 = monopoly.getDes().get(0);
 			msg.de2 = monopoly.getDes().get(1);
-			ihm.notifier(msg);
+			obs.notifier(msg);
 			
 			if (monopoly.getDes().get(0) == monopoly.getDes().get(1)){ // si il a fait un double
 				j.setNbTourEnPrison(0);
 				Message msg2 = new Message(AFFICHER_FAIT_UN_DOUBLE);
-				ihm.notifier(msg2);
+				obs.notifier(msg2);
 				
 				Message msg3 = new Message(AFFICHER_LIBERE_PRISON);
-				ihm.notifier(msg3);
+				obs.notifier(msg3);
 				//return true;
 			}else{
 				j.setNbTourEnPrison(j.getNbTourEnPrison()-1);
 				if (j.getNbTourEnPrison() == 0){ // si c'etait son dernier tour en prison
 					j.payerCash(50);
 					Message msg4 = new Message(AFFICHER_DERNIER_TOUR_EN_PRISON);
-					ihm.notifier(msg4);
+					obs.notifier(msg4);
 					
 					Message msg5 = new Message(AFFICHER_ARGENT_RESTANT);
 					msg5.joueur = j;
-					ihm.notifier(msg5);
+					obs.notifier(msg5);
 					//return true;
 				}
 				//return false;
@@ -439,7 +450,7 @@ public class Controleur {
 		}
 		j.achatMaisonSurPropriete(p);
 		Message msg = new Message(AFFICHER_ACHAT_BATIMENT);
-		ihm.notifier(msg);
+		obs.notifier(msg);
 		
 	}
 	
@@ -464,31 +475,31 @@ public class Controleur {
 					Message msg = new Message(AFFICHER_PROPRIETE_CONSTRUCTIBLE);
 					msg.proprieteConstructible = proprieteConstructible;
 					msg.joueur = j;
-					ihm.notifier(msg);
+					obs.notifier(msg);
 					
-					//int reponse = ihm.afficherProprieteConstructible(proprieteConstructible,monopoly.getNbMaisonDisponible(),monopoly.getNbHotelDisponible()); //affiche les batiments constructibles et demande une reponse
+					//int reponse = obs.afficherProprieteConstructible(proprieteConstructible,monopoly.getNbMaisonDisponible(),monopoly.getNbHotelDisponible()); //affiche les batiments constructibles et demande une reponse
 					/*if (reponse != 0){ // si il achete une propriete
 						if (proprieteConstructible.get(reponse-1).getPrixBatiment() <= j.getCash()){ // si il peut acheter le batiment
 							if ((proprieteConstructible.get(reponse-1).getNbmaison() == 4 && monopoly.getNbHotelDisponible() > 0) || (proprieteConstructible.get(reponse-1).getNbmaison() < 4 && monopoly.getNbMaisonDisponible() > 0) ){ // si il reste des batiments du type qu'il veut construire
 								achatBatiment(j, proprieteConstructible.get(reponse-1));
 							}else{
-								ihm.afficherPasAsserDeBatiment();
+								obs.afficherPasAsserDeBatiment();
 							}
 						}else{
-							ihm.afficherPasAsserArgent();
+							obs.afficherPasAsserArgent();
 						}
 					}else{ // si il quite l'achat de batiment
 						break;
 					}*/
 				} else {
 					Message msg = new Message(AFFICHER_PAS_DE_TERRAIN_CONSTRUCTIBLE);
-					ihm.notifier(msg);
+					obs.notifier(msg);
 				}
 			}else{
 				Message msg = new Message(AFFICHER_PAS_ASSEZ_DE_BATIMENTS);
-				ihm.notifier(msg);
+				obs.notifier(msg);
 			}
-		}while ((monopoly.getNbHotelDisponible() > 0 || monopoly.getNbMaisonDisponible() > 0) && !proprieteConstructible.isEmpty()/* && ihm.demandeAchatBatiment()*/); // boucle tant que le joueur veut acheter et peut acheter
+		}while ((monopoly.getNbHotelDisponible() > 0 || monopoly.getNbMaisonDisponible() > 0) && !proprieteConstructible.isEmpty()/* && obs.demandeAchatBatiment()*/); // boucle tant que le joueur veut acheter et peut acheter
 		
 		
 	}
@@ -499,11 +510,11 @@ public class Controleur {
 				achatBatiment(j, proprieteConstructible.get(reponse-1));
 			}else{
 				Message msg = new Message(AFFICHER_PAS_ASSEZ_DE_BATIMENTS);
-				ihm.notifier(msg);
+				obs.notifier(msg);
 			}
 		}else{
 			Message msg1 = new Message(AFFICHER_PAS_ASSEZ_DARGENT);
-			ihm.notifier(msg1);
+			obs.notifier(msg1);
 		}
 	}
 	

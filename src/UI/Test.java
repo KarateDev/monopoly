@@ -23,14 +23,15 @@ public class Test {
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	frame.setSize(800,800);
 	
-	IHMMenu menu = new IHMMenu();
+	Controleur controleur = new Controleur();
+	IHMMenu menu = new IHMMenu(controleur);
 	
-	Controleur controleur = new Controleur(menu);
-	menu.setControleur(controleur);
+	controleur.setObservateur(menu);
 
 	frame.getContentPane().setLayout(new BorderLayout());
 	frame.add(menu, BorderLayout.CENTER);
 	frame.setVisible(true);
+	
     }
 
 }

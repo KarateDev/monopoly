@@ -37,7 +37,7 @@ import javax.swing.JTextArea;
  *
  * @author bouchval
  */
-public class IHMJeu extends JPanel{
+public class IHMJeu extends JPanel implements Observateur{
 		
 	private boolean aLanceLesDes = false; // pour savoir si le joueur à lancé les dés
 	
@@ -72,17 +72,17 @@ public class IHMJeu extends JPanel{
 	private JLabel labelDe2;
 	private JLabel labelSommeDes;
 	
-	public IHMJeu(HashMap<Integer, Carreau> carreaux, ArrayList<Joueur> joueurs, Joueur joueur){
+	public IHMJeu(Controleur controleur){
 		
 		this.setLayout(new BorderLayout(10,10));
 		
-		initPartiePlateau(carreaux, joueurs);
+		initPartiePlateau(controleur.getMonopoly().getCarreaux(), controleur.getMonopoly().getJoueurs());
 		
 		initPartieJeu();
 		
-		ajouterListner(joueurs, joueur);
+		ajouterListner(controleur.getMonopoly().getJoueurs(), controleur.getMonopoly().getJoueurs().get(0));
 		
-		initialisationDebutTour(joueurs, joueur);
+		initialisationDebutTour(controleur.getMonopoly().getJoueurs(), controleur.getMonopoly().getJoueurs().get(0));
 	}
 	
 
@@ -110,7 +110,7 @@ public class IHMJeu extends JPanel{
 
 			panelPlateau.add(panelHaut,BorderLayout.NORTH);
 		
-			plateau = new Plateau(carreaux,joueurs,700);
+			plateau = new Plateau(carreaux,joueurs,850);
 			panelPlateau.add(plateau,BorderLayout.SOUTH);
 						
 		this.add(panelPlateau,BorderLayout.EAST);
@@ -254,7 +254,7 @@ public class IHMJeu extends JPanel{
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					Joueur joueur = null;
-					for (Joueur j : joueurs){ // pour recuperer le joueur à qui apartien, le label
+					for (Joueur j : joueurs){ // pour recuperer le joueur à qui apartien le label
 						if (j.getNomJoueur().equals(((JLabel)e.getComponent()).getText())){
 							joueur = j;
 						}
@@ -680,6 +680,11 @@ public class IHMJeu extends JPanel{
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 	}
+
+    @Override
+    public void notifier(Message message) {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 
 }
