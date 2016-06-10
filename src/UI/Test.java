@@ -16,6 +16,7 @@ public class Test {
 
     /**
      * @param args the command line arguments
+	 * MA QUESTION PREFEREE: KESKE JE VAI FER DE TOUTE SETT AUSEILLE ????
      */
     public static void main(String[] args) {
 	// TODO code application logic here
