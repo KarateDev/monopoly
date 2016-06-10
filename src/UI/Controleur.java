@@ -26,7 +26,7 @@ public class Controleur {
 	private Joueur joueurCourant;
 	private Observateur ihm;
 	
-	private int nbDouble;
+	private int nbDouble = 0;
 
 	public Controleur() {
 		this.monopoly = new Monopoly();

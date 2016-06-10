@@ -84,6 +84,11 @@ public class IHMJeu extends JPanel implements Observateur{
 	
 	public IHMJeu(Controleur controleur){
 		
+		this.controleur = controleur;
+		
+		joueurCourant = controleur.getMonopoly().getJoueurs().get(0);
+		this.joueurs = controleur.getMonopoly().getJoueurs();
+		
 		this.setLayout(new BorderLayout(10,10));
 		
 		initPartiePlateau(controleur.getMonopoly().getCarreaux(), controleur.getMonopoly().getJoueurs());
@@ -95,6 +100,10 @@ public class IHMJeu extends JPanel implements Observateur{
 		
 		initialisationDebutTour(controleur.getMonopoly().getJoueurs(), controleur.getMonopoly().getJoueurs().get(0));
 	}
+	
+	public AchatBatimentIhm getIhmAchatBatiment(){
+		return achatBatimentIhm;
+ 	}
 	
 
 	private void initPartiePlateau(HashMap<Integer, Carreau> carreaux, ArrayList<Joueur> joueurs) {
@@ -380,9 +389,7 @@ public class IHMJeu extends JPanel implements Observateur{
 	}
 	
 	private void initialisationDebutTour(ArrayList<Joueur> joueurs, Joueur joueur){
-		
-		joueurCourant = joueur;
-		
+				
 		// partie info joueur --------------------------------------------------------------
 		
 		labelNom2.setText(joueur.getNomJoueur());

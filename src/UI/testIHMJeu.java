@@ -40,6 +40,7 @@ public class testIHMJeu {
 		// ----------------------------------
 	
 		IHMJeu jeu = new IHMJeu(controleur);
+		controleur.setObservateur(jeu);
 		frame.getContentPane().setLayout(new BorderLayout());
         frame.add(jeu, BorderLayout.CENTER);
 		frame.setVisible(true);
