@@ -12,7 +12,8 @@ public class IHM implements Observateur {
    
     public static void main(String[] args) {
 		IHM ihm = new IHM();
-		Controleur controleur = new Controleur(ihm);
+		Controleur controleur = new Controleur();
+		controleur.setObservateur(ihm);
 		ihm.setControleur(controleur);
 	}
 

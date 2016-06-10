@@ -39,5 +39,9 @@ public class CarteDeplacementAbsolu extends Carte {
 		observateur.notifier(AFFICHER_CARREAU);
 		
 		monopoly.interactionCarreau(j);
+		
+		System.out.println("Le joueur se déplace de façon absolue sur le carreau "+ j.getPositionCourante().getNomCarreau());
+		System.out.println("deplacement =  "+ deplacement);
+	
 	}
 }

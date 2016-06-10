@@ -26,10 +26,9 @@ public class Controleur {
 	private Monopoly monopoly;
 	private Joueur joueurCourant;
 
-	public Controleur(Observateur ihm) {
-		this.monopoly = new Monopoly((Observateur)ihm);
-		this.ihm = ihm;
-
+	public Controleur() {
+		this.monopoly = new Monopoly();
+		
 		this.creerPlateau("./src/Data/data.txt");
 		
 		this.initialiserCartes("./src/Data/dataCartes.txt");
@@ -38,17 +37,23 @@ public class Controleur {
 		this.initialiserUnePartie();
 		
 		int numeroJoueur = 0;
-		while (this.getMonopoly().getJoueurs().size() > 1){ //boucle du jeu tant qu'il reste plus d'un joueur
-			Joueur j = this.getMonopoly().getJoueurs().get(numeroJoueur);
-			this.joueurCourant = j;
-			this.jouerUnCoup(j);
-			numeroJoueur += 1;
-			if (numeroJoueur > this.getMonopoly().getJoueurs().size()-1){
-				numeroJoueur = 0;
-			}
-		}
+		//while (this.getMonopoly().getJoueurs().size() > 1){ //boucle du jeu tant qu'il reste plus d'un joueur
+		//	Joueur j = this.getMonopoly().getJoueurs().get(numeroJoueur);
+		//	this.joueurCourant = j;
+		//	this.jouerUnCoup(j);
+		//	numeroJoueur += 1;
+		//	if (numeroJoueur > this.getMonopoly().getJoueurs().size()-1){
+		//		numeroJoueur = 0;
+		//	}
+		//}
 
-		ihm.notifier(AFFICHER_FIN_PARTIE);
+		//ihm.notifier(AFFICHER_FIN_PARTIE);
+	}
+	
+	public void setObservateur(Observateur ihm){
+		this.ihm = ihm;
+		monopoly.setObservateur(ihm);
+		joueurCourant = monopoly.getJoueurs().get(0);
 	}
 	
 
@@ -144,14 +149,14 @@ public class Controleur {
         int nbDouble = 0;
         boolean aFaitUnDouble;
                 
-        do{      //boucle tant que le joueur fait des doubles
-			ihm.notifier(AFFICHER_JOUEUR); //affichage des données du joueur
+        //do{      //boucle tant que le joueur fait des doubles ---enlevé pour l'ihm graphique
 			
 			if (j.getPositionCourante().getNumero() == getMonopoly().getPrison().getNumero() && j.getNbTourEnPrison() > 0){ //si il est en prison
-				boolean libere = j.getPositionCourante() instanceof Prison;//gestionPrison(j);
-				if (!libere){ // si il n'est pas libéré
-					break; // on sort de la boucle pour qu'il ne joue pas
-				} // si il est libéré, il joue normalement
+				//boolean libere = j.getPositionCourante() instanceof Prison;
+				gestionPrison(j);
+				//if (!libere){ // si il n'est pas libéré
+					// break; // on sort de la boucle pour qu'il ne joue pas
+				//} // si il est libéré, il joue normalement
 			}
 			
             aFaitUnDouble = lancerDesAvancer(j); //on lance les des et on fait avancer le joueur
@@ -159,7 +164,7 @@ public class Controleur {
             if (aFaitUnDouble){
                 nbDouble ++;
                 if (nbDouble == 3){ // si il a fait 3 doubles d'affilé,on sort de la boucle
-                    break;
+                   // break;
                 }
             }
                     
@@ -173,25 +178,26 @@ public class Controleur {
 			}
 
             if (j.getCash() < 0) { //si le joueur n'a plus d'argent, il est eliminé
+				monopoly.eliminerJoueur(j);
 				ihm.notifier(AFFICHER_JOUEUR_ELIMINE);
-                break;
+               // break;
             }
 
             if (aFaitUnDouble) {
 				ihm.notifier(AFFICHER_FAIT_UN_DOUBLE);
             }
 
-			if(!interactionFinDeTour(j)) { // interaction pour les choix de fin de tour
-				break;
-			}
+			//if(!interactionFinDeTour(j)) { // interaction pour les choix de fin de tour
+			//	break;
+			//}
 
-        } while (aFaitUnDouble);
+       // } while (aFaitUnDouble);
 
-        if (nbDouble == 3){ //si le joueur a fait 3 doubles, on l'envoie en prison
-			ihm.notifier(AFFICHER_3D_DOUBLE);
-		    monopoly.envoyerEnPrison(j);
-			interactionFinDeTour(j);
-        }
+       // if (nbDouble == 3){ //si le joueur a fait 3 doubles, on l'envoie en prison
+		//	ihm.notifier(AFFICHER_3D_DOUBLE);
+		//    monopoly.envoyerEnPrison(j);
+		//	interactionFinDeTour(j);
+        //}
 	}
 	
 	public boolean interactionFinDeTour(Joueur j) { // retourn vrai pour continuer, faux pour abandonner
@@ -203,8 +209,18 @@ public class Controleur {
 			ihm.notifier(AFFICHER_PATRIMOINE);
 			return interactionFinDeTour(j); // relance l'interaction à la fin de l'achat
 		}else if(reponse.equals("abandonner")) { // si le joueur decide d'abandonner
-			ihm.notifier(AFFICHER_JOUEUR_ELIMINE);
+			int joueurSuivant = monopoly.getJoueurs().indexOf(j);
 			monopoly.eliminerJoueur(j);
+			
+			if (joueurSuivant == monopoly.getJoueurs().size()){
+				joueurSuivant = 0;
+			}
+			joueurCourant = monopoly.getJoueurs().get(joueurSuivant);
+			ihm.notifier(AFFICHER_JOUEUR_ELIMINE);
+			if (monopoly.getJoueurs().size() == 1){
+				ihm.notifier(AFFICHER_FIN_PARTIE);
+				return false;
+			}
 			return false;
 		}else if(reponse.equals("batiment")) { // si le joueur veut acheter des batiments
 			interactionAchatBatiment(j);
@@ -237,7 +253,7 @@ public class Controleur {
 		//intialisation des joueurs
 
 		//int choixMenu = ihm.afficherMenu();
-		ihm.notifier(AFFICHER_MENU);
+	//	ihm.notifier(AFFICHER_MENU);
 	}
 	public void quitterJeu() {
 		System.exit(0);
@@ -324,7 +340,7 @@ public class Controleur {
 						carte = new CarteLiberationPrison(data.get(i)[2]);
 						break;
 					case "6":
-						carte = new CarteDeplacementAbsolu(data.get(i)[2], monopoly.getCarreaux().get(3));
+						carte = new CarteDeplacementAbsolu(data.get(i)[2], monopoly.getCarreaux().get(data.get(i)[3]));
 						break;
 					case "7":
 						carte = new CarteDeplacementSemiAbsolu(data.get(i)[2], data.get(i)[3]);
@@ -463,6 +479,16 @@ public class Controleur {
 	 */
 	public Joueur getJoueurCourant() {
 		return joueurCourant;
+	}
+	
+	public void tourJoueurSuivant(){
+		int indiceJoueur = monopoly.getJoueurs().indexOf(joueurCourant);
+		indiceJoueur ++;
+		if (indiceJoueur >= monopoly.getJoueurs().size()){
+			indiceJoueur -= monopoly.getJoueurs().size();
+		}
+		joueurCourant = monopoly.getJoueurs().get(indiceJoueur);
+		ihm.notifier(AFFICHER_JOUEUR); //affichage des données du joueur
 	}
 	
 }

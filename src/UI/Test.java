@@ -25,7 +25,8 @@ public class Test {
 	
 	IHMMenu menu = new IHMMenu();
 	
-	Controleur controleur = new Controleur(menu);
+	Controleur controleur = new Controleur();
+	controleur.setObservateur(menu);
 	menu.setControleur(controleur);
 
 	frame.getContentPane().setLayout(new BorderLayout());

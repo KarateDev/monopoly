@@ -37,7 +37,10 @@ import javax.swing.JTextArea;
  *
  * @author bouchval
  */
-public class IHMJeu extends JPanel{
+public class IHMJeu extends JPanel implements Observateur{
+	
+	private Joueur joueurCourant = null;
+	private ArrayList<Joueur> joueurs;
 	
 	private AchatBatimentIhm achatBatimentIhm;
 	
@@ -82,13 +85,17 @@ public class IHMJeu extends JPanel{
 		
 		this.controleur = controleur;
 		
+		joueurCourant = joueur;
+		this.joueurs = joueurs;
+
+		
 		this.setLayout(new BorderLayout(10,10));
 		
 		initPartiePlateau(carreaux, joueurs);
 		
 		this.add(initPartieJeu(),BorderLayout.CENTER);
 		
-		ajouterListner(joueurs, joueur);
+		ajouterListner();
 		
 		initialisationDebutTour(joueurs, joueur);
 	}
@@ -122,7 +129,7 @@ public class IHMJeu extends JPanel{
 
 			panelPlateau.add(panelHaut,BorderLayout.NORTH);
 		
-			plateau = new Plateau(carreaux,joueurs,700);
+			plateau = new Plateau(carreaux,joueurs,800);
 			panelPlateau.add(plateau,BorderLayout.SOUTH);
 						
 		this.add(panelPlateau,BorderLayout.EAST);
@@ -250,9 +257,9 @@ public class IHMJeu extends JPanel{
 	}
 	
 	
-	private void ajouterListnerAutreJoueur(ArrayList<Joueur> joueurs, Joueur joueur){
+	private void ajouterListnerAutreJoueur(){
 		for (JLabel label : labelAutreJoueurs){
-			
+
 			label.addMouseListener(new MouseListener() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -266,30 +273,31 @@ public class IHMJeu extends JPanel{
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					Joueur joueur = null;
-					for (Joueur j : joueurs){ // pour recuperer le joueur à qui apartien, le label
-						if (j.getNomJoueur().equals(((JLabel)e.getComponent()).getText())){
+					for (Joueur j : joueurs){
+						if (label.getText().equals(j.getNomJoueur())){
 							joueur = j;
 						}
 					}
-					((JLabel)e.getComponent()).setText(joueur.getCash()+"€");
+					label.setText(joueur.getCash()+"€");
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
-					int indice = labelAutreJoueurs.indexOf(e.getComponent());
-					int numero = joueurs.indexOf(joueur)+indice+1;
-					if (numero > labelAutreJoueurs.size()){
-						numero -= (labelAutreJoueurs.size()+1);
+					int numeroLabel = labelAutreJoueurs.indexOf(label);
+					int numeroJoueur = numeroLabel+1+joueurs.indexOf(joueurCourant);
+					if (numeroJoueur >= joueurs.size()){
+						numeroJoueur -= joueurs.size();
 					}
-					((JLabel)e.getComponent()).setText(joueurs.get(numero).getNomJoueur());
+					label.setText(joueurs.get(numeroJoueur).getNomJoueur());
 				}
 			});
+			
 		}
 	}
 	
-	private void ajouterListner(ArrayList<Joueur> joueurs, Joueur joueur) {
+	private void ajouterListner() {
 		
-		ajouterListnerAutreJoueur(joueurs, joueur);
+		ajouterListnerAutreJoueur();
 		
 		boutonLancerDes.addActionListener(new ActionListener() {
 			@Override
@@ -298,7 +306,8 @@ public class IHMJeu extends JPanel{
 				if (! aLanceLesDes){ // si il n'a pas deja lancé les des, il peut les lancer
 					
 					information.setText("");
-
+					
+					controleur.jouerUnCoup(joueurCourant);
 					//------------------------------------------------------------------------------- action du controleur a faire (lancer les dés et avancer)
 
 				}else{ // si il a deja lancé les des on affiche un message
@@ -315,6 +324,7 @@ public class IHMJeu extends JPanel{
 				information.setText("");
 				if (aLanceLesDes){ // si il a lancé les dés
 					
+					controleur.tourJoueurSuivant();
 					// --------------------------------------------------------------------------------- action du controleur a faire (passer au tour suivant)
 					
 				}else{ // si il n'a pas lancé les dés
@@ -328,7 +338,7 @@ public class IHMJeu extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				// -------------------------------------------------------------------------------------- action du controleur a faire (interaction avec le carreau)
+				interactionCarreau(joueurCourant);
 			}
 		});
 			
@@ -338,6 +348,7 @@ public class IHMJeu extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
+				controleur.interactionAchatBatiment(joueurCourant);
 				// --------------------------------------------------------------------------------------- action controleur a faire (achat batiment (initialise la liste des batiments constructible))
 				
 			}
@@ -365,6 +376,7 @@ public class IHMJeu extends JPanel{
 						JOptionPane.YES_NO_OPTION, 
 						JOptionPane.QUESTION_MESSAGE) == 0){ // si il abandonne
 					
+					controleur.finInteractionJoueur("abandonner", joueurCourant);
 					// --------------------------------------------------------------------------------action du controleur (abandonner)
 				
 				}
@@ -468,9 +480,9 @@ public class IHMJeu extends JPanel{
 		if (p.getClass() == ProprieteAConstruire.class){
 			donnees[3] = ((ProprieteAConstruire) p).getCouleur().toString();
 			if (((ProprieteAConstruire) p).getNbmaison() == 5){
-				donnees[4] = "1 hotel";
+				donnees[2] = "1 hotel";
 			}else{
-				donnees[4] = ((ProprieteAConstruire) p).getNbmaison()+" maisons";
+				donnees[2] = ((ProprieteAConstruire) p).getNbmaison()+" maisons";
 			}
 		}
             model.addRow(donnees);
@@ -478,7 +490,23 @@ public class IHMJeu extends JPanel{
         tablePropriete.setModel(model);
 	}
 	
-	
+	private void interactionCarreau(Joueur joueurCourant) { // les test sont effectuées dans l'ihm
+		Carreau carreau = joueurCourant.getPositionCourante();
+		if ((carreau.getClass() == Compagnie.class ||
+			carreau.getClass() == Gare.class ||
+			carreau.getClass() == ProprieteAConstruire.class) && 
+			((Propriete)carreau).getProprietaire() == null){
+			
+			if (joueurCourant.getCash() >= ((Propriete)carreau).getPrix()){
+				controleur.getMonopoly().acheterProprieteGenreVraiment(joueurCourant, (Propriete)joueurCourant.getPositionCourante(), this);
+			}else{
+				this.afficherPasAsserArgent();
+			}
+				
+		}else if (carreau.getClass() == Prison.class && joueurCourant.getNbTourEnPrison() > 0){
+			boutonActionCarreau.setText("Utiliser une carte");
+		}
+	}
 	
 	// ------------------------------------------------------------------------------------------
 	// ------------------------------------------------------------------------------------------ fonction que le notifieur devra appeler
@@ -488,17 +516,19 @@ public class IHMJeu extends JPanel{
 	
 	public void afficherTourDuJoueur(ArrayList<Joueur> joueurs, Joueur joueur){
 					
-					aLanceLesDes = false;
-					initialisationDebutTour(joueurs, joueur);
-					ajouterListner(joueurs, joueur);
+		joueurCourant = joueur;
+		initialisationDebutTour(joueurs, joueur);
+		aLanceLesDes = false;
 	}
 	
 	public void afficherActionDesEtCarreau(Carreau carreau, int de1, int de2, int nbTourEnPrison){
 		boutonActionCarreau.setEnabled(true);
-			if (carreau.getClass() == Propriete.class && ((Propriete)carreau).getProprietaire() == null){
+			if ((carreau.getClass() == Compagnie.class ||
+				carreau.getClass() == Gare.class ||
+				carreau.getClass() == ProprieteAConstruire.class) && 
+				((Propriete)carreau).getProprietaire() == null){
+				
 				boutonActionCarreau.setText("Acheter");
-			}else if (carreau.getClass() == Pioche.class){
-				boutonActionCarreau.setText("Piocher une carte");
 			}else if (carreau.getClass() == Prison.class && nbTourEnPrison > 0){
 				boutonActionCarreau.setText("Utiliser une carte");
 			}else{
@@ -513,6 +543,7 @@ public class IHMJeu extends JPanel{
 			aLanceLesDes = true;
 			
 			afficherInfoCarreau(carreau, (de1+de2));
+			
 	}
 
 	private void afficherInfoCarreau(Carreau carreau, int sommeDes) {
@@ -520,11 +551,14 @@ public class IHMJeu extends JPanel{
 		numeroCase.setText("Numero de carreau : "+carreau.getNumero());
 		nomCase.setText("Nom du carreau : "+carreau.getNomCarreau());
 		
-		if (carreau.getClass() == Propriete.class){
-			proprietaireCase.setText("Proprietaire : "+((Propriete)carreau).getProprietaire().getNomJoueur());
+		if (carreau.getClass() == Compagnie.class ||
+			carreau.getClass() == Gare.class ||
+			carreau.getClass() == ProprieteAConstruire.class){
 			if (((Propriete)carreau).getProprietaire() == null){
+				proprietaireCase.setText("Proprietaire : aucun");
 				loyerCase.setText("Prix d'achat : "+((Propriete)carreau).getPrix());
 			}else{
+				proprietaireCase.setText("Proprietaire : "+((Propriete)carreau).getProprietaire().getNomJoueur());
 				loyerCase.setText("Loyer : "+((Propriete)carreau).calculLoyer(sommeDes));
 			}
 			if (carreau.getClass() == ProprieteAConstruire.class){
@@ -564,10 +598,10 @@ public class IHMJeu extends JPanel{
 	public void afficherPayerLoyer(Joueur joueur1, Joueur joueur2, int loyer) {
 		 
 		JOptionPane.showConfirmDialog(null, 
-			"Loyer", 
 			"Vous vous etes arreté sur la propriete de "
 				+joueur2.getNomJoueur()
 				+" et payez un loyer de "+loyer+"€",
+			"Loyer", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 		
@@ -579,8 +613,8 @@ public class IHMJeu extends JPanel{
 	public void afficherPayerTaxe(Joueur joueur , Taxe taxe){
 		
 		JOptionPane.showConfirmDialog(null, 
+			"Vous payez une taxe de "+(-taxe.getPrixTaxe())+"€",
 			"Loyer", 
-			"Vous payez une taxe de "+taxe+"€",
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 		
@@ -588,13 +622,14 @@ public class IHMJeu extends JPanel{
 		
     }
 	
-	public void afficherDemandeAcheterPropriete(Propriete p){
+	public void afficherDemandeAcheterPropriete(Joueur joueur, ProprieteAConstruire p){
 		if (JOptionPane.showConfirmDialog(null, 
-				"Acheter", 
 				"Etes vous sur de vouloir acheter cette propriete pour "+p.getPrix()+"€",
+				"Acheter", 
 				JOptionPane.YES_NO_OPTION, 
 				JOptionPane.INFORMATION_MESSAGE) == 0){ // si il veut acheter
 			
+			controleur.achatBatiment(joueur, p);
 			// ---------------------------------------------------------------------------------- action du controleur a faire (acheter la propriete)
 			
 		}
@@ -609,46 +644,52 @@ public class IHMJeu extends JPanel{
         
     }
 	
-	public void afficherJoueurElimine(HashMap<Integer, Carreau> carreaux, ArrayList<Joueur> joueurs){
+	public void afficherJoueurElimine(HashMap<Integer, Carreau> carreaux, ArrayList<Joueur> joueurs, Joueur joueur){
         JOptionPane.showConfirmDialog(null, 
+			"Domage.... Vous etes éliminé !",
 			"Elimination", 
-			"Domage, vous n'avez plus d'argent... Vous etes éliminé !",
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 		plateau.repaintPlateau(carreaux, joueurs);
+		labelAutreJoueurs.get(joueurs.size()-1).setText("à abandonné");
+		labelAutreJoueurs.get(joueurs.size()-1).setForeground(joueurCourant.getColorJoueurIhm());
+		labelAutreJoueurs.get(joueurs.size()-1).removeMouseListener(labelAutreJoueurs.get(joueurs.size()-1).getMouseListeners()[0]);
+		this.joueurs.remove(joueurCourant);
+		this.afficherTourDuJoueur(joueurs, joueur);
+		joueurCourant = joueur;
 		
     }
 	
 	public void afficherJoueur3double(){
         JOptionPane.showConfirmDialog(null, 
-			"En prison", 
 			"Domage, vous avez fait 3 doubles ... Vous etes envoyé en prison !",
+			"En prison", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
     }
 	
 	public void afficherCarteChance(Carte carte){
 		JOptionPane.showConfirmDialog(null, 
-			"Carte chance", 
 			carte.getIntitule(),
+			"Carte chance", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public void afficherCarteCaisseDeCommunaute(Carte carte) {
 		JOptionPane.showConfirmDialog(null, 
-			"Carte caisse de communauté", 
 			carte.getIntitule(),
+			"Carte caisse de communauté", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public void afficherFinDePartie(Joueur joueur){
 		JOptionPane.showConfirmDialog(null, 
-			"Fin de partie", 
 			"La partie est terminée ! Le joueur "
 			+joueur.getNomJoueur()+" a gagné avec "
 			+joueur.getCash()+"€",
+			"Fin de partie", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 		this.setVisible(false);
@@ -656,32 +697,41 @@ public class IHMJeu extends JPanel{
 	
 	public void afficherPasDeTerrainConstructible() {
 		JOptionPane.showConfirmDialog(null, 
-			"Construction", 
 			"Desolé, vous n'avez pas toute les propriétés d'une couleur",
+			"Construction", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public void afficherLibereDePrison() {
 		JOptionPane.showConfirmDialog(null, 
-			"Prison", 
 			"Vous etes libere de prison",
+			"Prison", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public void afficherDernierTourEnPrison(Joueur joueur) {
 		JOptionPane.showConfirmDialog(null, 
-			"Prison", 
 			"C'était votre dernier tour en prison et vous n'avez pas fait de double ..."
 				+ "Vous payer donc une amande de 50€ pour etre libéré",
+			"Prison", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 		actualiserArgent(joueur);
 		
 	}
 	
-	public void interactionAcheterBatiment(Joueur joueur, ArrayList<Propriete> proprietes){
+	public void afficherPasAsserArgent() {
+		JOptionPane.showConfirmDialog(null, 
+			"Désolé, vous n'avez pas asser d'argent ....",
+			"...", 
+			JOptionPane.DEFAULT_OPTION, 
+			JOptionPane.INFORMATION_MESSAGE);
+		
+	}
+	
+	public void interactionAcheterBatiment(Joueur joueur, ArrayList<ProprieteAConstruire> proprietes){
 		
 		achatBatimentIhm = new AchatBatimentIhm(controleur, joueur, proprietes);
 		panelInteraction.removeAll();
@@ -692,9 +742,104 @@ public class IHMJeu extends JPanel{
 		
 		panelInteraction.removeAll();
 		panelInteraction = initPartieJeu();
-		ajouterListner(joueurs, joueur);
 		actualiserPropriete(joueur);
 		afficherActionDesEtCarreau(carreau, de1, de2, joueur.getNbTourEnPrison());
+	}
+
+	@Override
+	public void notifier(Message message) {
+		Joueur joueur = controleur.getJoueurCourant();
+		ArrayList<Joueur> joueurs = controleur.getMonopoly().getJoueurs();
+		HashMap<Integer, Carreau> carreaux = controleur.getMonopoly().getCarreaux();
+		int de1 = controleur.getMonopoly().getDes().get(0);
+		int de2 = controleur.getMonopoly().getDes().get(1);
+		Carreau position = joueur.getPositionCourante();
+		Carte carte = controleur.getMonopoly().getCarte();
+		switch (message) {
+			case AFFICHER_ACHAT_PROPRIETE:
+				this.afficherAchatPropriete(joueurs, joueur);
+				break;
+			case AFFICHER_DEMANDE_ACHETER_PROPRIETE:
+				break;
+			case AFFICHER_ACHAT_BATIMENT:
+				this.achatBatimentIhm.afficherAchatBatiment(joueur);
+				boutonActionCarreau.setEnabled(false);
+				boutonActionCarreau.setText("Aucune action");
+				break;
+			case AFFICHER_PROPRIETE_CONSTRUCTIBLE:
+				this.interactionAcheterBatiment(joueur, controleur.getProprieteConstructibles(joueur));
+				break;
+			case AFFICHER_PAYER_LOYER:
+				this.afficherPayerLoyer(joueur, ((Propriete)position).getProprietaire(),de1+de2);
+				break;
+			case AFFICHER_PAYER_TAXE:
+				this.afficherPayerTaxe(joueur, ((Taxe)position));
+				break;
+			case AFFICHER_CARTE_CAISSE_DE_COMMUNAUTE:
+				this.afficherCarteCaisseDeCommunaute(carte);
+				plateau.repaintPlateau(carreaux, joueurs);
+				break;
+			case AFFICHER_CARTE_CHANCE:
+				this.afficherCarteChance(carte);
+				plateau.repaintPlateau(carreaux, joueurs);
+				break;
+			case AFFICHER_PASSAGE_DEPART:
+				this.affichePassageDepart(((Depart)carreaux.get(1)).getGainPourPassage(), joueur);
+				break;
+			case AFFICHER_CARREAU:
+				this.afficherActionDesEtCarreau(position, de1, de2, joueur.getNbTourEnPrison());
+				break;
+			case AFFICHER_ARGENT_RESTANT:
+				this.actualiserArgent(joueur);
+				break;
+			case AFFICHER_FIN_PARTIE:
+				this.afficherFinDePartie(joueur);
+				break;
+			case AFFICHER_JOUEUR:
+				this.afficherTourDuJoueur(joueurs, joueur);
+				break;
+			case AFFICHER_JOUEUR_ELIMINE:
+				this.afficherJoueurElimine(carreaux, joueurs, joueur);
+				break;
+			case AFFICHER_PATRIMOINE:
+				// rien
+				break;
+			case AFFICHER_3D_DOUBLE:
+				this.afficherJoueur3double();
+				break;
+			case AFFICHER_ATTENDRE_PROCHAIN_TOUR:
+				// rien
+				break;
+			case AFFICHER_MENU:
+				// rien
+				break;
+			case AFFICHER_INTERACTION_PRISON:
+				// rien
+				break;
+			case AFFICHER_LANCER_DES:
+				this.afficherActionDesEtCarreau(position, de1, de2, PROPERTIES);
+				plateau.repaintPlateau(carreaux, joueurs);
+				break;
+			case AFFICHER_FAIT_UN_DOUBLE:
+				this.afficherAFaitUnDouble(joueur);
+				break;
+			case AFFICHER_LIBERE_PRISON:
+				this.afficherLibereDePrison();
+				break;
+			case AFFICHER_DERNIER_TOUR_EN_PRISON:
+				this.afficherLibereDePrison();
+				break;
+			case AFFICHER_PAS_ASSEZ_DE_BATIMENTS:
+				this.achatBatimentIhm.afficherPasDeBatiment();
+				break;
+			case AFFICHER_PAS_DE_TERRAIN_CONSTRUCTIBLE:
+				this.afficherPasDeTerrainConstructible();
+				break;
+			case AFFICHER_PAS_ASSEZ_DARGENT:
+				// rien
+				break;
+				
+		}
 	}
 
 

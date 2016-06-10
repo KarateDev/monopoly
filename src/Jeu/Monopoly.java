@@ -23,14 +23,25 @@ public class Monopoly {
 	private int indiceParc;
 	
 	private Observateur observateur;
+	
+	private Carte carte = null;
 	  
-	public Monopoly(Observateur observateur) {
+	public Monopoly() {
 		Carreaux = new HashMap();
 		joueurs = new ArrayList<>();
-		des = new ArrayList<>(2);
+		des = new ArrayList<>();
+		des.add(0);des.add(0);
 		piocheCarteChance = new ArrayList<>();
 		piocheCarteCaisseDeCommunaute = new ArrayList<>();
 		this.observateur = observateur;
+	}
+	
+	public void setObservateur(Observateur ihm){
+		this.observateur = ihm;
+	}
+	
+	public Carte getCarte(){
+		return carte;
 	}
 
 	public void lancerDes() {
@@ -211,13 +222,13 @@ public class Monopoly {
 			
 			observateur.notifier(AFFICHER_PAYER_TAXE);
 		} else if (j.getPositionCourante() instanceof CaisseDeCommunaute) {
-			Carte carte = this.piocherUneCarteCaisseDeCommunaute();
+			carte = this.piocherUneCarteCaisseDeCommunaute();
 			
 			observateur.notifier(AFFICHER_CARTE_CAISSE_DE_COMMUNAUTE);
 			
 			carte.action(j, observateur, this);
 		} else if (j.getPositionCourante() instanceof Chance) {
-			Carte carte = this.piocherUneCarteChance();
+			carte = this.piocherUneCarteChance();
 			
 			observateur.notifier(AFFICHER_CARTE_CHANCE);
 			
