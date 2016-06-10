@@ -32,7 +32,11 @@ public class testIHMJeu {
 		controleur.getMonopoly().addJoueur(new Joueur("joueur2", CouleurPropriete.bleuFonce, controleur.getMonopoly().getCarreau(1)));
 		controleur.getMonopoly().addJoueur(new Joueur("joueur3", CouleurPropriete.bleuCiel, controleur.getMonopoly().getCarreau(1)));
 		controleur.getMonopoly().addJoueur(new Joueur("joueur4", CouleurPropriete.violet, controleur.getMonopoly().getCarreau(1)));
-
+		
+		
+		controleur.getMonopoly().getJoueurs().get(0).achatPropriété((Propriete)controleur.getMonopoly().getCarreau(12));
+		controleur.getMonopoly().getJoueurs().get(0).achatPropriété((Propriete)controleur.getMonopoly().getCarreau(14));
+		controleur.getMonopoly().getJoueurs().get(0).achatPropriété((Propriete)controleur.getMonopoly().getCarreau(15));
 		// ----------------------------------
 	
 		IHMJeu jeu = new IHMJeu(controleur, controleur.getMonopoly().getCarreaux(), controleur.getMonopoly().getJoueurs(), controleur.getMonopoly().getJoueurs().get(0));

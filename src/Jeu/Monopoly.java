@@ -236,6 +236,11 @@ public class Monopoly {
 		} else if (j.getPositionCourante() instanceof AllerEnPrison) {
 			this.envoyerEnPrison(j);
 			
+		}else if (j.getPositionCourante() instanceof Prison) {
+			if (j.getNbTourEnPrison() > 0){
+				observateur.notifier(AFFICHER_INTERACTION_PRISON);
+			}
+			
 		} else if (j.getPositionCourante() instanceof ParcPublic) {
 			ParcPublic parc = (ParcPublic) j.getPositionCourante();
 			parc.viderCaisse(j);

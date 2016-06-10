@@ -25,6 +25,8 @@ public class Controleur {
 	private Observateur ihm;
 	private Monopoly monopoly;
 	private Joueur joueurCourant;
+	
+	private int nbDouble = 0;
 
 	public Controleur() {
 		this.monopoly = new Monopoly();
@@ -146,18 +148,17 @@ public class Controleur {
 	 * @param j
 	 */
 	public void jouerUnCoup(Joueur j) {
-        int nbDouble = 0;
         boolean aFaitUnDouble;
                 
         //do{      //boucle tant que le joueur fait des doubles ---enlevé pour l'ihm graphique
 			
-			if (j.getPositionCourante().getNumero() == getMonopoly().getPrison().getNumero() && j.getNbTourEnPrison() > 0){ //si il est en prison
+			//if (j.getPositionCourante().getNumero() == getMonopoly().getPrison().getNumero() && j.getNbTourEnPrison() > 0){ //si il est en prison
 				//boolean libere = j.getPositionCourante() instanceof Prison;
-				gestionPrison(j);
+				//gestionPrison(j);
 				//if (!libere){ // si il n'est pas libéré
 					// break; // on sort de la boucle pour qu'il ne joue pas
 				//} // si il est libéré, il joue normalement
-			}
+			//}
 			
             aFaitUnDouble = lancerDesAvancer(j); //on lance les des et on fait avancer le joueur
                     
@@ -308,6 +309,9 @@ public class Controleur {
 		} else if (j.getPositionCourante() instanceof AllerEnPrison) {
 			monopoly.envoyerEnPrison(j);
 			
+		} else if (j.getPositionCourante() instanceof Prison) {
+			tenteSortiePrisonDouble(j);
+			
 		}
 		
 	}
@@ -340,7 +344,7 @@ public class Controleur {
 						carte = new CarteLiberationPrison(data.get(i)[2]);
 						break;
 					case "6":
-						carte = new CarteDeplacementAbsolu(data.get(i)[2], monopoly.getCarreaux().get(data.get(i)[3]));
+						carte = new CarteDeplacementAbsolu(data.get(i)[2], monopoly.getCarreau(Integer.valueOf(data.get(i)[3])));
 						break;
 					case "7":
 						carte = new CarteDeplacementSemiAbsolu(data.get(i)[2], data.get(i)[3]);
@@ -398,6 +402,7 @@ public class Controleur {
 			j.setNbTourEnPrison(0);
 			j.retirerCarteLibereDePrison();
 			monopoly.ajouterCarteLibereDePrison();
+			ihm.notifier(AFFICHER_LIBERE_PRISON);
 			//return true;
 	}
 	
@@ -432,7 +437,7 @@ public class Controleur {
 	}
 	
 	public void interactionAchatBatiment(Joueur j){ //gere l'interaction entre le joueur et les batiments
-		do{
+		//do{
 			if (monopoly.getNbHotelDisponible() > 0 || monopoly.getNbMaisonDisponible() > 0) {
 				if (!getProprieteConstructibles(j).isEmpty()) { //si il y a des proprietes constructibles
 					ihm.notifier(AFFICHER_PROPRIETE_CONSTRUCTIBLE);
@@ -457,9 +462,13 @@ public class Controleur {
 			}else{
 				ihm.notifier(AFFICHER_PAS_ASSEZ_DE_BATIMENTS);
 			}
-		}while ((monopoly.getNbHotelDisponible() > 0 || monopoly.getNbMaisonDisponible() > 0) && !getProprieteConstructibles(j).isEmpty()/* && ihm.demandeAchatBatiment()*/); // boucle tant que le joueur veut acheter et peut acheter
+		//}while ((monopoly.getNbHotelDisponible() > 0 || monopoly.getNbMaisonDisponible() > 0) && !getProprieteConstructibles(j).isEmpty()/* && ihm.demandeAchatBatiment()*/); // boucle tant que le joueur veut acheter et peut acheter
 		
 		
+	}
+	
+	public void arretInteractionAchatBatiment(){
+		ihm.notifier(AFFICHER_ARRET_ACHAT_BATIMENT);
 	}
 	
 	public void acheterBatiment(ArrayList<ProprieteAConstruire> proprieteConstructible, int reponse, Joueur j) {
@@ -487,6 +496,7 @@ public class Controleur {
 		if (indiceJoueur >= monopoly.getJoueurs().size()){
 			indiceJoueur -= monopoly.getJoueurs().size();
 		}
+		nbDouble = 0;
 		joueurCourant = monopoly.getJoueurs().get(indiceJoueur);
 		ihm.notifier(AFFICHER_JOUEUR); //affichage des données du joueur
 	}
