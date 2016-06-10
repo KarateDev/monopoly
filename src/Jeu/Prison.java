@@ -16,13 +16,13 @@ public class Prison extends Carreau {
 	int nbTours = j.getNbTourEnPrison();
 	
 	if(nbTours == 2){
-	    j.payerCash(AMENDE);
-	    j.setNbTourEnPrison(3);	    
-	}else if (nbTours < 3 && j.isAFaitUnDouble()){
-	    j.setNbTourEnPrison(3);
-	}else{
-	    nbTours += 1;
-	    j.setNbTourEnPrison(nbTours);
-	}
+			j.payerCash(AMENDE);
+			j.setNbTourEnPrison(3);	    
+		}else if (nbTours < 3 && j.isAFaitUnDouble()){
+			j.setNbTourEnPrison(3);
+		}else{
+			nbTours += 1;
+			j.setNbTourEnPrison(nbTours);
+		}
     }
 }
