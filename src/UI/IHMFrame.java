@@ -81,7 +81,7 @@ public class IHMFrame extends JFrame /*implements Observateurimplements Observat
 		    
 		}else{
 		    JOptionPane.showConfirmDialog(   null, 
-				    " Il faut d'abord enregistré les joueurs !", 
+				    " Il faut d'abord enregistrer les joueurs !", 
 				    "Erreur",
 				    JOptionPane.DEFAULT_OPTION, 
 				    JOptionPane.ERROR_MESSAGE);

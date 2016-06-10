@@ -73,7 +73,7 @@ public class IHMMenu extends JPanel implements Observateur {
 		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
 		titre.add(picLabel);
 	} catch (IOException err) {
-		System.err.println("Mdr trolol l'image elle load pas xptdr");
+		System.err.println("Erreur: l'image de page de garde ne load pas");
 	}
 
 	
@@ -217,7 +217,7 @@ public class IHMMenu extends JPanel implements Observateur {
 		JOptionPane.INFORMATION_MESSAGE);
 	}else if(!complet && !couleursAttribués){
 	    JOptionPane.showConfirmDialog(   null, 
-		"Il faut saisir un nom et sélectionner une couleur pour chaque joueurs", 
+		"Il faut saisir un nom et séléctionner une couleur pour chaque joueurs", 
 		"Erreur",
 		JOptionPane.DEFAULT_OPTION, 
 		JOptionPane.ERROR_MESSAGE);
@@ -235,7 +235,7 @@ public class IHMMenu extends JPanel implements Observateur {
 			JOptionPane.ERROR_MESSAGE);
 	}else if(!couleurDoublons){
 		    JOptionPane.showConfirmDialog(   null, 
-				    "Deux joueurs ne peuvent pas voir la même couleur !", 
+				    "Deux joueurs ne peuvent pas être de la même couleur !", 
 				    "Erreur",
 				    JOptionPane.DEFAULT_OPTION, 
 				    JOptionPane.ERROR_MESSAGE);

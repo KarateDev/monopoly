@@ -31,24 +31,24 @@ public class IHM implements Observateur {
     }
     
     public void afficherLancerDesDe(int i1, int i2){ //i1 et i2 : valeur des dés
-        System.out.println("Vous lancer les dés et faites : "+i1+" et : "+i2);
+        System.out.println("Vous lancez les dés et faites : "+i1+" et : "+i2);
     }
     
     public void affichePassageDepart(int i){
-        System.out.println("Vous passer par la case depart et empocher : "+i+"€");
+        System.out.println("Vous passez par la case depart et empochez : "+i+"€");
     }
     
     public void afficherCarreau(Carreau c, int i1, int i2){
-        System.out.println("Vous etes sur le carreau n°"+c.getNumero());
+        System.out.println("Vous êtes sur le carreau n°"+c.getNumero());
         System.out.println("\n");
         System.out.println("Nom : "+c.getNomCarreau());
         if (c.getClass() == Gare.class || c.getClass() == ProprieteAConstruire.class || c.getClass() == Compagnie.class){
             if (((Propriete)c).getProprietaire() == null){
-                System.out.println("Proprietaire : Aucun");
-                System.out.println("Prix d'achat de la propriete : "+((Propriete)c).getPrix());
+                System.out.println("Propriétaire : Aucun");
+                System.out.println("Prix d'achat de la propriété : "+((Propriete)c).getPrix());
             }else{
-                System.out.println("Proprietaire : "+((Propriete)c).getProprietaire().getNomJoueur());
-                System.out.println("Loyer du terain : "+((Propriete)c).calculLoyer(i1+i2));
+                System.out.println("Propriétaire : "+((Propriete)c).getProprietaire().getNomJoueur());
+                System.out.println("Loyer du terrain : "+((Propriete)c).calculLoyer(i1+i2));
             }
             if (c.getClass() == ProprieteAConstruire.class){
                 System.out.println("Couleur : "+((ProprieteAConstruire)c).getCouleur());
@@ -65,7 +65,7 @@ public class IHM implements Observateur {
     }
     
     public void afficherPayerLoyer(Joueur j, Propriete p ,int loyer) {
-         System.out.println("Vous payer un loyer de "+loyer+"€ à "+p.getProprietaire().getNomJoueur());
+         System.out.println("Vous payez un loyer de "+loyer+"€ à "+p.getProprietaire().getNomJoueur());
          afficherArgentRestant(j);
     }
     
@@ -76,7 +76,7 @@ public class IHM implements Observateur {
     
     public boolean afficherDemandeAcheterPropriete(Propriete p){
         Scanner sc = new Scanner(System.in);
-        System.out.print("Voulez vous acheter cette propriete ? (oui/non) : ");
+        System.out.print("Voulez vous acheter cette propriété ? (oui/non) : ");
         String reponse = sc.nextLine();
         System.out.println("");
         return reponse.equals("oui");
@@ -93,19 +93,19 @@ public class IHM implements Observateur {
 	}
     
     public void afficherJoueurElimine(Joueur j){
-        System.out.println("Domage "+j.getNomJoueur()+" vous n'avez plus d'argent ...");
-        System.out.println("Vous etes éliminé de la partie !\n");
+        System.out.println("Dommage "+j.getNomJoueur()+" vous n'avez plus d'argent ...");
+        System.out.println("Vous êtes éliminé de la partie !\n");
     }
     
     public void afficherJoueur3double(Joueur j){
         System.out.println("Domage "+j.getNomJoueur()+" vous avez fait 3 doubles d'affilé ...");
-        System.out.println("Vous etes envoyé en prison !\n");
+        System.out.println("Vous êtes envoyé en prison !\n");
     }
     
     public String attendreProchainTour(Joueur j) { // return la reponse du joueur
         String reponse;
 		Scanner sc = new Scanner(System.in);
-        System.out.println("\nAppuyer sur entré pour passer au tour suivant");
+        System.out.println("\nAppuyez sur Entrée pour passer au tour suivant");
 		System.out.println("('abandonner' pour abandonner / 'patrimoine' pour voir votre patrimoine / 'batiment' pour acheter des batiments)\n");
 		reponse = sc.nextLine();
 		
@@ -122,20 +122,20 @@ public class IHM implements Observateur {
 		boolean fin = false;
 		String rep = "rien";
 		while (!rep.equals("oui") && !rep.equals("non") ) {
-			System.out.println("Voulez vous stoper l'ajout de joueurs ? (oui/non) ");
+			System.out.println("Voulez vous stopper l'ajout de joueurs ? (oui/non) ");
 			Scanner sc = new Scanner(System.in);
 			rep = sc.nextLine();
 			if (rep.equals("oui")) {
 				fin = true;
 			} else if(!rep.equals("non")) {
-					System.out.println("Vous devez repondre par oui ou non !");
+					System.out.println("Vous devez répondre par oui ou non !");
 			}
 		}
 		return fin;
     }
 	
 	public void afficherCarteChance(Carte carte){
-		System.out.println("\nVous avez pioché une carte chance :");
+		System.out.println("\nVous avez pioché une carte Chance :");
 		System.out.println(carte.getIntitule() + "\n");
 	}
 	
@@ -146,14 +146,14 @@ public class IHM implements Observateur {
 	
 	public void afficherFinDePartie(Joueur j){
 		System.out.println("\nLa partie est terminée !");
-		System.out.println("Felicitation au joueur "+j.getNomJoueur()+" pour sa victoire écrasante sur ses enemis !");
+		System.out.println("Félicitation au joueur "+j.getNomJoueur()+" pour sa victoire écrasante sur ses adversaires !");
 		System.out.println("Il termine avec "+j.getCash()+"€ à son compteur.");
 	}
 	
 	public int afficherMenu(){
 		int choix = 0;
 		do{
-			System.out.println("\nmenu :");
+			System.out.println("\nMenu :");
 			System.out.println("1. Inscrire les joueurs");
 			System.out.println("2. Commencer le jeu");
 			System.out.println("3. Quitter");
@@ -162,7 +162,7 @@ public class IHM implements Observateur {
 			try{
 				choix = sc.nextInt();
 			}catch (Exception e){
-				System.out.println("La valeure entré est invalide !");
+				System.out.println("La valeur entrée est invalide !");
 			}
 		}while(choix != 1 && choix != 2 && choix != 3);
 		return choix;
@@ -183,7 +183,7 @@ public class IHM implements Observateur {
 		int reponse;
 		ArrayList<Integer> reponsePossible = new ArrayList<>();
 		do{
-			System.out.println("\nNombre de maison disponible : "+nbmaisondisponible+" Nombre d'hotel disponible : "+nbhoteldisponible);
+			System.out.println("\nNombre de maison disponible : "+nbmaisondisponible+" Nombre d'hôtel disponible : "+nbhoteldisponible);
 			System.out.println("Choix du batiment à acheter : ");
 			System.out.println("\n0 : Quitter");
 			reponsePossible.add(0);
@@ -193,7 +193,7 @@ public class IHM implements Observateur {
 				String type;
 				if (proprietes.get(i).getNbmaison() != 5){ // si il n'y a pas deja le maximum de maison
 					if (proprietes.get(i).getNbmaison() == 4){
-						type = "l'hotel";
+						type = "l'hôtel";
 					}else{
 						type = "la maison";
 					}
@@ -224,7 +224,7 @@ public class IHM implements Observateur {
 		int prix = p.getPrixBatiment();
 		String type;
 		if (p.getNbmaison() == 5){
-			type = "un hotel";
+			type = "un hôtel";
 		}else{
 			type = "une maison";
 		}
@@ -241,18 +241,18 @@ public class IHM implements Observateur {
 	}
 	
 	public void afficherPasDeTerrainConstructible() {
-		System.out.println("Desolé, vous n'avez aucun terrain sur lequels vous pouvez construire ...");
+		System.out.println("Desolé, vous n'avez aucun terrain sur lequel vous pouvez construire ...");
 	}
 	
 	public void afficherPatrimoine(Joueur j) {
 		System.out.println("\nJoueur : "+j.getNomJoueur()+"  argent : "+j.getCash()+"€");
 		System.out.println("Proprietes : ");
 		for (Propriete p : j.getProprietes()){
-			System.out.print("Numero de carreau : "+p.getNumero());
+			System.out.print("Numéro de carreau : "+p.getNumero());
 			System.out.print(" / Nom : "+p.getNomCarreau());
 			if (p.getClass() == ProprieteAConstruire.class){
 				System.out.print(" / Couleur : "+((ProprieteAConstruire)p).getCouleur().toString());
-				System.out.print(" / Nombre de maison : "+((ProprieteAConstruire)p).getNbmaison());
+				System.out.print(" / Nombre de maisons : "+((ProprieteAConstruire)p).getNbmaison());
 			}
 			System.out.println("");
 		}
@@ -324,7 +324,7 @@ public class IHM implements Observateur {
 				afficherJoueur3double(j);
 				break;
 			case AFFICHER_ATTENDRE_PROCHAIN_TOUR:
-				System.err.println("afficherAttndreProchainTour (Changez ce string)");
+				System.err.println("afficherAttendreProchainTour (Changez ce string)");
 				break;
 			case AFFICHER_MENU:
 				int choixMenu = 4;
@@ -389,15 +389,15 @@ public class IHM implements Observateur {
 		int choix = 0;
 		
 		while (choix != 1 && choix != 2){
-			System.out.println("Vous etes en prison pour encore "+j.getNbTourEnPrison()+" tours !");
+			System.out.println("Vous êtes en prison pour encore "+j.getNbTourEnPrison()+" tours !");
 			System.out.println("Que voulez-vous faire ? :");
-			System.out.println("1 : Tenter de faire un double");
-			System.out.println("2 : Utiliser une carte 'Sortir de prison'");
+			System.out.println("1 : Tentez de faire un double");
+			System.out.println("2 : Utilisez une carte \"Sortir de prison\"");
 			Scanner sc = new Scanner(System.in);
 			try{
 				choix = sc.nextInt();
 			}catch (Exception e){
-				System.out.println("La reponse est invalide !");
+				System.out.println("La réponse est invalide !");
 				choix = 0;
 			}
 			
@@ -405,7 +405,7 @@ public class IHM implements Observateur {
 				System.out.println("Vous n'avez pas de carte pour sortir de prison ...");
 				choix = 0;
 			}else if (choix == 2 && j.getNbCarteLibereDePrison() > 0){
-				System.out.println("Vous utilisez une carte pour vous liberer de prison");
+				System.out.println("Vous utilisez une carte pour vous libérer de prison");
 			}
 		}
 		
@@ -413,12 +413,12 @@ public class IHM implements Observateur {
 	}
 
 	void afficherLibereDePrison() {
-		System.out.println("Vous etes liberé de prison");
+		System.out.println("Vous etes libéré de prison");
 	}
 
 	void afficherDernierTourEnPrison() {
 		System.out.println("C'était votre dernier tour en prison et vous n'avez pas fait de double ...");
-		System.out.println("Vous payer une amande de 50€ pour etre libére");
+		System.out.println("Vous payer une amende de 50€ pour être libéré");
 	}
 }
 

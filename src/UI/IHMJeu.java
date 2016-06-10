@@ -229,7 +229,7 @@ public class IHMJeu extends JPanel implements Observateur{
 					panelInteractionCentre.add(panelInteractionInfoCarreau,BorderLayout.NORTH);
 										
 				JPanel panelInteractionListePropriete = new JPanel(new BorderLayout());
-					JLabel labelListePropriete = new JLabel("Propriétes du joueur :");
+					JLabel labelListePropriete = new JLabel("Propriétés du joueur :");
 					labelListePropriete.setHorizontalAlignment(JTextField.CENTER);
 					panelInteractionListePropriete.add(labelListePropriete,BorderLayout.NORTH);
                 
@@ -314,7 +314,7 @@ public class IHMJeu extends JPanel implements Observateur{
 					//------------------------------------------------------------------------------- action du controleur a faire (lancer les dés et avancer)
 
 				}else{ // si il a deja lancé les des on affiche un message
-					information.setText("Vous avez dejà lancé les dés pour ce tour !");
+					information.setText("Vous avez déjà lancé les dés pour ce tour !");
 				}
 		
 			}
@@ -362,7 +362,7 @@ public class IHMJeu extends JPanel implements Observateur{
 			public void actionPerformed(ActionEvent e) {
 				
 				JOptionPane.showConfirmDialog(   null, 
-						"NON je ne vous aiderai pas !!!!!  HAHAHAHAHAAH", 
+						"NON je ne vous aiderais pas !!! HAHAHAHAHA", 
 						"Aide",
 						JOptionPane.DEFAULT_OPTION, 
 						JOptionPane.INFORMATION_MESSAGE);
@@ -374,7 +374,7 @@ public class IHMJeu extends JPanel implements Observateur{
 			public void actionPerformed(ActionEvent e) {
 				
 				if (JOptionPane.showConfirmDialog(   null, 
-						"Etes vous sur de vouloire abandonner ?", 
+						"Êtes-vous sûr de vouloir abandonner ?", 
 						"...",
 						JOptionPane.YES_NO_OPTION, 
 						JOptionPane.QUESTION_MESSAGE) == 0){ // si il abandonne
@@ -420,9 +420,9 @@ public class IHMJeu extends JPanel implements Observateur{
 		
 		// partie info des ---------------------------------------------------------------------
 		
-		labelDe1.setText("De n°1 : X");
+		labelDe1.setText("Dé n°1 : X");
 						
-		labelDe2.setText("De n°2 : X");
+		labelDe2.setText("Dé n°2 : X");
 						
 		labelSommeDes.setText("Somme : X");
 		
@@ -483,7 +483,7 @@ public class IHMJeu extends JPanel implements Observateur{
 		if (p.getClass() == ProprieteAConstruire.class){
 			donnees[3] = ((ProprieteAConstruire) p).getCouleur().toString();
 			if (((ProprieteAConstruire) p).getNbmaison() == 5){
-				donnees[2] = "1 hotel";
+				donnees[2] = "1 hôtel";
 			}else{
 				donnees[2] = ((ProprieteAConstruire) p).getNbmaison()+" maisons";
 			}
@@ -534,9 +534,9 @@ public class IHMJeu extends JPanel implements Observateur{
 				boutonActionCarreau.setText("Acheter");
 			}else if (carreau.getClass() == Prison.class && nbTourEnPrison > 0 && joueurCourant.getNbCarteLibereDePrison() > 0){
 				boutonActionCarreau.setText("Utiliser une carte");
-				information.setText("Vous etes en prison pour encore "+nbTourEnPrison+" tours");
+				information.setText("Vous êtes en prison pour encore "+nbTourEnPrison+" tours");
 			}else if (carreau.getClass() == Prison.class && nbTourEnPrison > 0){
-				information.setText("Vous etes en prison pour encore "+nbTourEnPrison+" tours");
+				information.setText("Vous êtes en prison pour encore "+nbTourEnPrison+" tours");
 				boutonActionCarreau.setText("Aucune action");
 				boutonActionCarreau.setEnabled(false);
 			}else{
@@ -544,8 +544,8 @@ public class IHMJeu extends JPanel implements Observateur{
 				boutonActionCarreau.setEnabled(false);
 			}
 					
-			labelDe1.setText("De n°1 : "+de1);
-			labelDe2.setText("De n°2 : "+de2);
+			labelDe1.setText("Dé n°1 : "+de1);
+			labelDe2.setText("Dé n°2 : "+de2);
 			labelSommeDes.setText("Somme: "+(de1+de2));
 
 			afficherInfoCarreau(carreau, (de1+de2));
@@ -554,23 +554,23 @@ public class IHMJeu extends JPanel implements Observateur{
 
 	private void afficherInfoCarreau(Carreau carreau, int sommeDes) {
 		
-		numeroCase.setText("Numero de carreau : "+carreau.getNumero());
+		numeroCase.setText("Numéro de carreau : "+carreau.getNumero());
 		nomCase.setText("Nom du carreau : "+carreau.getNomCarreau());
 		
 		if (carreau.getClass() == Compagnie.class ||
 			carreau.getClass() == Gare.class ||
 			carreau.getClass() == ProprieteAConstruire.class){
 			if (((Propriete)carreau).getProprietaire() == null){
-				proprietaireCase.setText("Proprietaire : aucun");
+				proprietaireCase.setText("Propriétaire : aucun");
 				loyerCase.setText("Prix d'achat : "+((Propriete)carreau).getPrix());
 			}else{
-				proprietaireCase.setText("Proprietaire : "+((Propriete)carreau).getProprietaire().getNomJoueur());
+				proprietaireCase.setText("Propriétaire : "+((Propriete)carreau).getProprietaire().getNomJoueur());
 				loyerCase.setText("Loyer : "+((Propriete)carreau).calculLoyer(sommeDes));
 			}
 			if (carreau.getClass() == ProprieteAConstruire.class){
 				couleurCase.setText("Couleur : "+((ProprieteAConstruire)carreau).getCouleur().toString());
 				if (((ProprieteAConstruire)carreau).getNbmaison() == 5){
-					nombreBatimentCase.setText("Batiment : 1 hotel");
+					nombreBatimentCase.setText("Batiment : 1 hôtel");
 				}else{
 					nombreBatimentCase.setText("Batiments : "+((ProprieteAConstruire)carreau).getNbmaison()+" maisons");
 				}
@@ -585,13 +585,13 @@ public class IHMJeu extends JPanel implements Observateur{
 	}
 	
 	public void afficherEnvoyerEnPrison(Joueur joueur){ // à appeler apres afficherActionDesEtCarreau
-		information.setText("Vous etes envoyé en prison ...");
+		information.setText("Vous êtes envoyé en prison ...");
 		boutonActionCarreau.setText("Aucune action");
 		boutonActionCarreau.setEnabled(false);
 	}
 	
 	public void afficherAFaitUnDouble(Joueur joueur){
-		information.setText("Félicitation, vous avez fait un double ! Vous pouvez donc rejouer !");
+		information.setText("Félicitations, vous avez fait un double ! Vous pouvez donc rejouer !");
 		aLanceLesDes = false;
 	}
 	
@@ -604,7 +604,7 @@ public class IHMJeu extends JPanel implements Observateur{
 	public void afficherPayerLoyer(Joueur joueur1, Joueur joueur2, int loyer) {
 		 
 		JOptionPane.showConfirmDialog(null, 
-			"Vous vous etes arreté sur la propriete de "
+			"Vous vous etes arrêté sur la propriété de "
 				+joueur2.getNomJoueur()
 				+" et payez un loyer de "+loyer+"€",
 			"Loyer", 
@@ -630,7 +630,7 @@ public class IHMJeu extends JPanel implements Observateur{
 	
 	public void afficherDemandeAcheterPropriete(Joueur joueur, ProprieteAConstruire p){
 		if (JOptionPane.showConfirmDialog(null, 
-				"Etes vous sur de vouloir acheter cette propriete pour "+p.getPrix()+"€",
+				"Êtes vous sur de vouloir acheter cette propriété pour "+p.getPrix()+"€",
 				"Acheter", 
 				JOptionPane.YES_NO_OPTION, 
 				JOptionPane.INFORMATION_MESSAGE) == 0){ // si il veut acheter
@@ -643,7 +643,7 @@ public class IHMJeu extends JPanel implements Observateur{
     }
     
     public void afficherAchatPropriete(ArrayList<Joueur> joueurs, Joueur joueur){
-        information.setText("Vous avez acheter une propriété");
+        information.setText("Vous avez acheté une propriété");
 		actualiserArgent(joueur);
 		actualiserPropriete(joueur);
 		plateau.repaintCarreau(joueur.getPositionCourante(), joueurs);
@@ -653,7 +653,7 @@ public class IHMJeu extends JPanel implements Observateur{
 	public void afficherJoueurElimine(HashMap<Integer, Carreau> carreaux, ArrayList<Joueur> joueurs, Joueur joueur){
         JOptionPane.showConfirmDialog(null, 
 			"Domage.... Vous etes éliminé !",
-			"Elimination", 
+			"Élimination", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 		plateau.repaintPlateau(carreaux, joueurs);
@@ -668,7 +668,7 @@ public class IHMJeu extends JPanel implements Observateur{
 	
 	public void afficherJoueur3double(){
         JOptionPane.showConfirmDialog(null, 
-			"Domage, vous avez fait 3 doubles ... Vous etes envoyé en prison !",
+			"Dommage, vous avez fait 3 doubles ... Vous êtes envoyé en prison !",
 			"En prison", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
@@ -703,7 +703,7 @@ public class IHMJeu extends JPanel implements Observateur{
 	
 	public void afficherPasDeTerrainConstructible() {
 		JOptionPane.showConfirmDialog(null, 
-			"Desolé, vous n'avez pas toutes les propriétés d'une couleur",
+			"Désolé, vous n'avez pas toutes les propriétés d'une couleur",
 			"Construction", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
@@ -711,7 +711,7 @@ public class IHMJeu extends JPanel implements Observateur{
 	
 	public void afficherLibereDePrison() {
 		JOptionPane.showConfirmDialog(null, 
-			"Vous etes libere de prison",
+			"Vous etes libéré de prison",
 			"Prison", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
@@ -721,7 +721,7 @@ public class IHMJeu extends JPanel implements Observateur{
 	public void afficherDernierTourEnPrison(Joueur joueur) {
 		JOptionPane.showConfirmDialog(null, 
 			"C'était votre dernier tour en prison et vous n'avez pas fait de double ..."
-				+ "Vous payer donc une amande de 50€ pour etre libéré",
+				+ "Vous payez donc une amende de 50€ pour être libéré",
 			"Prison", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
