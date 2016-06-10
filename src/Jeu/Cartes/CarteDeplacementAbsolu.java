@@ -8,7 +8,7 @@ package Jeu.Cartes;
 import Jeu.Carreau;
 import Jeu.Joueur;
 import Jeu.Monopoly;
-import UI.Message;
+import static UI.Message.*;
 import UI.Observateur;
 
 /**
@@ -36,12 +36,12 @@ public class CarteDeplacementAbsolu extends Carte {
 
 		monopoly.deplacerJoueur(j, deplacement); //deplacement du joueur
 		
-		Message msg  = new Message(Message.Type.AFFICHER_CARREAU);
-		msg.joueur = j;
-		msg.de1 = monopoly.getDes().get(0);
-		msg.de2 = monopoly.getDes().get(1);
-		observateur.notifier(msg);
+		observateur.notifier(AFFICHER_CARREAU);
 		
 		monopoly.interactionCarreau(j);
+		
+		System.out.println("Le joueur se déplace de façon absolue sur le carreau "+ j.getPositionCourante().getNomCarreau());
+		System.out.println("deplacement =  "+ deplacement);
+	
 	}
 }

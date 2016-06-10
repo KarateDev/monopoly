@@ -18,11 +18,10 @@ public class testIHMJeu {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1350,900);
+		frame.setSize(1400,900);
 		
 		// ----------------------------------
 	
-		
 		Controleur controleur = new Controleur();
 	
 		controleur.creerPlateau("./src/Data/data.txt");

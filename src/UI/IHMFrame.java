@@ -5,6 +5,7 @@
  */
 package UI;
 
+import Jeu.Joueur;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -70,6 +71,8 @@ public class IHMFrame extends JFrame implements Observateur/*implements Observat
 		if(menu.isPret()){
 		    afficherJeu(controleur);
 		    System.out.println(" pret ");
+		    System.out.println(controleur.getMonopoly().getJoueurs().get(0).getNomJoueur());
+		    System.out.println(controleur.getMonopoly().getJoueurs().get(1).getNomJoueur());
 		}else{
 		    JOptionPane.showConfirmDialog(   null, 
 				    " Il faut d'abord enregistré les joueurs !", 

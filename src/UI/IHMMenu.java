@@ -208,7 +208,7 @@ public class IHMMenu extends JPanel implements Observateur {
 	if(couleursAttribués && couleurDoublons && complet){
 	    for(int i = 0; i <= (nbJoueurs-1); i++){
 		couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()]);
-		controleur.initialiserUnJoueur((listeChampNom.get(i).toString()),couleursSelect.get(i));
+		controleur.initialiserUnJoueur((listeChampNom.get(i).getText()),couleursSelect.get(i));
 	    }
 	    JOptionPane.showConfirmDialog(   null, 
 		"Les joueurs ont été ajoutés", 

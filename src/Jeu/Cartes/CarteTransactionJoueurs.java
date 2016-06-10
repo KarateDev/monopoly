@@ -7,7 +7,7 @@ package Jeu.Cartes;
 
 import Jeu.Joueur;
 import Jeu.Monopoly;
-import UI.Message;
+import static UI.Message.*;
 import UI.Observateur;
 
 /**
@@ -39,8 +39,6 @@ public class CarteTransactionJoueurs extends Carte {
 				}
 			}
 		}
-		Message msg = new Message(Message.Type.AFFICHER_ARGENT_RESTANT);
-		msg.joueur = j;
-		observateur.notifier(msg);
+		observateur.notifier(AFFICHER_ARGENT_RESTANT);
 	}
 }
