@@ -258,6 +258,7 @@ public class Monopoly {
 			carte.action(j, observateur, this);
 		} else if (j.getPositionCourante() instanceof AllerEnPrison) {
 			this.envoyerEnPrison(j);
+			observateur.notifier(AFFICHER_ALLER_EN_PRISON);
 			
 		}else if (j.getPositionCourante() instanceof Prison) {
 			if (j.getNbTourEnPrison() > 0){

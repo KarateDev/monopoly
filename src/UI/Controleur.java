@@ -315,7 +315,7 @@ public class Controleur {
 		} else if (j.getPositionCourante() instanceof AllerEnPrison) {
 			monopoly.envoyerEnPrison(j);
 			
-		} else if (j.getPositionCourante() instanceof Prison) {
+		} else if (j.getPositionCourante() instanceof Prison && j.getNbTourEnPrison() > 0) {
 			tenteSortiePrisonDouble(j);
 			
 		}
@@ -379,9 +379,6 @@ public class Controleur {
 	}
 
 
-	public void gestionPrison(Joueur j) {
-		ihm.notifier(AFFICHER_INTERACTION_PRISON);
-	}
 	public void tenteSortiePrisonDouble(Joueur j) {
 			monopoly.lancerDes();
 			ihm.notifier(AFFICHER_LANCER_DES);

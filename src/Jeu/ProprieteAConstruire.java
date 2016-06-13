@@ -42,7 +42,7 @@ public class ProprieteAConstruire extends Propriete {
     }
 	
 	 public void setNbMaison(int nbMaison){
-            this.nbmaison += nbMaison;
+            this.nbmaison = nbMaison;
     }
     
     public int getNbmaison(){
