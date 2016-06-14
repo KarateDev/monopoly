@@ -15,8 +15,6 @@ public class Taxe extends Carreau {
 
     @Override
     public void action(Joueur j) {
-	j.payerTaxe(prixTaxe);
+		j.payerTaxe(prixTaxe);
     }
-    
-    
 }

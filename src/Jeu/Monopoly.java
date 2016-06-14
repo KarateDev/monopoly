@@ -2,7 +2,6 @@ package Jeu;
 
 import Jeu.Cartes.Carte;
 import Jeu.Cartes.CarteLiberationPrison;
-import UI.Message;
 import static UI.Message.*;
 import UI.Observateur;
 import java.io.BufferedReader;
@@ -32,11 +31,11 @@ public class Monopoly {
 	
 	private int tricheId = 0;
 
-	ArrayList<String[]> tricheArray;
+	String[] tricheArray;
 	
 	public Monopoly() {
 		try {//pour tricher
-			tricheArray = readDataFile("./src/Data/data.txt", ",");
+			tricheArray = loadDes("./src/Data/des_triche.txt", ",");
 		}
 		catch(FileNotFoundException e){
 			System.err.println("[initialiserCartes()] : File is not found!");
@@ -64,8 +63,9 @@ public class Monopoly {
 
 	public void lancerDes() {
 		this.getDes().clear();
-		if (false) { //mode triche
-			getDes().add(Integer.parseInt(tricheArray.get(tricheId++)[0]));
+		if (true) { //mode triche
+			getDes().add(Integer.parseInt(tricheArray[tricheId++]));
+			getDes().add(Integer.parseInt(tricheArray[tricheId++]));
 			
 		} else {
 			Random rand = new Random();
@@ -313,14 +313,14 @@ public class Monopoly {
 		return piocheCarteCaisseDeCommunaute;
 	}
 
-	private ArrayList<String[]> readDataFile(String filename, String token) throws FileNotFoundException, IOException
+	private String[] loadDes(String filename, String token) throws FileNotFoundException, IOException
 	{
-		ArrayList<String[]> data = new ArrayList<String[]>();
+		String[] data = null;
 
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		String line = null;
 		while((line = reader.readLine()) != null){
-			data.add(line.split(token));
+			data = line.split(token);
 		}
 		reader.close();
 
