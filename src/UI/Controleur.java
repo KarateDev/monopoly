@@ -172,16 +172,17 @@ public class Controleur {
                 if (nbDouble == 3){ // si il a fait 3 doubles d'affilé,on sort de la boucle
 					nbDouble = 0;
 					monopoly.envoyerEnPrison(j);
+					ihm.notifier(AFFICHER_3D_DOUBLE);
                 }
             }
                     
 			//affiche le carreau sur lequel il tombe
 			ihm.notifier(AFFICHER_CARREAU);
 
-		    monopoly.interactionCarreau(j);	// gère les intercations du joueur avec le carreau
-
 			if (j.getNbTourEnPrison() == 3) { // pour que si le joueur est envoyé en prison, son tour prend fin meme si il a fait un double
 				aFaitUnDouble = false;
+			}else{
+				monopoly.interactionCarreau(j);	// gère les intercations du joueur avec le carreau
 			}
 
             if (j.getCash() < 0) { //si le joueur n'a plus d'argent, il est eliminé
