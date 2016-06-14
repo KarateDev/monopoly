@@ -44,7 +44,7 @@ public class IHMMenu extends JPanel implements Observateur {
     private JButton enregistrer;
     
     private int nbJoueurs;
-
+    private boolean pret;
 
 
     public IHMMenu(Controleur controleur, IHMFrame frame){
@@ -53,7 +53,7 @@ public class IHMMenu extends JPanel implements Observateur {
 		this.controleur = controleur;
 		InitUIComponents();
 		this.frame = frame;
-
+		pret = false;
     }
 	
 
@@ -125,6 +125,7 @@ public class IHMMenu extends JPanel implements Observateur {
 	enregistrer.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
+		demarrer();
 	    }
 	});
 	    
@@ -187,7 +188,7 @@ public class IHMMenu extends JPanel implements Observateur {
     }
     
     //vérifie les données entrés par les joueur et enregistre les joueurs dans le monopoly
-    private boolean demarrer(){
+    private void demarrer(){
 	nomSelect.removeAll(nomSelect);
 	boolean complet = true;
 	boolean nomDoublons = true;
@@ -265,14 +266,16 @@ public class IHMMenu extends JPanel implements Observateur {
 				    JOptionPane.DEFAULT_OPTION, 
 				    JOptionPane.ERROR_MESSAGE);
 	}
-	    
-	return complet && couleurDoublons && couleursAttribues;
+
     }
 
     //retourne le panel contenant les boutons 
     public JPanel getpBouttons() {
 	return pBouttons;
     }
+
+    
+    
     
     
 }
