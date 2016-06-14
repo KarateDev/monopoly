@@ -17,10 +17,13 @@ import javax.swing.*;
 public class IHMFrame extends JFrame /*implements Observateurimplements Observateur */{
     
     private Controleur controleur;
+    
     private IHMMenu menu;
     private IHMJeu jeu;
+    
     private JButton boutonDemarrer;
     private JButton boutonMenu;
+    
     private JPanel boutonsMenu;
     private JPanel panelFenetre;
     private JPanel boutonsJeu;
