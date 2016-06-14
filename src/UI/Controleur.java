@@ -169,17 +169,19 @@ public class Controleur {
             if (aFaitUnDouble){
                 nbDouble ++;
                 if (nbDouble == 3){ // si il a fait 3 doubles d'affilé,on sort de la boucle
-                   // break;
+					nbDouble = 0;
+					monopoly.envoyerEnPrison(j);
+					ihm.notifier(AFFICHER_3D_DOUBLE);
                 }
             }
                     
 			//affiche le carreau sur lequel il tombe
 			ihm.notifier(AFFICHER_CARREAU);
 
-		    monopoly.interactionCarreau(j);	// gère les intercations du joueur avec le carreau
-
 			if (j.getNbTourEnPrison() == 3) { // pour que si le joueur est envoyé en prison, son tour prend fin meme si il a fait un double
 				aFaitUnDouble = false;
+			}else{
+				monopoly.interactionCarreau(j);	// gère les intercations du joueur avec le carreau
 			}
 
             if (j.getCash() < 0) { //si le joueur n'a plus d'argent, il est eliminé
@@ -314,7 +316,7 @@ public class Controleur {
 		} else if (j.getPositionCourante() instanceof AllerEnPrison) {
 			monopoly.envoyerEnPrison(j);
 			
-		} else if (j.getPositionCourante() instanceof Prison) {
+		} else if (j.getPositionCourante() instanceof Prison && j.getNbTourEnPrison() > 0) {
 			tenteSortiePrisonDouble(j);
 			
 		}
@@ -378,9 +380,6 @@ public class Controleur {
 	}
 
 
-	public void gestionPrison(Joueur j) {
-		ihm.notifier(AFFICHER_INTERACTION_PRISON);
-	}
 	public void tenteSortiePrisonDouble(Joueur j) {
 			monopoly.lancerDes();
 			ihm.notifier(AFFICHER_LANCER_DES);

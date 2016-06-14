@@ -5,7 +5,6 @@
  */
 package UI;
 
-import Jeu.Joueur;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,12 +49,19 @@ public class IHMFrame extends JFrame /*implements Observateurimplements Observat
 	initBoutonDemarrer();
 	boutonsMenu.add(boutonDemarrer);
 
-	panelFenetre.add(menu, BorderLayout.CENTER);
-	this.add(panelFenetre);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(900,900);
 
-	this.setVisible(true);
-	
-	
+		menu = new IHMMenu(controleur);
+		controleur.setObservateur(menu);
+		boutonsMenu = menu.getpBouttons();
+		initBoutonDemarrer();
+		boutonsMenu.add(boutonDemarrer);
+
+		panelFenetre.add(menu, BorderLayout.CENTER);
+		this.add(panelFenetre);
+
+		this.setVisible(true);
     }
     
     //ajuste la taille de la frame et initialise puis affiche l'IHM du jeu
@@ -124,7 +130,7 @@ public class IHMFrame extends JFrame /*implements Observateurimplements Observat
 	    IHMFrame ihm = new IHMFrame(controleur);
 	    ihm.afficherMenu(controleur);
 
-	    }
+	}
 
    
 }

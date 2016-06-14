@@ -65,6 +65,7 @@ public class IHMJeu extends JPanel implements Observateur{
 	
 	private JLabel numeroCase;
 	private JLabel nomCase;
+	private JLabel nomCase2;
 	private JLabel couleurCase;
 	private JLabel proprietaireCase;
 	private JLabel nombreBatimentCase;
@@ -164,13 +165,19 @@ public class IHMJeu extends JPanel implements Observateur{
 						panelInteraction.add(panelHaut,BorderLayout.NORTH);
 			
 				JPanel panelInteractionInfoCarreau = new JPanel(new BorderLayout(0,30));
-					JPanel panelInteractionInfoCarreauLabel = new JPanel(new GridLayout(6,1,10,10));
+					JPanel panelInteractionInfoCarreauLabel = new JPanel(new GridLayout(7,1,0,5));
 					panelInteractionInfoCarreauLabel.setBorder(new TitledBorder("Case actuelle : "));
 						numeroCase = new JLabel();
 						panelInteractionInfoCarreauLabel.add(numeroCase);
+						
+						JPanel panelNomCarreau = new JPanel(new GridLayout(2,1));
+							nomCase = new JLabel();
+							panelNomCarreau.add(nomCase);
+
+							nomCase2 = new JLabel();
+							panelNomCarreau.add(nomCase2);
 							
-						nomCase = new JLabel();
-						panelInteractionInfoCarreauLabel.add(nomCase);
+							panelInteractionInfoCarreauLabel.add(panelNomCarreau);
 						
 						proprietaireCase = new JLabel();
 						panelInteractionInfoCarreauLabel.add(proprietaireCase);
@@ -345,7 +352,7 @@ public class IHMJeu extends JPanel implements Observateur{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				interactionCarreau(joueurCourant);
+				interactionCarreau();
 			}
 		});
 			
@@ -412,15 +419,15 @@ public class IHMJeu extends JPanel implements Observateur{
 			labelAutreJoueurs.get(i).setForeground(joueurs.get(numero).getColorJoueurIhm());
 		}
 		
-		// partie info case -------------------------------------------------------------------
-		
-		afficherInfoCarreau(joueur.getPositionCourante(), 0);
-		
 		// partie bouton action ---------------------------------------------------------------
 		
 		boutonActionCarreau.setText("Aucune action");
 		boutonActionCarreau.setEnabled(false);
 		information.setText("");
+		
+		// partie info case -------------------------------------------------------------------
+		
+		afficherInfoCarreau(joueur.getPositionCourante(), 0);
 		
 		// partie info des ---------------------------------------------------------------------
 		
@@ -432,7 +439,7 @@ public class IHMJeu extends JPanel implements Observateur{
 		
 		// partie propriete du joueur ----------------------------------------------------------
 		
-		actualiserPropriete(joueur);
+		actualiserPropriete();
 		
 		// -------------------------------------------------------------------------------------
 		
@@ -467,13 +474,13 @@ public class IHMJeu extends JPanel implements Observateur{
 		
 	}
 	
-	private void actualiserArgent(Joueur joueur){
+	private void actualiserArgent(){
 		
-		labelArgent.setText("Argent : "+joueur.getCash()+"€");
+		labelArgent.setText("Argent : "+joueurCourant.getCash()+"€");
 		
 	}
 	
-	private void actualiserPropriete(Joueur joueur){
+	private void actualiserPropriete(){
 		DefaultTableModel model = new DefaultTableModel(){ 
                 @Override
                 public boolean isCellEditable(int row, int column){ //pour rendre les cellules non modifiable
@@ -482,7 +489,7 @@ public class IHMJeu extends JPanel implements Observateur{
         String [] colonnes = {"Nom","Loyer","Batiment","Couleur"};
         model.setColumnIdentifiers(colonnes);
             
-        for (Propriete p : joueur.getProprietes()){
+        for (Propriete p : joueurCourant.getProprietes()){
 		String [] donnees = {p.getNomCarreau(), String.valueOf(p.calculLoyer(0)), "vide", "vide"};
 		if (p.getClass() == ProprieteAConstruire.class){
 			donnees[3] = ((ProprieteAConstruire) p).getCouleur().toString();
@@ -497,7 +504,7 @@ public class IHMJeu extends JPanel implements Observateur{
         tablePropriete.setModel(model);
 	}
 	
-	private void interactionCarreau(Joueur joueurCourant) { // les test sont effectuées dans l'ihm
+	private void interactionCarreau() { // les test sont effectuées dans l'ihm
 		Carreau carreau = joueurCourant.getPositionCourante();
 		if ((carreau.getClass() == Compagnie.class ||
 			carreau.getClass() == Gare.class ||
@@ -521,14 +528,15 @@ public class IHMJeu extends JPanel implements Observateur{
 	
 	
 	
-	public void afficherTourDuJoueur(ArrayList<Joueur> joueurs, Joueur joueur){
+	public void afficherTourDuJoueur(ArrayList<Joueur> joueurs, Joueur joueurSuivant){
 					
-		joueurCourant = joueur;
-		initialisationDebutTour(joueurs, joueur);
+		joueurCourant = joueurSuivant;
 		aLanceLesDes = false;
+		initialisationDebutTour(joueurs, joueurSuivant);
+		
 	}
 	
-	public void afficherActionDesEtCarreau(Carreau carreau, int de1, int de2, int nbTourEnPrison){
+	public void afficherActionDesEtCarreau(Carreau carreau, int de1, int de2){
 		boutonActionCarreau.setEnabled(true);
 			if ((carreau.getClass() == Compagnie.class ||
 				carreau.getClass() == Gare.class ||
@@ -536,13 +544,6 @@ public class IHMJeu extends JPanel implements Observateur{
 				((Propriete)carreau).getProprietaire() == null){
 				
 				boutonActionCarreau.setText("Acheter");
-			}else if (carreau.getClass() == Prison.class && nbTourEnPrison > 0 && joueurCourant.getNbCarteLibereDePrison() > 0){
-				boutonActionCarreau.setText("Utiliser une carte");
-				information.setText("Vous êtes en prison pour encore "+nbTourEnPrison+" tours");
-			}else if (carreau.getClass() == Prison.class && nbTourEnPrison > 0){
-				information.setText("Vous êtes en prison pour encore "+nbTourEnPrison+" tours");
-				boutonActionCarreau.setText("Aucune action");
-				boutonActionCarreau.setEnabled(false);
 			}else{
 				boutonActionCarreau.setText("Aucune action");
 				boutonActionCarreau.setEnabled(false);
@@ -559,17 +560,24 @@ public class IHMJeu extends JPanel implements Observateur{
 	private void afficherInfoCarreau(Carreau carreau, int sommeDes) {
 		
 		numeroCase.setText("Numéro de carreau : "+carreau.getNumero());
-		nomCase.setText("Nom du carreau : "+carreau.getNomCarreau());
+		nomCase.setText("Nom du carreau : ");
+		nomCase2.setText(carreau.getNomCarreau());
 		
+		
+		couleurCase.setText("");
+		nombreBatimentCase.setText("");
+		proprietaireCase.setText("");
+		loyerCase.setText("");
+			
 		if (carreau.getClass() == Compagnie.class ||
 			carreau.getClass() == Gare.class ||
 			carreau.getClass() == ProprieteAConstruire.class){
 			if (((Propriete)carreau).getProprietaire() == null){
 				proprietaireCase.setText("Propriétaire : aucun");
-				loyerCase.setText("Prix d'achat : "+((Propriete)carreau).getPrix());
+				loyerCase.setText("Prix d'achat : "+((Propriete)carreau).getPrix()+"€");
 			}else{
 				proprietaireCase.setText("Propriétaire : "+((Propriete)carreau).getProprietaire().getNomJoueur());
-				loyerCase.setText("Loyer : "+((Propriete)carreau).calculLoyer(sommeDes));
+				loyerCase.setText("Loyer : "+((Propriete)carreau).calculLoyer(sommeDes)+"€");
 			}
 			if (carreau.getClass() == ProprieteAConstruire.class){
 				couleurCase.setText("Couleur : "+((ProprieteAConstruire)carreau).getCouleur().toString());
@@ -578,34 +586,34 @@ public class IHMJeu extends JPanel implements Observateur{
 				}else{
 					nombreBatimentCase.setText("Batiments : "+((ProprieteAConstruire)carreau).getNbmaison()+" maisons");
 				}
-			}else{
-				couleurCase.setText("");
-				nombreBatimentCase.setText("");
 			}
-		}else{
-			proprietaireCase.setText("");
-			loyerCase.setText("");
+		}else if (carreau.getClass() == Prison.class && joueurCourant.getNbTourEnPrison() > 0 && joueurCourant.getNbCarteLibereDePrison() > 0 && !aLanceLesDes){
+			boutonActionCarreau.setText("Utiliser une carte");
+			boutonActionCarreau.setEnabled(true);
+			information.setText("Vous êtes en prison pour encore "+joueurCourant.getNbTourEnPrison()+" tours");
+		}else if (carreau.getClass() == Prison.class && joueurCourant.getNbTourEnPrison() > 0 && !aLanceLesDes){
+			information.setText("Vous êtes en prison pour encore "+joueurCourant.getNbTourEnPrison()+" tours");
 		}
 	}
 	
-	public void afficherEnvoyerEnPrison(Joueur joueur){ // à appeler apres afficherActionDesEtCarreau
-		information.setText("Vous êtes envoyé en prison ...");
+	public void afficherEnvoyerEnPrison(){
+		information.setText("Vous êtes envoyé en prison pour 3 tours ...");
 		boutonActionCarreau.setText("Aucune action");
 		boutonActionCarreau.setEnabled(false);
 	}
 	
-	public void afficherAFaitUnDouble(Joueur joueur){
+	public void afficherAFaitUnDouble(){
 		information.setText("Félicitations, vous avez fait un double ! Vous pouvez donc rejouer !");
 		aLanceLesDes = false;
 	}
 	
-	public void affichePassageDepart(int argentGagne, Joueur joueur){
+	public void affichePassageDepart(int argentGagne){
 		information.setText("Vous passez par la case départ et empochez "+argentGagne+"€");
-		actualiserArgent(joueur);
+		actualiserArgent();
 		
 	}
 	
-	public void afficherPayerLoyer(Joueur joueur1, Joueur joueur2, int loyer) {
+	public void afficherPayerLoyer(Joueur joueur2, int loyer) {
 		 
 		JOptionPane.showConfirmDialog(null, 
 			"Vous vous etes arrêté sur la propriété de "
@@ -615,12 +623,12 @@ public class IHMJeu extends JPanel implements Observateur{
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 		
-		actualiserArgent(joueur1);
+		actualiserArgent();
 		actualiserArgentAutreJoueur(joueur2);
 		
 	}
 	
-	public void afficherPayerTaxe(Joueur joueur , Taxe taxe){
+	public void afficherPayerTaxe(Taxe taxe){
 		
 		JOptionPane.showConfirmDialog(null, 
 			"Vous payez une taxe de "+(-taxe.getPrixTaxe())+"€",
@@ -628,33 +636,33 @@ public class IHMJeu extends JPanel implements Observateur{
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 		
-		actualiserArgent(joueur);
+		actualiserArgent();
 		
     }
 	
-	public void afficherDemandeAcheterPropriete(Joueur joueur, ProprieteAConstruire p){
+	public void afficherDemandeAcheterPropriete(ProprieteAConstruire p){
 		if (JOptionPane.showConfirmDialog(null, 
 				"Êtes vous sur de vouloir acheter cette propriété pour "+p.getPrix()+"€",
 				"Acheter", 
 				JOptionPane.YES_NO_OPTION, 
 				JOptionPane.INFORMATION_MESSAGE) == 0){ // si il veut acheter
 			
-			controleur.achatBatiment(joueur, p);
+			controleur.achatBatiment(joueurCourant, p);
 			// ---------------------------------------------------------------------------------- action du controleur a faire (acheter la propriete)
 			
 		}
 		
     }
     
-    public void afficherAchatPropriete(ArrayList<Joueur> joueurs, Joueur joueur){
+    public void afficherAchatPropriete(ArrayList<Joueur> joueurs){
         information.setText("Vous avez acheté une propriété");
-		actualiserArgent(joueur);
-		actualiserPropriete(joueur);
-		plateau.repaintCarreau(joueur.getPositionCourante(), joueurs);
+		actualiserArgent();
+		actualiserPropriete();
+		plateau.repaintCarreau(joueurCourant.getPositionCourante(), joueurs);
         
     }
 	
-	public void afficherJoueurElimine(HashMap<Integer, Carreau> carreaux, ArrayList<Joueur> joueurs, Joueur joueur){
+	public void afficherJoueurElimine(HashMap<Integer, Carreau> carreaux, ArrayList<Joueur> joueurs, Joueur joueurSuivant){
         JOptionPane.showConfirmDialog(null, 
 			"Domage.... Vous etes éliminé !",
 			"Élimination", 
@@ -665,8 +673,7 @@ public class IHMJeu extends JPanel implements Observateur{
 		labelAutreJoueurs.get(joueurs.size()-1).setForeground(joueurCourant.getColorJoueurIhm());
 		labelAutreJoueurs.get(joueurs.size()-1).removeMouseListener(labelAutreJoueurs.get(joueurs.size()-1).getMouseListeners()[0]);
 		this.joueurs.remove(joueurCourant);
-		this.afficherTourDuJoueur(joueurs, joueur);
-		joueurCourant = joueur;
+		this.afficherTourDuJoueur(joueurs, joueurSuivant);
 		
     }
 	
@@ -728,14 +735,14 @@ public class IHMJeu extends JPanel implements Observateur{
 		aLanceLesDes = false;
 	}
 	
-	public void afficherDernierTourEnPrison(Joueur joueur) {
+	public void afficherDernierTourEnPrison() {
 		JOptionPane.showConfirmDialog(null, 
 			"C'était votre dernier tour en prison et vous n'avez pas fait de double ..."
 				+ "Vous payez donc une amende de 50€ pour être libéré",
 			"Prison", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
-		actualiserArgent(joueur);
+		actualiserArgent();
 		
 	}
 	
@@ -748,9 +755,9 @@ public class IHMJeu extends JPanel implements Observateur{
 		
 	}
 	
-	public void interactionAcheterBatiment(Joueur joueur, ArrayList<ProprieteAConstruire> proprietes){
+	public void interactionAcheterBatiment(ArrayList<ProprieteAConstruire> proprietes){
 		
-		achatBatimentIhm = new AchatBatimentIhm(controleur, joueur, proprietes);
+		achatBatimentIhm = new AchatBatimentIhm(controleur, joueurCourant, proprietes);
 		panelInteraction.removeAll();
 		panelInteraction.add(achatBatimentIhm);
 		panelInteraction.revalidate();
@@ -761,50 +768,49 @@ public class IHMJeu extends JPanel implements Observateur{
 		panelInteraction.add(initPartieJeu());
 		ajouterListner();
 		initialisationDebutTour(joueurs, joueurCourant);
-		afficherActionDesEtCarreau(joueurCourant.getPositionCourante(), de1, de2, joueurCourant.getNbTourEnPrison());
+		afficherActionDesEtCarreau(joueurCourant.getPositionCourante(), de1, de2);
 		panelInteraction.revalidate();
 	}
 	
-	public void quitterAcheterBatiment(ArrayList<Joueur> joueurs, Joueur joueur,Carreau carreau, int de1, int de2){
+	public void quitterAcheterBatiment(int de1, int de2){
 		
 		panelInteraction.removeAll();
 		panelInteraction = initPartieJeu();
 		ajouterListner();
-		initialisationDebutTour(joueurs, joueur);
-		afficherActionDesEtCarreau(carreau, de1, de2, joueur.getNbTourEnPrison());
+		initialisationDebutTour(joueurs, joueurCourant);
+		afficherActionDesEtCarreau(joueurCourant.getPositionCourante(), de1, de2);
 	}
 
 	@Override
 	public void notifier(Message message) {
-		Joueur joueur = controleur.getJoueurCourant();
-		ArrayList<Joueur> joueurs = controleur.getMonopoly().getJoueurs();
+		Joueur joueurSuivant = controleur.getJoueurCourant(); // pour afficher le tour du joueur suivant
 		HashMap<Integer, Carreau> carreaux = controleur.getMonopoly().getCarreaux();
 		int de1 = controleur.getMonopoly().getDes().get(0);
 		int de2 = controleur.getMonopoly().getDes().get(1);
-		Carreau position = joueur.getPositionCourante();
+		Carreau position = joueurCourant.getPositionCourante();
 		Carte carte = controleur.getMonopoly().getCarte();
 		switch (message) {
 			case AFFICHER_ACHAT_PROPRIETE:
-				this.afficherAchatPropriete(joueurs, joueur);
+				this.afficherAchatPropriete(joueurs);
 				break;
 			case AFFICHER_DEMANDE_ACHETER_PROPRIETE:
 				break;
 			case AFFICHER_ACHAT_BATIMENT:
-				this.achatBatimentIhm.afficherAchatBatiment(joueur);
-				this.achatBatimentIhm.actualiserPropriete(joueur);
+				this.achatBatimentIhm.afficherAchatBatiment(joueurCourant);
+				this.achatBatimentIhm.actualiserPropriete(joueurCourant);
 				plateau.repaintPlateau(carreaux, joueurs);
 				break;
 			case AFFICHER_PROPRIETE_CONSTRUCTIBLE:
-				this.interactionAcheterBatiment(joueur, controleur.getProprieteConstructibles(joueur));
+				this.interactionAcheterBatiment(controleur.getProprieteConstructibles(joueurCourant));
 				break;
 			case AFFICHER_ARRET_ACHAT_BATIMENT:
 				this.arretAchatBatiment(de1, de2);
 				break;
 			case AFFICHER_PAYER_LOYER:
-				this.afficherPayerLoyer(joueur, ((Propriete)position).getProprietaire(),((Propriete)position).calculLoyer(de1+de2));
+				this.afficherPayerLoyer(((Propriete)position).getProprietaire(),((Propriete)position).calculLoyer(de1+de2));
 				break;
 			case AFFICHER_PAYER_TAXE:
-				this.afficherPayerTaxe(joueur, ((Taxe)position));
+				this.afficherPayerTaxe(((Taxe)position));
 				break;
 			case AFFICHER_CARTE_CAISSE_DE_COMMUNAUTE:
 				this.afficherCarteCaisseDeCommunaute(carte);
@@ -815,22 +821,22 @@ public class IHMJeu extends JPanel implements Observateur{
 				plateau.repaintPlateau(carreaux, joueurs);
 				break;
 			case AFFICHER_PASSAGE_DEPART:
-				this.affichePassageDepart(((Depart)carreaux.get(1)).getGainPourPassage(), joueur);
+				this.affichePassageDepart(((Depart)carreaux.get(1)).getGainPourPassage());
 				break;
 			case AFFICHER_CARREAU:
-				this.afficherActionDesEtCarreau(position, de1, de2, joueur.getNbTourEnPrison());
+				this.afficherActionDesEtCarreau(position, de1, de2);
 				break;
 			case AFFICHER_ARGENT_RESTANT:
-				this.actualiserArgent(joueur);
+				this.actualiserArgent();
 				break;
 			case AFFICHER_FIN_PARTIE:
-				this.afficherFinDePartie(joueur);
+				this.afficherFinDePartie(joueurCourant);
 				break;
 			case AFFICHER_JOUEUR:
-				this.afficherTourDuJoueur(joueurs, joueur);
+				this.afficherTourDuJoueur(joueurs, joueurSuivant);
 				break;
 			case AFFICHER_JOUEUR_ELIMINE:
-				this.afficherJoueurElimine(carreaux, joueurs, joueur);
+				this.afficherJoueurElimine(carreaux, joueurs, joueurSuivant);
 				break;
 			case AFFICHER_PATRIMOINE:
 				// rien
@@ -845,22 +851,24 @@ public class IHMJeu extends JPanel implements Observateur{
 				// rien
 				break;
 			case AFFICHER_INTERACTION_PRISON:
-				aLanceLesDes = true;
-				controleur.tenterSortiePrisonCarte(joueur);
+				controleur.tenterSortiePrisonCarte(joueurCourant);
+				break;
+			case AFFICHER_ALLER_EN_PRISON:
+				this.afficherEnvoyerEnPrison();
 				break;
 			case AFFICHER_LANCER_DES:
-				this.afficherActionDesEtCarreau(position, de1, de2, PROPERTIES);
+				this.afficherActionDesEtCarreau(position, de1, de2);
 				plateau.repaintPlateau(carreaux, joueurs);
 				aLanceLesDes = true;
 				break;
 			case AFFICHER_FAIT_UN_DOUBLE:
-				this.afficherAFaitUnDouble(joueur);
+				this.afficherAFaitUnDouble();
 				break;
 			case AFFICHER_LIBERE_PRISON:
 				this.afficherLibereDePrison();
 				break;
 			case AFFICHER_DERNIER_TOUR_EN_PRISON:
-				this.afficherLibereDePrison();
+				this.afficherDernierTourEnPrison();
 				break;
 			case AFFICHER_PAS_ASSEZ_DE_BATIMENTS:
 				this.achatBatimentIhm.afficherPasDeBatiment();
