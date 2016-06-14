@@ -373,7 +373,9 @@ public class IHMJeu extends JPanel implements Observateur{
 			public void actionPerformed(ActionEvent e) {
 				
 				JOptionPane.showConfirmDialog(   null, 
-						"NON je ne vous aiderais pas !!! HAHAHAHAHA", 
+						"Achetez des propriétés et faites payer le plus gros loyer possible aux joueurs qui atterrissent chez vous.\n"
+							+ "Achetez toutes les propriétés d’un même groupe de couleur pour augmenter les loyers et pouvoir construire des maisons et des hôtels aﬁn d’augmenter le montant de vos revenus.\n"
+							+ "Ne faites pas faillite !", 
 						"Aide",
 						JOptionPane.DEFAULT_OPTION, 
 						JOptionPane.INFORMATION_MESSAGE);
