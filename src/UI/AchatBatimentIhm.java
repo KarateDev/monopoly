@@ -215,7 +215,7 @@ public class AchatBatimentIhm extends JPanel{
 	
 	public void afficherAchatBatiment(Joueur joueur){
 		JOptionPane.showConfirmDialog(null, 
-			"Vous avez acheter un batiment !",
+			"Vous avez acheté un batiment !",
 			"Achat", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);

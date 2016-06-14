@@ -421,6 +421,7 @@ public class IHMJeu extends JPanel implements Observateur{
 		
 		// partie bouton action ---------------------------------------------------------------
 		
+		boutonLancerDes.setEnabled(true);
 		boutonActionCarreau.setText("Aucune action");
 		boutonActionCarreau.setEnabled(false);
 		information.setText("");
@@ -532,6 +533,7 @@ public class IHMJeu extends JPanel implements Observateur{
 					
 		joueurCourant = joueurSuivant;
 		aLanceLesDes = false;
+		boutonLancerDes.setEnabled(true);
 		initialisationDebutTour(joueurs, joueurSuivant);
 		
 	}
@@ -605,6 +607,7 @@ public class IHMJeu extends JPanel implements Observateur{
 	public void afficherAFaitUnDouble(){
 		information.setText("Félicitations, vous avez fait un double ! Vous pouvez donc rejouer !");
 		aLanceLesDes = false;
+		boutonLancerDes.setEnabled(true);
 	}
 	
 	public void affichePassageDepart(int argentGagne){
@@ -733,6 +736,7 @@ public class IHMJeu extends JPanel implements Observateur{
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
 		aLanceLesDes = false;
+		boutonLancerDes.setEnabled(true);
 	}
 	
 	public void afficherDernierTourEnPrison() {
@@ -861,6 +865,7 @@ public class IHMJeu extends JPanel implements Observateur{
 			case AFFICHER_LANCER_DES:
 				this.afficherActionDesEtCarreau(position, de1, de2);
 				plateau.repaintPlateau(carreaux, joueurs);
+				boutonLancerDes.setEnabled(false);
 				aLanceLesDes = true;
 				break;
 			case AFFICHER_FAIT_UN_DOUBLE:
