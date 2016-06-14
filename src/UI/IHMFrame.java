@@ -20,15 +20,17 @@ public class IHMFrame extends JFrame /*implements Observateurimplements Observat
     private Controleur controleur;
     private IHMMenu menu;
     private IHMJeu jeu;
-    private JButton demarrer;
+    private JButton boutonDemarrer;
+    private JButton boutonMenu;
     private JPanel boutonsMenu;
-	private JPanel panelFenetre;
+    private JPanel panelFenetre;
+    private JPanel boutonsJeu;
    /* @Override
     public void notifier(Message message) {
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }*/
     
-    
+    //initialise la frame
     public IHMFrame(Controleur controleur){
 	super("Monopoly");
 	panelFenetre = new JPanel(new BorderLayout());
@@ -36,7 +38,7 @@ public class IHMFrame extends JFrame /*implements Observateurimplements Observat
 		
     }
     
-    
+    //ajuste la taille de la frame et initilaise puis affiche l'IHM du menu de sélection des joueurs
     public void afficherMenu(Controleur controleur){
 	
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,7 +48,7 @@ public class IHMFrame extends JFrame /*implements Observateurimplements Observat
 	controleur.setObservateur(menu);
 	boutonsMenu = menu.getpBouttons();
 	initBoutonDemarrer();
-	boutonsMenu.add(demarrer);
+	boutonsMenu.add(boutonDemarrer);
 
 	panelFenetre.add(menu, BorderLayout.CENTER);
 	this.add(panelFenetre);
@@ -56,44 +58,67 @@ public class IHMFrame extends JFrame /*implements Observateurimplements Observat
 	
     }
     
-    
+    //ajuste la taille de la frame et initialise puis affiche l'IHM du jeu
     public void afficherJeu(Controleur controleur){
 	controleur.setJoueurCourant(controleur.getMonopoly().getJoueurs().get(0));
-	this.setSize(1400,900);
+	this.setSize(1500,1000);
 	jeu = new IHMJeu(controleur,this);
 	controleur.setObservateur(jeu);
 	panelFenetre.removeAll();
 	panelFenetre.add(jeu,BorderLayout.CENTER);
 	panelFenetre.revalidate();
+	initBoutonMenu(controleur);
 	
     }
     
+    //initialise et place dans la fenètre le bouton démarrer(pour le menu)
     public void initBoutonDemarrer(){
-	demarrer = new JButton(" Demarrer ");
-	demarrer.addActionListener(new ActionListener() {
+	boutonDemarrer = new JButton(" Demarrer ");
+	boutonDemarrer.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		if(menu.isPret()){
 			System.out.println(controleur.getMonopoly().getJoueurs().get(0).getNomJoueur());
 		    System.out.println(controleur.getMonopoly().getJoueurs().get(1).getNomJoueur());
-		    afficherJeu(controleur);
-		    System.out.println(" pret ");
-		    
+		    afficherJeu(controleur);		    
 		}else{
 		    JOptionPane.showConfirmDialog(   null, 
 				    " Il faut d'abord enregistrer les joueurs !", 
 				    "Erreur",
 				    JOptionPane.DEFAULT_OPTION, 
 				    JOptionPane.ERROR_MESSAGE);
-		    System.out.println(" pas pret ");
 		}
 	    }
 	});
 	
-	menu.getpBouttons().add(demarrer);
+	menu.getpBouttons().add(boutonDemarrer);
 	
     }
+    
+    //initialise et place dans la denètre le bouton menu(pour le jeu)
+    public void initBoutonMenu(Controleur controleur){
+	boutonsJeu = new JPanel();
+	boutonMenu = new JButton("Menu");
+	boutonMenu.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		int rep = JOptionPane.showConfirmDialog(   null, 
+				    " Voulez vous retourner au menu ? Votre progression sera perdu", 
+				    "Retour au menu ",
+				    JOptionPane.OK_OPTION, 
+				    JOptionPane.QUESTION_MESSAGE);
+		if(rep == 0){
+		    panelFenetre.removeAll();
+		    controleur.getMonopoly().getJoueurs().clear();
+		    afficherMenu(controleur);
+		}
+	    }
+	});
+	boutonsJeu.add(boutonMenu);
+	panelFenetre.add(boutonMenu, BorderLayout.NORTH);
+    }
         
+    //main du programme
     public static void main(String[] args) {
 	    Controleur controleur = new Controleur();
 	    IHMFrame ihm = new IHMFrame(controleur);

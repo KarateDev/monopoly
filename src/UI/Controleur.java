@@ -36,7 +36,6 @@ public class Controleur {
 		this.initialiserCartes("./src/Data/dataCartes.txt");
 		this.getMonopoly().melangerLesCartes();
 
-		this.initialiserUnePartie();
 		
 		int numeroJoueur = 0;
 		//while (this.getMonopoly().getJoueurs().size() > 1){ //boucle du jeu tant qu'il reste plus d'un joueur
@@ -256,12 +255,12 @@ public class Controleur {
 	    monopoly.addJoueur(nouveauJoueur);
 	}
 	
-	public void initialiserUnePartie() { //retourn vrai pour jouer at faux pour quitter le jeu
+	/*public void initialiserUnePartie() { //retourn vrai pour jouer at faux pour quitter le jeu
 		//intialisation des joueurs
 
 		//int choixMenu = ihm.afficherMenu();
 	//	ihm.notifier(AFFICHER_MENU);
-	}
+	}*/
 	public void quitterJeu() {
 		System.exit(0);
 	}
@@ -269,9 +268,9 @@ public class Controleur {
 		/**
 		 * @return the monopoly
 		 */
-		public Monopoly getMonopoly() {
-			return monopoly;
-		}
+	public Monopoly getMonopoly() {
+		return monopoly;
+	}
 
 	/*
 	Le controleur vérifie sur quelle case se trouve le joueur et lui propose une interaction adéquate
