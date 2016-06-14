@@ -185,13 +185,14 @@ public class Controleur {
 			}
 
             if (j.getCash() < 0) { //si le joueur n'a plus d'argent, il est eliminé
-				int joueurSuivant = monopoly.getJoueurs().indexOf(j);
-				monopoly.eliminerJoueur(j);
 				
+				int joueurSuivant = monopoly.getJoueurs().indexOf(j)+1;
 				if (joueurSuivant == monopoly.getJoueurs().size()){
 					joueurSuivant = 0;
 				}
 				joueurCourant = monopoly.getJoueurs().get(joueurSuivant);
+				monopoly.eliminerJoueur(j);
+								
                // break;
             }
 
@@ -221,13 +222,13 @@ public class Controleur {
 			ihm.notifier(AFFICHER_PATRIMOINE);
 			return interactionFinDeTour(j); // relance l'interaction à la fin de l'achat
 		}else if(reponse.equals("abandonner")) { // si le joueur decide d'abandonner
-			int joueurSuivant = monopoly.getJoueurs().indexOf(j);
-			monopoly.eliminerJoueur(j);
 			
+			int joueurSuivant = monopoly.getJoueurs().indexOf(j)+1;
 			if (joueurSuivant == monopoly.getJoueurs().size()){
 				joueurSuivant = 0;
 			}
 			joueurCourant = monopoly.getJoueurs().get(joueurSuivant);
+			monopoly.eliminerJoueur(j);
 			
 			return false;
 		}else if(reponse.equals("batiment")) { // si le joueur veut acheter des batiments
