@@ -28,6 +28,7 @@ public class IHMMenu extends JPanel implements Observateur {
     private JPanel joueurs; 
     private JPanel titre;
     private JPanel pBouttons;
+    private IHMFrame frame;
     
     private ArrayList<JPanel> listePanelNom;
     private ArrayList<JTextField> listeChampNom;
@@ -46,11 +47,12 @@ public class IHMMenu extends JPanel implements Observateur {
     private boolean pret;
 
 
-    public IHMMenu(Controleur controleur){
+    public IHMMenu(Controleur controleur, IHMFrame frame){
 		super();
 		
 		this.controleur = controleur;
 		InitUIComponents();
+		this.frame = frame;
 		pret = false;
     }
 	
@@ -91,7 +93,7 @@ public class IHMMenu extends JPanel implements Observateur {
 	
 	retirerJ = new JButton(" Retirer un joueur ");
 	ajouterJ = new JButton(" Ajouter un joueur ");
-	enregistrer = new JButton(" Enregistrer les joueurs ");
+	enregistrer = new JButton(" Démarrer ");
 	
 	ajouterJ.addActionListener(new ActionListener() {
 	    @Override
@@ -125,7 +127,7 @@ public class IHMMenu extends JPanel implements Observateur {
 	enregistrer.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-		pret = enregistrer();
+		pret = demarrer();
 	    }
 	});
 	    
@@ -188,7 +190,7 @@ public class IHMMenu extends JPanel implements Observateur {
     }
     
     //vérifie les données entrés par les joueur et enregistre les joueurs dans le monopoly
-    private boolean enregistrer(){
+    private boolean demarrer(){
 	nomSelect.removeAll(nomSelect);
 	boolean complet = true;
 	boolean nomDoublons = true;
@@ -232,6 +234,7 @@ public class IHMMenu extends JPanel implements Observateur {
 		"Enregistré",
 		JOptionPane.DEFAULT_OPTION, 
 		JOptionPane.INFORMATION_MESSAGE);
+	    frame.afficherJeu(controleur, frame);
 	}else if(!complet && !couleursAttribues){
 	    JOptionPane.showConfirmDialog(   null, 
 		"Il faut saisir un nom et séléctionner une couleur pour chaque joueurs", 
