@@ -185,7 +185,13 @@ public class Controleur {
 			}
 
             if (j.getCash() < 0) { //si le joueur n'a plus d'argent, il est eliminé
+				int joueurSuivant = monopoly.getJoueurs().indexOf(j);
 				monopoly.eliminerJoueur(j);
+				
+				if (joueurSuivant == monopoly.getJoueurs().size()){
+					joueurSuivant = 0;
+				}
+				joueurCourant = monopoly.getJoueurs().get(joueurSuivant);
                // break;
             }
 
