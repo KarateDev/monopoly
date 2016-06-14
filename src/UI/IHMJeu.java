@@ -65,6 +65,7 @@ public class IHMJeu extends JPanel implements Observateur{
 	
 	private JLabel numeroCase;
 	private JLabel nomCase;
+	private JLabel nomCase2;
 	private JLabel couleurCase;
 	private JLabel proprietaireCase;
 	private JLabel nombreBatimentCase;
@@ -164,13 +165,19 @@ public class IHMJeu extends JPanel implements Observateur{
 						panelInteraction.add(panelHaut,BorderLayout.NORTH);
 			
 				JPanel panelInteractionInfoCarreau = new JPanel(new BorderLayout(0,30));
-					JPanel panelInteractionInfoCarreauLabel = new JPanel(new GridLayout(6,1,10,10));
+					JPanel panelInteractionInfoCarreauLabel = new JPanel(new GridLayout(7,1,0,5));
 					panelInteractionInfoCarreauLabel.setBorder(new TitledBorder("Case actuelle : "));
 						numeroCase = new JLabel();
 						panelInteractionInfoCarreauLabel.add(numeroCase);
+						
+						JPanel panelNomCarreau = new JPanel(new GridLayout(2,1));
+							nomCase = new JLabel();
+							panelNomCarreau.add(nomCase);
+
+							nomCase2 = new JLabel();
+							panelNomCarreau.add(nomCase2);
 							
-						nomCase = new JLabel();
-						panelInteractionInfoCarreauLabel.add(nomCase);
+							panelInteractionInfoCarreauLabel.add(panelNomCarreau);
 						
 						proprietaireCase = new JLabel();
 						panelInteractionInfoCarreauLabel.add(proprietaireCase);
@@ -524,8 +531,9 @@ public class IHMJeu extends JPanel implements Observateur{
 	public void afficherTourDuJoueur(ArrayList<Joueur> joueurs, Joueur joueurSuivant){
 					
 		joueurCourant = joueurSuivant;
-		initialisationDebutTour(joueurs, joueurSuivant);
 		aLanceLesDes = false;
+		initialisationDebutTour(joueurs, joueurSuivant);
+		
 	}
 	
 	public void afficherActionDesEtCarreau(Carreau carreau, int de1, int de2){
@@ -552,7 +560,8 @@ public class IHMJeu extends JPanel implements Observateur{
 	private void afficherInfoCarreau(Carreau carreau, int sommeDes) {
 		
 		numeroCase.setText("Numéro de carreau : "+carreau.getNumero());
-		nomCase.setText("Nom du carreau : "+carreau.getNomCarreau());
+		nomCase.setText("Nom du carreau : ");
+		nomCase2.setText(carreau.getNomCarreau());
 		
 		
 		couleurCase.setText("");
@@ -565,10 +574,10 @@ public class IHMJeu extends JPanel implements Observateur{
 			carreau.getClass() == ProprieteAConstruire.class){
 			if (((Propriete)carreau).getProprietaire() == null){
 				proprietaireCase.setText("Propriétaire : aucun");
-				loyerCase.setText("Prix d'achat : "+((Propriete)carreau).getPrix());
+				loyerCase.setText("Prix d'achat : "+((Propriete)carreau).getPrix()+"€");
 			}else{
 				proprietaireCase.setText("Propriétaire : "+((Propriete)carreau).getProprietaire().getNomJoueur());
-				loyerCase.setText("Loyer : "+((Propriete)carreau).calculLoyer(sommeDes));
+				loyerCase.setText("Loyer : "+((Propriete)carreau).calculLoyer(sommeDes)+"€");
 			}
 			if (carreau.getClass() == ProprieteAConstruire.class){
 				couleurCase.setText("Couleur : "+((ProprieteAConstruire)carreau).getCouleur().toString());
