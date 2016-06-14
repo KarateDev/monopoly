@@ -31,10 +31,12 @@ public class IHMMenu extends JPanel implements Observateur {
     
     private ArrayList<JPanel> listePanelNom;
     private ArrayList<JTextField> listeChampNom;
+    private ArrayList<CouleurPropriete> couleursSelect;
+    private ArrayList<String> nomSelect;
+    private ArrayList<JComboBox> listeChoixCouleurs;
+    
     private final CouleurPropriete[] listeCouleurs = {CouleurPropriete.bleuFonce, CouleurPropriete.orange, CouleurPropriete.mauve, CouleurPropriete.violet, CouleurPropriete.bleuCiel, CouleurPropriete.jaune, CouleurPropriete.vert, CouleurPropriete.rouge};
     private final String[] choixCouleur = {"Couleur","Bleu Foncé","Orange","Violet","Rose","Bleu Ciel","Jaune","Vert","Rouge"};
-    private ArrayList<CouleurPropriete> couleursSelect;
-    private ArrayList<JComboBox> listeChoixCouleurs;
     
     private JButton ajouterJ;
     private JButton retirerJ;
@@ -85,6 +87,7 @@ public class IHMMenu extends JPanel implements Observateur {
 	listeChampNom = new ArrayList<>();
 	listeChoixCouleurs = new ArrayList<>();
 	couleursSelect = new ArrayList<>();
+	nomSelect = new ArrayList<>();
 	
 	retirerJ = new JButton(" Retirer un joueur ");
 	ajouterJ = new JButton(" Ajouter un joueur ");
@@ -186,12 +189,17 @@ public class IHMMenu extends JPanel implements Observateur {
     
     //vérifie les données entrés par les joueur et enregistre les joueurs dans le monopoly
     private boolean enregistrer(){
+	nomSelect.removeAll(nomSelect);
 	boolean complet = true;
+	boolean nomDoublons = true;
 	//si un joueur n'as pas entrez de nom , complet devient faux
 	    for(int i = 0; i <= (nbJoueurs-1); i++){
 		if(listeChampNom.get(i).getText().equals("") && complet){
-		    complet = false;
-		    
+		    complet = false;	    
+		}else if(nomSelect.contains(listeChampNom.get(i).getText().toLowerCase())){
+		    nomDoublons = false;
+		}else{
+		    nomSelect.add(listeChampNom.get(i).getText().toLowerCase());
 		}
 	    }
 	    
@@ -208,13 +216,13 @@ public class IHMMenu extends JPanel implements Observateur {
 	    }else if(couleursSelect.contains(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1])){
 		couleurDoublons = false;
 	    }else{
-		// si aucune erreur n'es noté pour le joueur , on ajoute sa couleur a la liste des couleurs selectionnés
+		// si aucune erreur n'est relevé pour le joueur , on ajoute sa couleur a la liste des couleurs selectionnés
 	    couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1]);
 	    }
-	    System.out.println(i);
 	}
 	// si tout les bouléns sont vrais , les joueurs sont ajouté dans le monopoly, sinon un message d'erreur sera affiché
-	if(couleursAttribues && couleurDoublons && complet){
+	if(couleursAttribues && couleurDoublons && complet && nomDoublons){
+	    controleur.getMonopoly().getJoueurs().clear();
 	    for(int i = 0; i <= (nbJoueurs-1); i++){
 		couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1]);
 		controleur.initialiserUnJoueur((listeChampNom.get(i).getText()),couleursSelect.get(i));
@@ -237,14 +245,20 @@ public class IHMMenu extends JPanel implements Observateur {
 		JOptionPane.DEFAULT_OPTION, 
 		JOptionPane.ERROR_MESSAGE);
 	}else if(!couleursAttribues){
-		JOptionPane.showConfirmDialog(   null, 
-			"Il faut sélectionner une couleur pour chaque joueur !", 
-			"Erreur",
-			JOptionPane.DEFAULT_OPTION, 
-			JOptionPane.ERROR_MESSAGE);
+	    JOptionPane.showConfirmDialog(   null, 
+		    "Il faut sélectionner une couleur pour chaque joueur !", 
+		    "Erreur",
+		    JOptionPane.DEFAULT_OPTION, 
+		    JOptionPane.ERROR_MESSAGE);
 	}else if(!couleurDoublons){
-		    JOptionPane.showConfirmDialog(   null, 
-				    "Deux joueurs ne peuvent pas être de la même couleur !", 
+	    JOptionPane.showConfirmDialog(   null, 
+			    "Deux joueurs ne peuvent pas être de la même couleur !", 
+			    "Erreur",
+			    JOptionPane.DEFAULT_OPTION, 
+			    JOptionPane.ERROR_MESSAGE);
+	}else if(!nomDoublons){
+	    JOptionPane.showConfirmDialog(   null, 
+				    "Deux joueurs ne peuvent pas avoir le même nom !", 
 				    "Erreur",
 				    JOptionPane.DEFAULT_OPTION, 
 				    JOptionPane.ERROR_MESSAGE);
