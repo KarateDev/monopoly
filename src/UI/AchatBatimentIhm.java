@@ -114,10 +114,13 @@ public class AchatBatimentIhm extends JPanel{
         for (Propriete p : proprietes){
 		String [] donnees = {p.getNomCarreau(),
 			String.valueOf(p.calculLoyer(0)),
-			((ProprieteAConstruire) p).getCouleur().toString(),
 			((ProprieteAConstruire) p).getNbmaison()+" maisons",
+			((ProprieteAConstruire) p).getCouleur().toString(),
 			((ProprieteAConstruire) p).getPrixBatiment()+"€"};
-
+		
+			if (((ProprieteAConstruire) p).getNbmaison() == 5){
+				donnees[2] = "1 hotel";
+			}
 			
             model.addRow(donnees);
         }
@@ -207,30 +210,12 @@ public class AchatBatimentIhm extends JPanel{
 		
 		labelArgent.setText("Argent : "+joueur.getCash()+"€");
 		
-		DefaultTableModel model = new DefaultTableModel(){ 
-                @Override
-                public boolean isCellEditable(int row, int column){ //pour rendre les cellules non modifiable
-                return false;
-            }};
-        String [] colonnes = {"Nom","Loyer","Batiment","Couleur","Prix batiment"};
-        model.setColumnIdentifiers(colonnes);
-            
-        for (Propriete p : proprietes){
-		String [] donnees = {p.getNomCarreau(),
-			String.valueOf(p.calculLoyer(0)),
-			((ProprieteAConstruire) p).getCouleur().toString(),
-			((ProprieteAConstruire) p).getNbmaison()+" maisons",
-			((ProprieteAConstruire) p).getPrixBatiment()+"€"};
-
-			
-            model.addRow(donnees);
-        }
-        tablePropriete.setModel(model);
+		actualiserPropriete(joueur);
 	}
 	
 	public void afficherAchatBatiment(Joueur joueur){
 		JOptionPane.showConfirmDialog(null, 
-			"Vous avez achate un batiment !",
+			"Vous avez acheter un batiment !",
 			"Achat", 
 			JOptionPane.DEFAULT_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE);
