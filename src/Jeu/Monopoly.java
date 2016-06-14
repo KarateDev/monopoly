@@ -138,6 +138,10 @@ public class Monopoly {
 			}
 		}
 		joueurs.remove(j);
+		
+		if (getJoueurs().size() == 1){
+			observateur.notifier(AFFICHER_FIN_PARTIE);
+		}
 	}
 
 	public Carte piocherUneCarteChance() {
