@@ -138,6 +138,7 @@ public class Monopoly {
 			}
 		}
 		joueurs.remove(j);
+		observateur.notifier(AFFICHER_JOUEUR_ELIMINE);
 		
 		if (getJoueurs().size() == 1){
 			observateur.notifier(AFFICHER_FIN_PARTIE);
