@@ -44,7 +44,7 @@ public class IHMMenu extends JPanel implements Observateur {
     private JButton enregistrer;
     
     private int nbJoueurs;
-    private boolean pret;
+
 
 
     public IHMMenu(Controleur controleur, IHMFrame frame){
@@ -53,7 +53,7 @@ public class IHMMenu extends JPanel implements Observateur {
 		this.controleur = controleur;
 		InitUIComponents();
 		this.frame = frame;
-		pret = false;
+
     }
 	
 
@@ -101,7 +101,6 @@ public class IHMMenu extends JPanel implements Observateur {
 		if(nbJoueurs < 6){
 		    nbJoueurs += 1;
 		    joueurs.add(listePanelNom.get(nbJoueurs-1));
-		    pret = false;
 		    controleur.getMonopoly().getJoueurs().clear();
 		    revalidate();
 		    repaint();
@@ -116,7 +115,6 @@ public class IHMMenu extends JPanel implements Observateur {
 		    joueurs.remove(listePanelNom.get(nbJoueurs-1));
 		    listeChampNom.get(nbJoueurs-1).setText("");
 		    nbJoueurs -= 1;
-		    pret = false;
 		    controleur.getMonopoly().getJoueurs().clear();
 		    revalidate();
 		    repaint();
@@ -127,7 +125,6 @@ public class IHMMenu extends JPanel implements Observateur {
 	enregistrer.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-		pret = demarrer();
 	    }
 	});
 	    
@@ -276,13 +273,6 @@ public class IHMMenu extends JPanel implements Observateur {
     public JPanel getpBouttons() {
 	return pBouttons;
     }
-
-    // retourne vrai si les joueurs on été enregistrées et qu'aucun joueur n'a été rajouté
-    public boolean isPret() {
-	return pret;
-    }
-    
-    
     
     
 }
