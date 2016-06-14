@@ -170,7 +170,7 @@ public class Controleur {
             if (aFaitUnDouble){
                 nbDouble ++;
                 if (nbDouble == 3){ // si il a fait 3 doubles d'affilé,on sort de la boucle
-                   // break;
+                   monopoly.envoyerEnPrison(j);
                 }
             }
                     

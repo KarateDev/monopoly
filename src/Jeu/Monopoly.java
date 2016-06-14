@@ -100,6 +100,7 @@ public class Monopoly {
 	public void envoyerEnPrison(Joueur j) {
 		j.setPositionCourante(getPrison());//la prison se trouve être la case 11
 		j.setNbTourEnPrison(3);
+		observateur.notifier(AFFICHER_ALLER_EN_PRISON);
 	}
 	/**
 	 * @return the Carreaux
@@ -258,7 +259,6 @@ public class Monopoly {
 			carte.action(j, observateur, this);
 		} else if (j.getPositionCourante() instanceof AllerEnPrison) {
 			this.envoyerEnPrison(j);
-			observateur.notifier(AFFICHER_ALLER_EN_PRISON);
 			
 		}else if (j.getPositionCourante() instanceof Prison) {
 			if (j.getNbTourEnPrison() > 0){
