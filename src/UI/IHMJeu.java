@@ -791,6 +791,8 @@ public class IHMJeu extends JPanel implements Observateur{
 		Carte carte = controleur.getMonopoly().getCarte();
 		switch (message) {
 			case AFFICHER_ACHAT_PROPRIETE:
+				boutonActionCarreau.setText("Aucune action");
+				boutonActionCarreau.setEnabled(false);
 				this.afficherAchatPropriete(joueurs);
 				break;
 			case AFFICHER_DEMANDE_ACHETER_PROPRIETE:
