@@ -96,6 +96,8 @@ public class IHMMenu extends JPanel implements Observateur {
 		if(nbJoueurs < 6){
 		    nbJoueurs += 1;
 		    joueurs.add(listePanelNom.get(nbJoueurs-1));
+		    pret = false;
+		    controleur.getMonopoly().getJoueurs().clear();
 		    revalidate();
 		    repaint();
 		}
@@ -109,6 +111,8 @@ public class IHMMenu extends JPanel implements Observateur {
 		    joueurs.remove(listePanelNom.get(nbJoueurs-1));
 		    listeChampNom.get(nbJoueurs-1).setText("");
 		    nbJoueurs -= 1;
+		    pret = false;
+		    controleur.getMonopoly().getJoueurs().clear();
 		    revalidate();
 		    repaint();
 		}
@@ -165,11 +169,13 @@ public class IHMMenu extends JPanel implements Observateur {
 	return panel;
     }
 
-	@Override
-	public void notifier(Message message) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+    //n'est pas utilisé par la classe IHMMenu
+    @Override
+    public void notifier(Message message) {
+	    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
+    // initialise les combobox qui permetent de choisir la couleur du joueurs
     private JComboBox initComboBox(){
 	JComboBox cb = new JComboBox();
 	for(int i = 0; i < 9; i++){
@@ -178,9 +184,10 @@ public class IHMMenu extends JPanel implements Observateur {
 	return cb;
     }
     
-    //vérifie les données entrés par les joueur et lance la partie
+    //vérifie les données entrés par les joueur et enregistre les joueurs dans le monopoly
     private boolean enregistrer(){
 	boolean complet = true;
+	//si un joueur n'as pas entrez de nom , complet devient faux
 	    for(int i = 0; i <= (nbJoueurs-1); i++){
 		if(listeChampNom.get(i).getText().equals("") && complet){
 		    complet = false;
@@ -189,23 +196,25 @@ public class IHMMenu extends JPanel implements Observateur {
 	    }
 	    
 	couleursSelect.removeAll(couleursSelect);
-	boolean couleursAttribués = true;
+	boolean couleursAttribues = true; 
 	boolean	couleurDoublons = true;
+	//parcours les joueurs 
 	for(int i = 0; i < (nbJoueurs); i++){
+	    // si un joueurs n'a pas elctionner de couleur , couleursAttribues devient faux
 	    if(listeChoixCouleurs.get(i).getSelectedIndex() == 0){
-		System.out.println(" couleursAttribué = false");
-		couleursAttribués = false;
+		couleursAttribues = false;
 	
+		//si un joueur choisi la même couleur qu'un autre joueur , couleurDoublons devient faux
 	    }else if(couleursSelect.contains(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1])){
-		System.out.println(" couleurDoublons = false");
 		couleurDoublons = false;
 	    }else{
+		// si aucune erreur n'es noté pour le joueur , on ajoute sa couleur a la liste des couleurs selectionnés
 	    couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1]);
 	    }
 	    System.out.println(i);
 	}
-	
-	if(couleursAttribués && couleurDoublons && complet){
+	// si tout les bouléns sont vrais , les joueurs sont ajouté dans le monopoly, sinon un message d'erreur sera affiché
+	if(couleursAttribues && couleurDoublons && complet){
 	    for(int i = 0; i <= (nbJoueurs-1); i++){
 		couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1]);
 		controleur.initialiserUnJoueur((listeChampNom.get(i).getText()),couleursSelect.get(i));
@@ -215,7 +224,7 @@ public class IHMMenu extends JPanel implements Observateur {
 		"Enregistré",
 		JOptionPane.DEFAULT_OPTION, 
 		JOptionPane.INFORMATION_MESSAGE);
-	}else if(!complet && !couleursAttribués){
+	}else if(!complet && !couleursAttribues){
 	    JOptionPane.showConfirmDialog(   null, 
 		"Il faut saisir un nom et séléctionner une couleur pour chaque joueurs", 
 		"Erreur",
@@ -227,7 +236,7 @@ public class IHMMenu extends JPanel implements Observateur {
 		"Erreur",
 		JOptionPane.DEFAULT_OPTION, 
 		JOptionPane.ERROR_MESSAGE);
-	}else if(!couleursAttribués){
+	}else if(!couleursAttribues){
 		JOptionPane.showConfirmDialog(   null, 
 			"Il faut sélectionner une couleur pour chaque joueur !", 
 			"Erreur",
@@ -241,13 +250,15 @@ public class IHMMenu extends JPanel implements Observateur {
 				    JOptionPane.ERROR_MESSAGE);
 	}
 	    
-	return complet && couleurDoublons && couleursAttribués;
+	return complet && couleurDoublons && couleursAttribues;
     }
 
+    //retourne le panel contenant les boutons 
     public JPanel getpBouttons() {
 	return pBouttons;
     }
 
+    // retourne vrai si les joueurs on été enregistrées et qu'aucun joueur n'a été rajouté
     public boolean isPret() {
 	return pret;
     }
