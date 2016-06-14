@@ -186,7 +186,6 @@ public class Controleur {
 
             if (j.getCash() < 0) { //si le joueur n'a plus d'argent, il est eliminé
 				monopoly.eliminerJoueur(j);
-				ihm.notifier(AFFICHER_JOUEUR_ELIMINE);
                // break;
             }
 
@@ -223,7 +222,6 @@ public class Controleur {
 				joueurSuivant = 0;
 			}
 			joueurCourant = monopoly.getJoueurs().get(joueurSuivant);
-			ihm.notifier(AFFICHER_JOUEUR_ELIMINE);
 			
 			return false;
 		}else if(reponse.equals("batiment")) { // si le joueur veut acheter des batiments
