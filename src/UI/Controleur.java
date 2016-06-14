@@ -224,10 +224,7 @@ public class Controleur {
 			}
 			joueurCourant = monopoly.getJoueurs().get(joueurSuivant);
 			ihm.notifier(AFFICHER_JOUEUR_ELIMINE);
-			if (monopoly.getJoueurs().size() == 1){
-				ihm.notifier(AFFICHER_FIN_PARTIE);
-				return false;
-			}
+			
 			return false;
 		}else if(reponse.equals("batiment")) { // si le joueur veut acheter des batiments
 			interactionAchatBatiment(j);
