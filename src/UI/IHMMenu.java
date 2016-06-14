@@ -28,6 +28,7 @@ public class IHMMenu extends JPanel implements Observateur {
     private JPanel joueurs; 
     private JPanel titre;
     private JPanel pBouttons;
+    private IHMFrame frame;
     
     private ArrayList<JPanel> listePanelNom;
     private ArrayList<JTextField> listeChampNom;
@@ -46,11 +47,12 @@ public class IHMMenu extends JPanel implements Observateur {
     private boolean pret;
 
 
-    public IHMMenu(Controleur controleur){
+    public IHMMenu(Controleur controleur, IHMFrame frame){
 		super();
 		
 		this.controleur = controleur;
 		InitUIComponents();
+		this.frame = frame;
 		pret = false;
     }
 	
@@ -91,7 +93,7 @@ public class IHMMenu extends JPanel implements Observateur {
 	
 	retirerJ = new JButton(" Retirer un joueur ");
 	ajouterJ = new JButton(" Ajouter un joueur ");
-	enregistrer = new JButton(" Enregistrer les joueurs ");
+	enregistrer = new JButton(" Démarrer ");
 	
 	ajouterJ.addActionListener(new ActionListener() {
 	    @Override
@@ -99,7 +101,6 @@ public class IHMMenu extends JPanel implements Observateur {
 		if(nbJoueurs < 6){
 		    nbJoueurs += 1;
 		    joueurs.add(listePanelNom.get(nbJoueurs-1));
-		    pret = false;
 		    controleur.getMonopoly().getJoueurs().clear();
 		    revalidate();
 		    repaint();
@@ -114,7 +115,6 @@ public class IHMMenu extends JPanel implements Observateur {
 		    joueurs.remove(listePanelNom.get(nbJoueurs-1));
 		    listeChampNom.get(nbJoueurs-1).setText("");
 		    nbJoueurs -= 1;
-		    pret = false;
 		    controleur.getMonopoly().getJoueurs().clear();
 		    revalidate();
 		    repaint();
@@ -125,7 +125,7 @@ public class IHMMenu extends JPanel implements Observateur {
 	enregistrer.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-		pret = enregistrer();
+		demarrer();
 	    }
 	});
 	    
@@ -188,7 +188,7 @@ public class IHMMenu extends JPanel implements Observateur {
     }
     
     //vérifie les données entrés par les joueur et enregistre les joueurs dans le monopoly
-    private boolean enregistrer(){
+    private void demarrer(){
 	nomSelect.removeAll(nomSelect);
 	boolean complet = true;
 	boolean nomDoublons = true;
@@ -222,16 +222,19 @@ public class IHMMenu extends JPanel implements Observateur {
 	}
 	// si tout les bouléns sont vrais , les joueurs sont ajouté dans le monopoly, sinon un message d'erreur sera affiché
 	if(couleursAttribues && couleurDoublons && complet && nomDoublons){
-	    controleur.getMonopoly().getJoueurs().clear();
-	    for(int i = 0; i <= (nbJoueurs-1); i++){
-		couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1]);
-		controleur.initialiserUnJoueur((listeChampNom.get(i).getText()),couleursSelect.get(i));
+	    controleur.getMonopoly().getJoueurs().clear();	    
+	    int rep = JOptionPane.showConfirmDialog(   null, 
+			"Voulez vous lancer la partie ?", 
+			"Lancement",
+			JOptionPane.OK_OPTION, 
+			JOptionPane.QUESTION_MESSAGE);
+	    if(rep == 0){
+		for(int i = 0; i <= (nbJoueurs-1); i++){
+		    couleursSelect.add(listeCouleurs[listeChoixCouleurs.get(i).getSelectedIndex()-1]);
+		    controleur.initialiserUnJoueur((listeChampNom.get(i).getText()),couleursSelect.get(i));
+		}
+		frame.afficherJeu(controleur, frame);
 	    }
-	    JOptionPane.showConfirmDialog(   null, 
-		"Les joueurs ont été ajoutés", 
-		"Enregistré",
-		JOptionPane.DEFAULT_OPTION, 
-		JOptionPane.INFORMATION_MESSAGE);
 	}else if(!complet && !couleursAttribues){
 	    JOptionPane.showConfirmDialog(   null, 
 		"Il faut saisir un nom et séléctionner une couleur pour chaque joueurs", 
@@ -263,8 +266,7 @@ public class IHMMenu extends JPanel implements Observateur {
 				    JOptionPane.DEFAULT_OPTION, 
 				    JOptionPane.ERROR_MESSAGE);
 	}
-	    
-	return complet && couleurDoublons && couleursAttribues;
+
     }
 
     //retourne le panel contenant les boutons 
@@ -272,10 +274,6 @@ public class IHMMenu extends JPanel implements Observateur {
 	return pBouttons;
     }
 
-    // retourne vrai si les joueurs on été enregistrées et qu'aucun joueur n'a été rajouté
-    public boolean isPret() {
-	return pret;
-    }
     
     
     
