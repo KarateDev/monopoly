@@ -41,7 +41,7 @@ import javax.swing.JTextArea;
  */
 public class IHMJeu extends JPanel implements Observateur{
 	
-	private Joueur joueurCourant = null;
+	private Joueur joueurCourant = null; // le joueur courant
 	private ArrayList<Joueur> joueurs;
 	
 	private AchatBatimentIhm achatBatimentIhm;
@@ -111,7 +111,7 @@ public class IHMJeu extends JPanel implements Observateur{
  	}
 	
 
-	private void initPartiePlateau(HashMap<Integer, Carreau> carreaux, ArrayList<Joueur> joueurs) {
+	private void initPartiePlateau(HashMap<Integer, Carreau> carreaux, ArrayList<Joueur> joueurs) { // pour initialiser la partie plateau (partie droite) de l'ihm
 		int nbJoueur = joueurs.size();
 		labelAutreJoueurs = new ArrayList<>();
 		
@@ -142,7 +142,7 @@ public class IHMJeu extends JPanel implements Observateur{
 	}
 
 
-	private JPanel initPartieJeu() {
+	private JPanel initPartieJeu() { // pour initialiser la partie jeu
 				
 		panelInteraction = new JPanel(new BorderLayout(0,20));
 			
@@ -269,7 +269,7 @@ public class IHMJeu extends JPanel implements Observateur{
 	}
 	
 	
-	private void ajouterListnerAutreJoueur(){
+	private void ajouterListnerAutreJoueur(){ // pour ajouter des listner aux label des autres joueurs (quand on passe la souris dessus, sa affiche l'argent restant du joueur)
 		for (JLabel label : labelAutreJoueurs){
 
 			label.addMouseListener(new MouseListener() {
@@ -307,22 +307,22 @@ public class IHMJeu extends JPanel implements Observateur{
 		}
 	}
 	
-	private void ajouterListner() {
+	private void ajouterListner() { // pour ajouter les listner des boutons
 		
 		boutonLancerDes.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				if (! aLanceLesDes){ // si il n'a pas deja lancé les des, il peut les lancer
+				if (! aLanceLesDes){ // si il n'a pas deja lancé les des, il peut les lancer (test condition inutile apres une modification qui empeche d'appuyer sur le bouton)
 					
 					information.setText("");
 					
 					if (joueurCourant.getPositionCourante().getClass() == Prison.class && joueurCourant.getNbTourEnPrison() > 0){
-						controleur.interactionCarreau(joueurCourant);
+						controleur.interactionCarreau(joueurCourant); // si le joueur est un prison et qu'il lance les dés, c pour tenter de faire un double
 					}else{
 						controleur.jouerUnCoup(joueurCourant);
 					}
-					//------------------------------------------------------------------------------- action du controleur a faire (lancer les dés et avancer)
+					//------------------------------------------------------------------------------- action du controleur a faire (jouer un coup)
 
 				}else{ // si il a deja lancé les des on affiche un message
 					information.setText("Vous avez déjà lancé les dés pour ce tour !");
@@ -348,7 +348,7 @@ public class IHMJeu extends JPanel implements Observateur{
 			}
 		});
 		
-		boutonActionCarreau.addActionListener(new ActionListener() {
+		boutonActionCarreau.addActionListener(new ActionListener() { // bouton pour acheter une propriete ou se liberer de prison en utilisant une carte 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
@@ -401,7 +401,7 @@ public class IHMJeu extends JPanel implements Observateur{
 		
 	}
 	
-	private void initialisationDebutTour(ArrayList<Joueur> joueurs, Joueur joueur){
+	private void initialisationDebutTour(ArrayList<Joueur> joueurs, Joueur joueur){ // permet d'initialiser les boutons et les label pour le joueur
 				
 		// partie info joueur --------------------------------------------------------------
 		
@@ -448,42 +448,13 @@ public class IHMJeu extends JPanel implements Observateur{
 		
 	}
 	
-	private void actualiserArgentAutreJoueur(Joueur joueur){
-		
-		for (JLabel label : labelAutreJoueurs){
-			if (label.getText().equals(joueur.getNomJoueur())){
-				label.addMouseListener(new MouseListener() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
-					}
-					@Override
-					public void mousePressed(MouseEvent e) {
-					}
-					@Override
-					public void mouseReleased(MouseEvent e) {
-					}
-					@Override
-					public void mouseEntered(MouseEvent e) {
-						label.setText(joueur.getCash()+"€");
-					}
-
-					@Override
-					public void mouseExited(MouseEvent e) {
-						label.setText(joueur.getNomJoueur());
-					}
-				});
-			}
-		}
-		
-	}
-	
-	private void actualiserArgent(){
+	private void actualiserArgent(){ // pour actualiser l'argent du joueur courant
 		
 		labelArgent.setText("Argent : "+joueurCourant.getCash()+"€");
 		
 	}
 	
-	private void actualiserPropriete(){
+	private void actualiserPropriete(){ // pour actualiser les proprietes du joueur
 		DefaultTableModel model = new DefaultTableModel(){ 
                 @Override
                 public boolean isCellEditable(int row, int column){ //pour rendre les cellules non modifiable
@@ -507,7 +478,7 @@ public class IHMJeu extends JPanel implements Observateur{
         tablePropriete.setModel(model);
 	}
 	
-	private void interactionCarreau() { // les test sont effectuées dans l'ihm
+	private void interactionCarreau() { // les test sont effectuées dans l'ihm (fonction pour quand le joueur click sur le bouton acheter propriete ou libere prison carte)
 		Carreau carreau = joueurCourant.getPositionCourante();
 		if ((carreau.getClass() == Compagnie.class ||
 			carreau.getClass() == Gare.class ||
@@ -531,7 +502,7 @@ public class IHMJeu extends JPanel implements Observateur{
 	
 	
 	
-	public void afficherTourDuJoueur(ArrayList<Joueur> joueurs, Joueur joueurSuivant){
+	public void afficherTourDuJoueur(ArrayList<Joueur> joueurs, Joueur joueurSuivant){ // permet d'afficher le tour du joueur
 					
 		joueurCourant = joueurSuivant;
 		aLanceLesDes = false;
@@ -540,7 +511,7 @@ public class IHMJeu extends JPanel implements Observateur{
 		
 	}
 	
-	public void afficherActionDesEtCarreau(Carreau carreau, int de1, int de2){
+	public void afficherActionDesEtCarreau(Carreau carreau, int de1, int de2){ // permet d'actualiser les boutons et les label en fonction du carreau sur lequel est le joueur
 		boutonActionCarreau.setEnabled(true);
 			if ((carreau.getClass() == Compagnie.class ||
 				carreau.getClass() == Gare.class ||
@@ -561,7 +532,7 @@ public class IHMJeu extends JPanel implements Observateur{
 			
 	}
 
-	private void afficherInfoCarreau(Carreau carreau, int sommeDes) {
+	private void afficherInfoCarreau(Carreau carreau, int sommeDes) { // pour afficher les  informations du carreau
 		
 		numeroCase.setText("Numéro de carreau : "+carreau.getNumero());
 		nomCase.setText("Nom du carreau : ");
@@ -629,7 +600,6 @@ public class IHMJeu extends JPanel implements Observateur{
 			JOptionPane.INFORMATION_MESSAGE);
 		
 		actualiserArgent();
-		actualiserArgentAutreJoueur(joueur2);
 		
 	}
 	
@@ -761,7 +731,7 @@ public class IHMJeu extends JPanel implements Observateur{
 		
 	}
 	
-	public void interactionAcheterBatiment(ArrayList<ProprieteAConstruire> proprietes){
+	public void interactionAcheterBatiment(ArrayList<ProprieteAConstruire> proprietes){ // pour changer le panel si le joueur veut acheter des batiments
 		
 		achatBatimentIhm = new AchatBatimentIhm(controleur, joueurCourant, proprietes);
 		panelInteraction.removeAll();
@@ -769,22 +739,13 @@ public class IHMJeu extends JPanel implements Observateur{
 		panelInteraction.revalidate();
 	}
 	
-	public void arretAchatBatiment(int de1, int de2) {
+	public void arretAchatBatiment(int de1, int de2) { // pour rechanger le panel quand le joueur quitte la partie achat de batiment
 		panelInteraction.removeAll();
 		panelInteraction.add(initPartieJeu());
 		ajouterListner();
 		initialisationDebutTour(joueurs, joueurCourant);
 		afficherActionDesEtCarreau(joueurCourant.getPositionCourante(), de1, de2);
 		panelInteraction.revalidate();
-	}
-	
-	public void quitterAcheterBatiment(int de1, int de2){
-		
-		panelInteraction.removeAll();
-		panelInteraction = initPartieJeu();
-		ajouterListner();
-		initialisationDebutTour(joueurs, joueurCourant);
-		afficherActionDesEtCarreau(joueurCourant.getPositionCourante(), de1, de2);
 	}
 
 	@Override

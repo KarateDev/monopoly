@@ -151,7 +151,7 @@ public class Controleur {
 	 * 
 	 * @param j
 	 */
-	public void jouerUnCoup(Joueur j) {
+	public void jouerUnCoup(Joueur j) { // gere l'enchainement des actions pour joueur un coup (lacé des dés/deplacement/interaction avec le carreau)
         boolean aFaitUnDouble;
                 
         //do{      //boucle tant que le joueur fait des doubles ---enlevé pour l'ihm graphique
@@ -213,11 +213,11 @@ public class Controleur {
         //}
 	}
 	
-	public boolean interactionFinDeTour(Joueur j) { // retourn vrai pour continuer, faux pour abandonner
+	public boolean interactionFinDeTour(Joueur j) { // retourn vrai pour continuer, faux pour abandonner (ne sert pas pour l'interface graphique)
 		ihm.notifier(AFFICHER_ATTENDRE_PROCHAIN_TOUR); // interaction de fin de tour
 		return true;//changez moi !
 	}
-	public boolean finInteractionJoueur(String reponse, Joueur j) {
+	public boolean finInteractionJoueur(String reponse, Joueur j) { // servai pour l'inteface textuel (utilisé pour faire abandonner un joueur)
 		if (reponse.equals("patrimoine")){ // si le joueur veut voir sont patrimoine
 			ihm.notifier(AFFICHER_PATRIMOINE);
 			return interactionFinDeTour(j); // relance l'interaction à la fin de l'achat
@@ -242,7 +242,7 @@ public class Controleur {
 	 * 
 	 * @param j
 	 */
-	private boolean lancerDesAvancer(Joueur j) { //renvoi vrai si il a fait un double
+	private boolean lancerDesAvancer(Joueur j) { //renvoi vrai si il a fait un double (gere le lancé des dés et le deplacement du joueur)
 		getMonopoly().lancerDes();
 		int valeurdes = getMonopoly().getSommeDes(); //recupere la somme des dés
 
@@ -254,7 +254,7 @@ public class Controleur {
 		return getMonopoly().getDes().get(0) == getMonopoly().getDes().get(1);
 	}
 
-	public void initialiserUnJoueur(String nomJoueur, CouleurPropriete couleur){
+	public void initialiserUnJoueur(String nomJoueur, CouleurPropriete couleur){ // permet d'initialiser les joueurs en debut de partie
 	    Joueur nouveauJoueur = new Joueur(nomJoueur,couleur, monopoly.getCarreau(1));
 	    monopoly.addJoueur(nouveauJoueur);
 	}
@@ -412,7 +412,7 @@ public class Controleur {
 			//return true;
 	}
 	
-	public void achatBatiment(Joueur j, ProprieteAConstruire p){ //gere l'achat d'un batiment
+	public void achatBatiment(Joueur j, ProprieteAConstruire p){ //gere l'achat d'un batiment pour une propriete
 		
 		if (p.getNbmaison() < 4){
 			monopoly.setNbMaisonDisponible(monopoly.getNbMaisonDisponible()-1); //on enleve 1 maison
@@ -425,7 +425,7 @@ public class Controleur {
 		
 	}
 	
-	public ArrayList<ProprieteAConstruire> getProprieteConstructibles(Joueur j) {
+	public ArrayList<ProprieteAConstruire> getProprieteConstructibles(Joueur j) { // renvoi les proprietes sur lequels le joueur peut construir des maisons
 		ArrayList<ProprieteAConstruire> proprieteConstructible = new ArrayList<> (); //proprietes sur lequelles on peut construire
 		for (Propriete p : j.getProprietes()){
 			if (p.getClass() == ProprieteAConstruire.class && j.asToutesLesProprietesDeCouleur(((ProprieteAConstruire) p).getCouleur())){
@@ -473,11 +473,11 @@ public class Controleur {
 		
 	}
 	
-	public void arretInteractionAchatBatiment(){
+	public void arretInteractionAchatBatiment(){ // pemet de signaler l'arret de l'interaction à l'ihm
 		ihm.notifier(AFFICHER_ARRET_ACHAT_BATIMENT);
 	}
 	
-	public void acheterBatiment(ArrayList<ProprieteAConstruire> proprieteConstructible, int reponse, Joueur j) {
+	public void acheterBatiment(ArrayList<ProprieteAConstruire> proprieteConstructible, int reponse, Joueur j) { // permet d'acheter le batiment que le joueur a selectionné (utilisé pour l'interface text)
 		if (proprieteConstructible.get(reponse-1).getPrixBatiment() <= j.getCash()){ // si il peut acheter le batiment
 			if ((proprieteConstructible.get(reponse-1).getNbmaison() == 4 && monopoly.getNbHotelDisponible() > 0) || (proprieteConstructible.get(reponse-1).getNbmaison() < 4 && monopoly.getNbMaisonDisponible() > 0) ){ // si il reste des batiments du type qu'il veut construire
 				achatBatiment(j, proprieteConstructible.get(reponse-1));
@@ -496,7 +496,7 @@ public class Controleur {
 		return joueurCourant;
 	}
 	
-	public void tourJoueurSuivant(){
+	public void tourJoueurSuivant(){ // permet d'actualiser le joueur courant et d'afficher le tour du joueur suivant
 		int indiceJoueur = monopoly.getJoueurs().indexOf(joueurCourant);
 		indiceJoueur ++;
 		if (indiceJoueur >= monopoly.getJoueurs().size()){
