@@ -172,8 +172,8 @@ public class Monopoly {
 	}
 
 	public void melangerLesCartes() {
-		java.util.Collections.shuffle(getPiocheCarteChance());
-		java.util.Collections.shuffle(getPiocheCarteCaisseDeCommunaute());
+		//java.util.Collections.shuffle(getPiocheCarteChance());
+		//java.util.Collections.shuffle(getPiocheCarteCaisseDeCommunaute());
 	}
 	
 	public void ajouterCarteLibereDePrison(){ // pour remetre la carte sous la pioche quand le joueur l'utilise
