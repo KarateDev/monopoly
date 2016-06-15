@@ -33,7 +33,7 @@ public class Controleur {
 		
 		this.creerPlateau("./src/Data/data.txt");
 		
-		this.initialiserCartes("./src/Data/dataCartes.txt");
+		this.initialiserCartes("./src/Data/dataCartesCheat.txt");
 		this.getMonopoly().melangerLesCartes();
 	}
 	

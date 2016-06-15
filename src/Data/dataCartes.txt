@@ -1,7 +1,4 @@
-ch,6,Aller boulevard de belleville[cheat],2
 ch,4,Aller en prison. Avancez tout droit en prison et ne passez pas par la case depart
-ch,1,Amende pour exces de vitesse : payez 15€,-15
-ch,1,Amende pour exces de vitesse : payez 1500€(cheat),-1500
 ch,0,Reculer de trois cases,-3
 ch,1,Amende pour exces de vitesse : payez 15€,-15
 ch,1,Votre immeuble et votre pret rapportent. Vous toucher 150€,150
@@ -12,14 +9,13 @@ ch,5,Vous etes libere de prison
 ch,6,Avancez jusqu'a la case depart,1
 ch,6,Rendez-vous a la rue de la paix,40
 ch,6,Avancez au boulevard de la Villette,12
-ch,6,Alez a la gare Montparnasse,6
+ch,6,Allez a la gare Montparnasse,6
 ch,6,Rendez-vous a l'avenue Henri-Martin,25
 ch,7,Avancez jusqu'a la gare la plus proche. Si elle n'appartient a personne vous pouvez l'acheter,gare
 ch,7,Avancez jusqu'a la gare la plus proche. Si elle n'appartient a personne vous pouvez alors l'acheter,gare
 ch,7,Avancez jusqu'a la compagnie de service la plus proche. Si elle n'appartient a personne vous pouvez l'acheter,compagnie
 cdc,1,Erreur de la banque en votre faveur. Recevez 200€,200
 cdc,5,Vous etes libere de prison
-cdc,6,RDV à la compagnie des eaux,29
 cdc,1,Commission d'expert immobilier. Recevez 25€,25
 cdc,1,La vente de votre stock vous rapporte 50€,50
 cdc,1,Votre placement vous rapporte. Recevez 100€,100
