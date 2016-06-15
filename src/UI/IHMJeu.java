@@ -575,6 +575,8 @@ public class IHMJeu extends JPanel implements Observateur{
 		information.setText("Vous êtes envoyé en prison pour 3 tours ...");
 		boutonActionCarreau.setText("Aucune action");
 		boutonActionCarreau.setEnabled(false);
+		aLanceLesDes = true;
+		boutonLancerDes.setEnabled(false);
 	}
 	
 	public void afficherAFaitUnDouble(){
