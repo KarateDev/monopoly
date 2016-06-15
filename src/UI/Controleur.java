@@ -168,6 +168,7 @@ public class Controleur {
                     
             if (aFaitUnDouble){
                 nbDouble ++;
+				ihm.notifier(AFFICHER_FAIT_UN_DOUBLE);
                 if (nbDouble == 3){ // si il a fait 3 doubles d'affilé,on sort de la boucle
 					nbDouble = 0;
 					monopoly.envoyerEnPrison(j);
@@ -194,10 +195,6 @@ public class Controleur {
 				monopoly.eliminerJoueur(j);
 								
                // break;
-            }
-
-            if (aFaitUnDouble) {
-				ihm.notifier(AFFICHER_FAIT_UN_DOUBLE);
             }
 
 			//if(!interactionFinDeTour(j)) { // interaction pour les choix de fin de tour

@@ -506,7 +506,6 @@ public class IHMJeu extends JPanel implements Observateur{
 					
 		joueurCourant = joueurSuivant;
 		aLanceLesDes = false;
-		boutonLancerDes.setEnabled(true);
 		initialisationDebutTour(joueurs, joueurSuivant);
 		
 	}
