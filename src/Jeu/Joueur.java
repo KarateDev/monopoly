@@ -83,14 +83,11 @@ public class Joueur {
 	 * 
 	 * @param propriété
 	 */
-	public boolean achatPropriété(Propriete propriete) {
+	public void achatPropriété(Propriete propriete) {
 		if(getCash() >= propriete.getPrix()){
             propriete.setProprietaire(this);
             addPropriete(propriete);
             setCash(getCash()-propriete.getPrix());
-            return true;
-        }else{
-            return false;
         }
 	}
         

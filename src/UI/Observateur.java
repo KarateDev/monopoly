@@ -10,6 +10,5 @@ package UI;
  * @author sorindoc
  */
 public interface Observateur {
-    
-    public void notifier(Message message);
+	public void notifier(Message message);
 }

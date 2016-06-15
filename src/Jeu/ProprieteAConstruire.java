@@ -1,5 +1,4 @@
 package Jeu;
-import java.util.HashSet;
 import java.util.ArrayList;
 
 public class ProprieteAConstruire extends Propriete {
@@ -64,7 +63,6 @@ public class ProprieteAConstruire extends Propriete {
 	 * @return the prixMaison
 	 */
 	public int getPrixBatiment(){
-		int prix;
 		if ( getNbmaison() == 4){
 			return prixHotel;
 		}else{
