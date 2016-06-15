@@ -1,0 +1,20 @@
+Pour mettre le jeu en mode démo :
+Dans la classe UI.Controleur.java :
+
+remplacer la ligne  36
+		this.initialiserCartes("./src/Data/dataCartes.txt");
+par 
+		this.initialiserCartes("./src/Data/dataCartesCheat.txt");
+
+dans la classe Monopoly :
+
+changer dans la methode lancerDes (ligne 64)
+la ligne 66
+		if (false) { //mode triche
+par
+		if (true) { //mode triche
+
+mettre en commentaire dans la methode melangerLesCartes (ligne 174)
+les lignes 175	java.util.Collections.shuffle(getPiocheCarteChance());
+et 176 java.util.Collections.shuffle(getPiocheCarteCaisseDeCommunaute());
+

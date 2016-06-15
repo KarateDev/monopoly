@@ -63,7 +63,7 @@ public class Monopoly {
 
 	public void lancerDes() {
 		this.getDes().clear();
-		if (true) { //mode triche
+		if (false) { //mode triche
 			getDes().add(Integer.parseInt(tricheArray[tricheId++]));
 			getDes().add(Integer.parseInt(tricheArray[tricheId++]));
 			
@@ -172,8 +172,8 @@ public class Monopoly {
 	}
 
 	public void melangerLesCartes() {
-		//java.util.Collections.shuffle(getPiocheCarteChance());
-		//java.util.Collections.shuffle(getPiocheCarteCaisseDeCommunaute());
+		java.util.Collections.shuffle(getPiocheCarteChance());
+		java.util.Collections.shuffle(getPiocheCarteCaisseDeCommunaute());
 	}
 	
 	public void ajouterCarteLibereDePrison(){ // pour remetre la carte sous la pioche quand le joueur l'utilise
