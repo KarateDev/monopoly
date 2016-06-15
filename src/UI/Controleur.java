@@ -35,20 +35,6 @@ public class Controleur {
 		
 		this.initialiserCartes("./src/Data/dataCartes.txt");
 		this.getMonopoly().melangerLesCartes();
-
-		
-		int numeroJoueur = 0;
-		//while (this.getMonopoly().getJoueurs().size() > 1){ //boucle du jeu tant qu'il reste plus d'un joueur
-		//	Joueur j = this.getMonopoly().getJoueurs().get(numeroJoueur);
-		//	this.joueurCourant = j;
-		//	this.jouerUnCoup(j);
-		//	numeroJoueur += 1;
-		//	if (numeroJoueur > this.getMonopoly().getJoueurs().size()-1){
-		//		numeroJoueur = 0;
-		//	}
-		//}
-
-		//ihm.notifier(AFFICHER_FIN_PARTIE);
 	}
 	
 	public void setObservateur(Observateur ihm){
@@ -153,66 +139,44 @@ public class Controleur {
 	 */
 	public void jouerUnCoup(Joueur j) {
         boolean aFaitUnDouble;
-                
-        //do{      //boucle tant que le joueur fait des doubles ---enlevé pour l'ihm graphique
-			
-			//if (j.getPositionCourante().getNumero() == getMonopoly().getPrison().getNumero() && j.getNbTourEnPrison() > 0){ //si il est en prison
-				//boolean libere = j.getPositionCourante() instanceof Prison;
-				//gestionPrison(j);
-				//if (!libere){ // si il n'est pas libéré
-					// break; // on sort de la boucle pour qu'il ne joue pas
-				//} // si il est libéré, il joue normalement
-			//}
-			
-            aFaitUnDouble = lancerDesAvancer(j); //on lance les des et on fait avancer le joueur
-                    
-            if (aFaitUnDouble){
-                nbDouble ++;
-                if (nbDouble == 3){ // si il a fait 3 doubles d'affilé,on sort de la boucle
-					nbDouble = 0;
-					monopoly.envoyerEnPrison(j);
-					ihm.notifier(AFFICHER_3D_DOUBLE);
-                }
-            }
-                    
-			//affiche le carreau sur lequel il tombe
-			ihm.notifier(AFFICHER_CARREAU);
 
-			if (j.getNbTourEnPrison() == 3) { // pour que si le joueur est envoyé en prison, son tour prend fin meme si il a fait un double
-				aFaitUnDouble = false;
-			}else{
-				monopoly.interactionCarreau(j);	// gère les intercations du joueur avec le carreau
+		aFaitUnDouble = lancerDesAvancer(j); //on lance les des et on fait avancer le joueur
+
+		if (aFaitUnDouble){
+			nbDouble ++;
+			if (nbDouble == 3){ // si il a fait 3 doubles d'affilé,on sort de la boucle
+				nbDouble = 0;
+				monopoly.envoyerEnPrison(j);
+				ihm.notifier(AFFICHER_3D_DOUBLE);
 			}
+		}
 
-            if (j.getCash() < 0) { //si le joueur n'a plus d'argent, il est eliminé
-				
-				int joueurSuivant = monopoly.getJoueurs().indexOf(j)+1;
-				if (joueurSuivant == monopoly.getJoueurs().size()){
-					joueurSuivant = 0;
-				}
-				joueurCourant = monopoly.getJoueurs().get(joueurSuivant);
-				monopoly.eliminerJoueur(j);
-								
-               // break;
-            }
+		//affiche le carreau sur lequel il tombe
+		ihm.notifier(AFFICHER_CARREAU);
 
-            if (aFaitUnDouble) {
-				ihm.notifier(AFFICHER_FAIT_UN_DOUBLE);
-            }
+		if (j.getNbTourEnPrison() == 3) { // pour que si le joueur est envoyé en prison, son tour prend fin meme si il a fait un double
+			aFaitUnDouble = false;
+		}else{
+			monopoly.interactionCarreau(j);	// gère les intercations du joueur avec le carreau
+		}
 
-			//if(!interactionFinDeTour(j)) { // interaction pour les choix de fin de tour
-			//	break;
-			//}
+		if (j.getCash() < 0) { //si le joueur n'a plus d'argent, il est eliminé
 
-       // } while (aFaitUnDouble);
+			int joueurSuivant = monopoly.getJoueurs().indexOf(j)+1;
+			if (joueurSuivant == monopoly.getJoueurs().size()){
+				joueurSuivant = 0;
+			}
+			joueurCourant = monopoly.getJoueurs().get(joueurSuivant);
+			monopoly.eliminerJoueur(j);
 
-       // if (nbDouble == 3){ //si le joueur a fait 3 doubles, on l'envoie en prison
-		//	ihm.notifier(AFFICHER_3D_DOUBLE);
-		//    monopoly.envoyerEnPrison(j);
-		//	interactionFinDeTour(j);
-        //}
+		   // break;
+		}
+
+		if (aFaitUnDouble) {
+			ihm.notifier(AFFICHER_FAIT_UN_DOUBLE);
+		}
 	}
-	
+
 	public boolean interactionFinDeTour(Joueur j) { // retourn vrai pour continuer, faux pour abandonner
 		ihm.notifier(AFFICHER_ATTENDRE_PROCHAIN_TOUR); // interaction de fin de tour
 		return true;//changez moi !
@@ -247,7 +211,6 @@ public class Controleur {
 		int valeurdes = getMonopoly().getSommeDes(); //recupere la somme des dés
 
 		ihm.notifier(AFFICHER_LANCER_DES);
-		//ihm.afficherLancerDesDe(getMonopoly().getDes().get(0), getMonopoly().getDes().get(1)); //affiche les resultats des dés
 
 		monopoly.deplacerJoueur(j, valeurdes); // on deplace le joueur
 
@@ -258,13 +221,7 @@ public class Controleur {
 	    Joueur nouveauJoueur = new Joueur(nomJoueur,couleur, monopoly.getCarreau(1));
 	    monopoly.addJoueur(nouveauJoueur);
 	}
-	
-	/*public void initialiserUnePartie() { //retourn vrai pour jouer at faux pour quitter le jeu
-		//intialisation des joueurs
 
-		//int choixMenu = ihm.afficherMenu();
-	//	ihm.notifier(AFFICHER_MENU);
-	}*/
 	public void quitterJeu() {
 		System.exit(0);
 	}
@@ -399,9 +356,7 @@ public class Controleur {
 					ihm.notifier(AFFICHER_DERNIER_TOUR_EN_PRISON);
 					
 					ihm.notifier(AFFICHER_ARGENT_RESTANT);
-					//return true;
 				}
-				//return false;
 			}
 	}
 	public void tenterSortiePrisonCarte(Joueur j) {
@@ -409,7 +364,6 @@ public class Controleur {
 			j.retirerCarteLibereDePrison();
 			monopoly.ajouterCarteLibereDePrison();
 			ihm.notifier(AFFICHER_LIBERE_PRISON);
-			//return true;
 	}
 	
 	public void achatBatiment(Joueur j, ProprieteAConstruire p){ //gere l'achat d'un batiment
@@ -443,34 +397,15 @@ public class Controleur {
 	}
 	
 	public void interactionAchatBatiment(Joueur j){ //gere l'interaction entre le joueur et les batiments
-		//do{
-			if (monopoly.getNbHotelDisponible() > 0 || monopoly.getNbMaisonDisponible() > 0) {
-				if (!getProprieteConstructibles(j).isEmpty()) { //si il y a des proprietes constructibles
-					ihm.notifier(AFFICHER_PROPRIETE_CONSTRUCTIBLE);
-					
-					//int reponse = obs.afficherProprieteConstructible(proprieteConstructible,monopoly.getNbMaisonDisponible(),monopoly.getNbHotelDisponible()); //affiche les batiments constructibles et demande une reponse
-					/*if (reponse != 0){ // si il achete une propriete
-						if (proprieteConstructible.get(reponse-1).getPrixBatiment() <= j.getCash()){ // si il peut acheter le batiment
-							if ((proprieteConstructible.get(reponse-1).getNbmaison() == 4 && monopoly.getNbHotelDisponible() > 0) || (proprieteConstructible.get(reponse-1).getNbmaison() < 4 && monopoly.getNbMaisonDisponible() > 0) ){ // si il reste des batiments du type qu'il veut construire
-								achatBatiment(j, proprieteConstructible.get(reponse-1));
-							}else{
-								obs.afficherPasAsserDeBatiment();
-							}
-						}else{
-							obs.afficherPasAsserArgent();
-						}
-					}else{ // si il quite l'achat de batiment
-						break;
-					}*/
-				} else {
-					ihm.notifier(AFFICHER_PAS_DE_TERRAIN_CONSTRUCTIBLE);
-				}
-			}else{
-				ihm.notifier(AFFICHER_PAS_ASSEZ_DE_BATIMENTS);
+		if (monopoly.getNbHotelDisponible() > 0 || monopoly.getNbMaisonDisponible() > 0) {
+			if (!getProprieteConstructibles(j).isEmpty()) { //si il y a des proprietes constructibles
+				ihm.notifier(AFFICHER_PROPRIETE_CONSTRUCTIBLE);
+			} else {
+				ihm.notifier(AFFICHER_PAS_DE_TERRAIN_CONSTRUCTIBLE);
 			}
-		//}while ((monopoly.getNbHotelDisponible() > 0 || monopoly.getNbMaisonDisponible() > 0) && !getProprieteConstructibles(j).isEmpty()/* && ihm.demandeAchatBatiment()*/); // boucle tant que le joueur veut acheter et peut acheter
-		
-		
+		}else{
+			ihm.notifier(AFFICHER_PAS_ASSEZ_DE_BATIMENTS);
+		}
 	}
 	
 	public void arretInteractionAchatBatiment(){

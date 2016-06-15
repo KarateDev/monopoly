@@ -13,3 +13,12 @@ hs_err_pid*
 /nbproject/
 /build/
 /dist/
+
+# https://github.com/github/gitignore/blob/master/Global/NetBeans.gitignore
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+.nb-gradle/
